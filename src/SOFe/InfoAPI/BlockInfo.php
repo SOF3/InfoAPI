@@ -20,14 +20,18 @@
 
 namespace SOFe\InfoAPI;
 
+use Generator;
 use pocketmine\block\Block;
 
 class BlockInfo extends Info{
 	/** @var Block */
 	private $block;
+	/** @var bool */
+	private $hasPosition;
 
-	public function __construct(Block $block){
+	public function __construct(Block $block, bool $hasPosition = true){
 		$this->block = $block;
+		$this->hasPosition = $hasPosition;
 	}
 
 	public function getBlock() : Block{
@@ -44,5 +48,11 @@ class BlockInfo extends Info{
 			}) or $event->match("pocketmine.block.damage", function(){
 				return new NumberInfo($this->block->getDamage());
 			});
+	}
+
+	public function fallbackInfos() : Generator{
+		if($this->hasPosition){
+			yield new PositionInfo($this->block);
+		}
 	}
 }

@@ -31,6 +31,10 @@ class PositionInfo extends Info{
 		$this->position = $position;
 	}
 
+	public function getPosition() : Position{
+		return $this->position;
+	}
+
 	public function toString() : string{
 		/** @noinspection NullPointerExceptionInspection */
 		return sprintf("%g %g %g %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
