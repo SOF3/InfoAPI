@@ -23,6 +23,10 @@ namespace SOFe\InfoAPI;
 use Generator;
 use pocketmine\block\Block;
 
+/**
+ * Represents a block type.
+ * If `$hasPosition` is set to true, represents a block of known type at a specific position.
+ */
 class BlockInfo extends Info{
 	/** @var Block */
 	private $block;
@@ -49,6 +53,9 @@ class BlockInfo extends Info{
 		$event->match("pocketmine.block.damage", function(){
 				return new NumberInfo($this->block->getDamage());
 			});
+		$event->match("pocketmine.block.name", function(){
+			return new NumberInfo($this->block->getId());
+		});
 	}
 
 	public function fallbackInfos() : Generator{

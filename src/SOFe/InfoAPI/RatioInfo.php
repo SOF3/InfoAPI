@@ -56,14 +56,16 @@ class RatioInfo extends Info{
 	}
 
 	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("ratio.value", function() : Info{
+		$event->matchAny(["pocketmine.ratio.num", "pocketmine.ratio.value"], function() : Info{
 			return new NumberInfo($this->value);
-		}) || $event->match("ratio.max", function() : Info{
+		}) || $event->matchAny(["pocketmine.ratio.denom", "pocketmine.ratio.max"], function() : Info{
 			return new NumberInfo($this->max);
 		});
 	}
 
 	public function fallbackInfos() : Generator{
-		yield new NumberInfo($this->value / $this->max);
+		if($this->max !== 0.0){
+			yield new NumberInfo($this->value / $this->max);
+		}
 	}
 }

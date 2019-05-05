@@ -39,7 +39,7 @@ class LevelInfo extends Info{
 	}
 
 	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("pocketmine.custom name", function() : Info{
+		$event->match("pocketmine.level.custom name", function() : Info{
 				return new StringInfo($this->level->getName());
 		});
 		$event->matchAny(["pocketmine.name", "pocketmine.folder name"], function() : Info{

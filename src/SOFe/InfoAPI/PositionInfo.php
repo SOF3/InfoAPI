@@ -37,7 +37,7 @@ class PositionInfo extends Info{
 
 	public function toString() : string{
 		/** @noinspection NullPointerExceptionInspection */
-		return sprintf("%g %g %g %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
+		return sprintf("(%g, %g, %g) @ %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
 	}
 
 	public function defaults(InfoResolveEvent $event) : void{

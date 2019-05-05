@@ -24,6 +24,7 @@ use InvalidArgumentException;
 use function abs;
 use function gettype;
 use function is_numeric;
+use function sprintf;
 
 class NumberInfo extends Info{
 	/** @var float */
@@ -41,13 +42,13 @@ class NumberInfo extends Info{
 	}
 
 	public function toString() : string{
-		return (string) $this->number;
+		return sprintf("%g", $this->number);
 	}
 
 	public function defaults(InfoResolveEvent $event) : void{
 		/** @noinspection TypeUnsafeComparisonInspection */
 		if($this->number == (int) $this->number){
-			$event->match("number.ordinal", function() : Info{
+			$event->match("pocketmine.number.ordinal", function() : Info{
 				$number = abs($this->number) % 100;
 				if($number !== 11 && $number % 10 === 1){
 					$suffix = "st";
@@ -61,8 +62,8 @@ class NumberInfo extends Info{
 				return new StringInfo($this->number . $suffix);
 			});
 		}
-		$event->matchAny(["number.percent", "number.percentage"], function() : Info{
-				return new StringInfo(((string) ($this->number * 100)) . "%");
-			});
+		$event->matchAny(["pocketmine.number.percent", "pocketmine.number.percentage"], function() : Info{
+			return new StringInfo(sprintf("%g%%", $this->number * 100));
+		});
 	}
 }

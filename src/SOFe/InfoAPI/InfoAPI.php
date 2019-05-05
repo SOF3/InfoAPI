@@ -28,6 +28,16 @@ use function strpos;
 use function substr;
 
 final class InfoAPI{
+	/**
+	 * Formats a template string with the context given
+	 *
+	 * @param string $template the template string, usually from a config value
+	 * @param Info   $info     the context, usually an instance of ContextInfo
+	 *
+	 * @return string
+	 *
+	 * @see ContextInfo
+	 */
 	public static function resolveTemplate(string $template, Info $info) : string{
 		$offset = 0;
 		$output = "";
@@ -64,6 +74,15 @@ final class InfoAPI{
 		return $output;
 	}
 
+	/**
+	 * Resolves an info identifier.
+	 *
+	 * @param string $iden the info identifier
+	 * @param Info   $info the context info
+	 *
+	 * @return string the resolved value
+	 * @throws InvalidArgumentException
+	 */
 	public static function resolve(string $iden, Info $info) : string{
 		$parts = explode(" ", $iden);
 		while(!empty($parts)){

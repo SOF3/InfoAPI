@@ -114,6 +114,7 @@ class InfoResolveEvent extends Event implements Cancellable{
 	}
 
 	public function call() : void{
+		parent::call();
 		if($this->isCancelled()){
 			return;
 		}
