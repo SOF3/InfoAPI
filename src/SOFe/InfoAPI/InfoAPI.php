@@ -21,6 +21,7 @@
 namespace SOFe\InfoAPI;
 
 use InvalidArgumentException;
+use pocketmine\utils\TextFormat;
 use function explode;
 use function implode;
 use function strlen;
@@ -33,12 +34,13 @@ final class InfoAPI{
 	 *
 	 * @param string $template the template string, usually from a config value
 	 * @param Info   $info     the context, usually an instance of ContextInfo
+	 * @param bool   $colorize if set to true, replaces `&[0-9A-Fa-f]` with the color code.
 	 *
 	 * @return string
 	 *
 	 * @see ContextInfo
 	 */
-	public static function resolveTemplate(string $template, Info $info) : string{
+	public static function resolveTemplate(string $template, Info $info, bool $colorize = false) : string{
 		$offset = 0;
 		$output = "";
 		while($offset < strlen($template) - 2){
@@ -58,7 +60,7 @@ final class InfoAPI{
 						throw new InvalidArgumentException("Unknown escape sequence \"\\$char\"");
 				}
 				$output .= $out;
-			}elseif($char === "$" && $template[$offset] === "{"){
+			}elseif($char === "$" && $template{$offset} === "{"){
 				$offset++;
 				$next = strpos($template, "}", $offset);
 				if($next === false){
@@ -67,6 +69,8 @@ final class InfoAPI{
 				$iden = substr($template, $offset, $next - $offset);
 				$offset = $next + 1;
 				$output .= self::resolve($iden, $info);
+			}elseif($char === "&" && strpos("0123456789abcdefklmnor", $template{$offset}) !== false){
+				$output .= TextFormat::ESCAPE;
 			}else{
 				$output .= $char;
 			}
