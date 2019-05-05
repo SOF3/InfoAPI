@@ -1,5 +1,23 @@
 <?php
 
+/*
+ * InfoAPI
+ *
+ * Copyright (C) 2019 SOFe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace SOFe\InfoAPI;
 
 use pocketmine\event\Cancellable;
@@ -38,6 +56,10 @@ class InfoResolveEvent extends Event implements Cancellable{
 		return array_slice($this->tokens, 0, $size);
 	}
 
+	public function match(string $match, callable $resolve) : bool{
+		return $this->matchAny([$match], $resolve);
+	}
+
 	/**
 	 * @param string[] $matches
 	 * @param callable $resolve (string[] $match) => Info
@@ -46,7 +68,7 @@ class InfoResolveEvent extends Event implements Cancellable{
 	 */
 	public function matchAny(array $matches, callable $resolve) : bool{
 		foreach($matches as $match){
-			if($this->matches(...explode(" ", $match))){
+			if($this->matches(explode(" ", $match))){
 				$this->resolve($resolve($match), count($match));
 				return true;
 			}
@@ -54,7 +76,12 @@ class InfoResolveEvent extends Event implements Cancellable{
 		return false;
 	}
 
-	public function matches(string ...$tokens) : bool{
+	/**
+	 * @param string[] $tokens
+	 *
+	 * @return bool
+	 */
+	private function matches(array $tokens) : bool{
 		foreach($tokens as $i => $token){
 			$token = strtolower($token);
 			$other = strtolower($this->tokens[$i]);
@@ -71,6 +98,9 @@ class InfoResolveEvent extends Event implements Cancellable{
 		$this->result = $result;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getResidue() : array{
 		return $this->residue;
 	}
@@ -81,5 +111,24 @@ class InfoResolveEvent extends Event implements Cancellable{
 
 	private static function endsWith(string $string, string $suffix){
 		return substr($string, -strlen($suffix)) === $suffix;
+	}
+
+	public function call() : void{
+		if($this->isCancelled()){
+			return;
+		}
+		if($this->info->defaults($this)){
+			return;
+		}
+		/** @var Info $info */
+		foreach($this->info->fallbackInfos() as $info){
+			$event = new InfoResolveEvent($this->tokens, $info);
+			$event->call();
+			if($event->isCancelled()){
+				$this->residue = $event->residue;
+				$this->result = $event->result;
+				return;
+			}
+		}
 	}
 }

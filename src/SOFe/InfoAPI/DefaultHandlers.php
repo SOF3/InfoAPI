@@ -1,36 +1,35 @@
 <?php
 
+/*
+ * InfoAPI
+ *
+ * Copyright (C) 2019 SOFe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 namespace SOFe\InfoAPI;
 
 use pocketmine\event\Listener;
-use pocketmine\Player;
 
 final class DefaultHandlers implements Listener{
-	public function e(InfoResolveEvent $event){
-		$info = $event->getInfo();
-		if($info instanceof PlayerInfo){
-			$this->providePlayer($info->getPlayer(), $event);
-		}
-	}
-	
-	private function providePlayer(Player $player, InfoResolveEvent $event) : void{
-		if($event->matches("pocketmine.name")){
-			$event->resolve(new StringInfo($player->getName()));
-			return;
-		}
+	/**
+	 * @param InfoResolveEvent $event
+	 *
+	 * @priority        HIGHEST
+	 * @ignoreCancelled true
+	 */
+	public function e(InfoResolveEvent $event) : void{
 
-		if($event->matchAny([
-			"pocketmine.nametag",
-			"pocketmine.name tag"
-		], static function() use ($player) : Info{
-			return new StringInfo($player->getNameTag());
-		})){
-			return;
-		}
-
-		if($event->matches("pocketmine.ip")){
-			$event->resolve(new StringInfo($player->getAddress()));
-			return;
-		}
 	}
 }

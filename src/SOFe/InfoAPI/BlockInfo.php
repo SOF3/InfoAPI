@@ -20,29 +20,29 @@
 
 namespace SOFe\InfoAPI;
 
-use function function_exists;
-use function mb_strtolower;
-use function mb_strtoupper;
-use function strtolower;
-use function strtoupper;
+use pocketmine\block\Block;
 
-class StringInfo extends Info{
-	/** @var string */
-	private $string;
+class BlockInfo extends Info{
+	/** @var Block */
+	private $block;
 
-	public function __construct(string $string){
-		$this->string = $string;
+	public function __construct(Block $block){
+		$this->block = $block;
+	}
+
+	public function getBlock() : Block{
+		return $this->block;
 	}
 
 	public function toString() : string{
-		return $this->string;
+		return $this->block->getName();
 	}
 
 	public function defaults(InfoResolveEvent $event) : bool{
-		return $event->match("string.uppercase", function() : Info{
-				return new StringInfo(function_exists("mb_strtoupper") ? mb_strtoupper($this->string) : strtoupper($this->string));
-			}) or $event->match("string.lowercase", function() : Info{
-				return new StringInfo(function_exists("mb_strtolower") ? mb_strtolower($this->string) : strtolower($this->string));
+		return $event->match("pocketmine.block.id", function(){
+				return new NumberInfo($this->block->getId());
+			}) or $event->match("pocketmine.block.damage", function(){
+				return new NumberInfo($this->block->getDamage());
 			});
 	}
 }
