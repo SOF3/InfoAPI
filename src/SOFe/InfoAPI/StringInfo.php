@@ -2,7 +2,7 @@
 
 namespace SOFe\InfoAPI;
 
-class StringInfo{
+class StringInfo implements Info{
 	private $string;
 
 	public function __construct(string $string){

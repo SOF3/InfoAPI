@@ -7,27 +7,28 @@ use pocketmine\Player;
 
 final class DefaultHandlers implements Listener{
 	public function e(InfoResolveEvent $event){
-		if($event->getInfo() instanceof PlayerInfo){
-			$this->providePlayer($event->getInfo()->getPlayer(), $event);
+		$info = $event->getInfo();
+		if($info instanceof PlayerInfo){
+			$this->providePlayer($info->getPlayer(), $event);
 		}
 	}
 	
 	private function providePlayer(Player $player, InfoResolveEvent $event) : void{
-		if($event->matches("name")){
+		if($event->matches("pocketmine.name")){
 			$event->resolve(new StringInfo($player->getName()));
 			return;
 		}
 
 		if($event->matchAny([
-			"nametag",
-			"name tag"
-		], function() use($player) : Info{
+			"pocketmine.nametag",
+			"pocketmine.name tag"
+		], static function() use ($player) : Info{
 			return new StringInfo($player->getNameTag());
 		})){
 			return;
 		}
 
-		if($event->matches("ip")){
+		if($event->matches("pocketmine.ip")){
 			$event->resolve(new StringInfo($player->getAddress()));
 			return;
 		}

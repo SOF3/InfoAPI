@@ -2,12 +2,12 @@
 
 namespace SOFe\InfoAPI;
 
+use function implode;
+use InvalidArgumentException;
 use function explode;
 use function strlen;
 use function strpos;
 use function substr;
-use InvalidArgumentException;
-use pocketmine\plugin\PluginBase;
 
 final class InfoAPI{
 	public static function resolveTemplate(string $template, Info $info) : string{
@@ -43,6 +43,7 @@ final class InfoAPI{
 				$output .= $char;
 			}
 		}
+		return $output;
 	}
 
 	public static function resolve(string $iden, Info $info) : string{
