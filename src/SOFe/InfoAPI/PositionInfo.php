@@ -40,14 +40,17 @@ class PositionInfo extends Info{
 		return sprintf("%g %g %g %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
+	public function defaults(InfoResolveEvent $event) : void{
 		$event->match("pocketmine.pos.x", function() : Info{
 			return new NumberInfo($this->position->getX());
-		}) or $event->match("pocketmine.pos.y", function() : Info{
+		});
+		$event->match("pocketmine.pos.y", function() : Info{
 			return new NumberInfo($this->position->getY());
-		}) or $event->match("pocketmine.pos.z", function() : Info{
+		});
+		$event->match("pocketmine.pos.z", function() : Info{
 			return new NumberInfo($this->position->getZ());
-		}) or $event->matchAny([
+		});
+		$event->matchAny([
 			"pocketmine.pos.level",
 			"pocketmine.pos.world",
 		], function(){

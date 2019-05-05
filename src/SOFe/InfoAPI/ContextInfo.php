@@ -45,15 +45,14 @@ class ContextInfo extends Info{
 		return $this->infos;
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
+	public function defaults(InfoResolveEvent $event) : void{
 		foreach($this->infos as $name => $value){
 			if($event->match($name, static function() use ($value) : Info{
 				return $value;
 			})){
-				return true;
+				return;
 			}
 		}
-		return false;
 	}
 
 	public function toString() : string{

@@ -25,8 +25,7 @@ use Generator;
 abstract class Info{
 	abstract public function toString() : string;
 
-	public function defaults(InfoResolveEvent $event) : bool{
-		return false;
+	public function defaults(InfoResolveEvent $event) : void{
 	}
 
 	public function fallbackInfos() : Generator{

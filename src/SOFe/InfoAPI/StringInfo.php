@@ -38,10 +38,11 @@ class StringInfo extends Info{
 		return $this->string;
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
-		return $event->match("string.uppercase", function() : Info{
+	public function defaults(InfoResolveEvent $event) : void{
+		$event->match("string.uppercase", function() : Info{
 				return new StringInfo(function_exists("mb_strtoupper") ? mb_strtoupper($this->string) : strtoupper($this->string));
-			}) or $event->match("string.lowercase", function() : Info{
+		});
+		$event->match("string.lowercase", function() : Info{
 				return new StringInfo(function_exists("mb_strtolower") ? mb_strtolower($this->string) : strtolower($this->string));
 			});
 	}

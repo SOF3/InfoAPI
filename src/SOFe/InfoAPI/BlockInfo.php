@@ -42,10 +42,11 @@ class BlockInfo extends Info{
 		return $this->block->getName();
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
-		return $event->match("pocketmine.block.id", function(){
+	public function defaults(InfoResolveEvent $event) : void{
+		$event->match("pocketmine.block.id", function(){
 				return new NumberInfo($this->block->getId());
-			}) or $event->match("pocketmine.block.damage", function(){
+		});
+		$event->match("pocketmine.block.damage", function(){
 				return new NumberInfo($this->block->getDamage());
 			});
 	}

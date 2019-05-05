@@ -55,13 +55,14 @@ class RatioInfo extends Info{
 		return sprintf("%g / %g", $this->value, $this->max);
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
-		return $event->match("ratio.value", function() : Info{
+	public function defaults(InfoResolveEvent $event) : void{
+		$event->match("ratio.value", function() : Info{
 			return new NumberInfo($this->value);
 		}) || $event->match("ratio.max", function() : Info{
 			return new NumberInfo($this->max);
 		});
 	}
+
 	public function fallbackInfos() : Generator{
 		yield new NumberInfo($this->value / $this->max);
 	}

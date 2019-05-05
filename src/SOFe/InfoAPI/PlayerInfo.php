@@ -31,17 +31,28 @@ class PlayerInfo extends Info{
 		$this->player = $player;
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
-		return $event->match("pocketmine.name", function() : Info{
+	public function defaults(InfoResolveEvent $event) : void{
+		$event->match("pocketmine.name", function() : Info{
 				return new StringInfo($this->player->getName());
-			}) or $event->matchAny([
+		});
+		$event->matchAny(["pocketmine.nick", "pocketmine.display name"], function() : Info{
+			return new StringInfo($this->player->getDisplayName());
+		});
+		$event->matchAny([
 				"pocketmine.nametag",
 				"pocketmine.name tag"
 			], function() : Info{
 				return new StringInfo($this->player->getNameTag());
-			}) or $event->match("pocketmine.player.ip", function() : Info{
+		});
+		$event->match("pocketmine.player.ip", function() : Info{
 				return new StringInfo($this->player->getAddress());
-			});
+		});
+		$event->match("pocketmine.player.ping", function() : Info{
+			return new NumberInfo($this->player->getPing());
+		});
+		$event->match("pocketmine.player.health", function() : Info{
+			return new RatioInfo($this->player->getHealth(), $this->player->getMaxHealth());
+		});
 	}
 
 	public function getPlayer() : Player{

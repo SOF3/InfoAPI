@@ -117,7 +117,8 @@ class InfoResolveEvent extends Event implements Cancellable{
 		if($this->isCancelled()){
 			return;
 		}
-		if($this->info->defaults($this)){
+		$this->info->defaults($this);
+		if($this->isCancelled()){
 			return;
 		}
 		/** @var Info $info */
@@ -125,6 +126,7 @@ class InfoResolveEvent extends Event implements Cancellable{
 			$event = new InfoResolveEvent($this->tokens, $info);
 			$event->call();
 			if($event->isCancelled()){
+				$this->isCancelled();
 				$this->residue = $event->residue;
 				$this->result = $event->result;
 				return;

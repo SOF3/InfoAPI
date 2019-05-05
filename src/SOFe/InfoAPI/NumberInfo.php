@@ -44,9 +44,10 @@ class NumberInfo extends Info{
 		return (string) $this->number;
 	}
 
-	public function defaults(InfoResolveEvent $event) : bool{
+	public function defaults(InfoResolveEvent $event) : void{
 		/** @noinspection TypeUnsafeComparisonInspection */
-		return $this->number == (int) $this->number && $event->match("number.ordinal", function() : Info{
+		if($this->number == (int) $this->number){
+			$event->match("number.ordinal", function() : Info{
 				$number = abs($this->number) % 100;
 				if($number !== 11 && $number % 10 === 1){
 					$suffix = "st";
@@ -58,7 +59,9 @@ class NumberInfo extends Info{
 					$suffix = "th";
 				}
 				return new StringInfo($this->number . $suffix);
-			}) or $event->matchAny(["number.percent", "number.percentage"], function() : Info{
+			});
+		}
+		$event->matchAny(["number.percent", "number.percentage"], function() : Info{
 				return new StringInfo(((string) ($this->number * 100)) . "%");
 			});
 	}
