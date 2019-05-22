@@ -32,10 +32,6 @@ class InfoRegistry{
 	/** @var InfoRegistry */
 	private static $instance;
 
-	public static function init() : void{
-		self::$instance = self::$instance ?? new InfoRegistry();
-	}
-
 	public static function getInstance() : InfoRegistry{
 		if(self::$instance === null){
 			self::$instance = new InfoRegistry();

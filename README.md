@@ -57,19 +57,42 @@ The \\ character is reserved for "escaping" special symbols. Here are some conve
 ### Providing info for InfoAPI
 If your plugin stores data (esp. about players, etc.), you can expose your data to InfoAPI so that users can use these data in other plugins.
 
-To provide info for InfoAPI, just add an event handler (all classes are under the namespace `SOFe\InfoAPI`):
+To provide info for InfoAPI, use the API methods on `InfoRegistry` in `onEnable`:
 ```php
-public function resolveInfo(InfoResolveEvent $event){
-	$event->match("pluginname.modulename.infoname", function(){
-		return new InfoType(...);
-	});
-	$event->match("pluginname.modulename.info2name", function(){
-		return new InfoType(...);
-	});
+public function onEnable(){
+	// other normal stuff
+	if(class_exists(InfoRegistry::class)){
+		$registry = InfoRegistry::getInstance();
+		$registry->addDetail(SomeInfo::class, "pluginname.modulename.infoname", function(SomeInfo $info){
+			return new MyInfo(...);
+		});
+	}
 }
 ```
 
-Each call match tries to match the required info with the given fully-qualified info name. (For the first example above, `${infoname}`, `${modulename.infoname}` and `${pluginname.modulename.infoname}` will all be matched)
+`SomeInfo` is the type of the parent of the info you provide, and `MyInfo` is the type of the info provided.
+
+The second parameter is a fully-qualified identifier for the info you provide. Users only need to type the part behind the last dot, but they can use the previous parts in case two infos have identical names (especially from different plugins). (For the first example above, `${infoname}`, `${modulename.infoname}` and `${pluginname.modulename.infoname}` will all be matched)
+
+For example, if you provide a kills/deaths ratio for a player in a plugin called KDCounter, your code might look like this:
+
+```php
+public function onEnable(){
+	// other normal stuff
+	if(class_exists(InfoRegistry::class)){
+		$registry = InfoRegistry::getInstance();
+		$registry->addDetail(PlayerInfo::class, "kdcounter.kills", function(PlayerInfo $info){
+			return new NumberInfo($this->getKills($info->getPlayer()));
+		});
+		$registry->addDetail(PlayerInfo::class, "kdcounter.deaths", function(PlayerInfo $info){
+			return new NumberInfo($this->getDeaths($info->getPlayer()));
+		});
+		$registry->addDetail(PlayerInfo::class, "kdcounter.kd", function(PlayerInfo $info){
+			return new RatioInfo($this->getKills($info->getPlayer()), $this->getDeaths($info->getPlayer()));
+		});
+	}
+}
+```
 
 The second parameter is a closure that gets called if the event is matched. It should return an `Info` object that is the resolved result.
 
@@ -85,15 +108,11 @@ depend: [InfoAPI]
 
 In the class where you use the InfoAPI value, call this method (all classes are under the namespace `SOFe\InfoAPI`):
 ```php
-$result = InfoAPI::resolveTemplate($configValue, new ContextInfo([
+$result = InfoAPI::resolveTemplate($configValue, [
 	"player" => new PlayerInfo($player),
 	"message" => new StringInfo($message),
 	// etc.
 ]);
 ```
 
-`$configValue` is the template string supplied by the user.
-
-`ContextInfo` is a holder for the infos that users can use. `PlayerInfo` and `StringInfo` are builtin info types with a wide range of details supported.
-
-The returned result is the formatted string.
+`$configValue` is the template string supplied by the user. The returned result is the formatted string. An InvalidArgumentException is thrown if the info cannot be fully resolved.

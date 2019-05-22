@@ -20,6 +20,7 @@
 
 namespace SOFe\InfoAPI;
 
+use Closure;
 use InvalidArgumentException;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -32,15 +33,19 @@ final class InfoAPI{
 	/**
 	 * Formats a template string with the context given
 	 *
-	 * @param string $template the template string, usually from a config value
-	 * @param Info[] $context  the context, an associative array of Info objects
-	 * @param bool   $colorize if set to true, replaces `&[0-9A-Fa-f]` with the color code.
+	 * @param string    $template      the template string, usually from a config value
+	 * @param Info[]    $context       the context, an associative array of Info objects
+	 * @param Closure[] $fallbackInfos default [function(){ return new CommonInfo(); }]
+	 * @param bool      $colorize      if set to true, replaces `&[0-9A-Fa-f]` with the color code.
 	 *
 	 * @return string
 	 *
 	 * @see ContextInfo
 	 */
-	public static function resolveTemplate(string $template, array $context, bool $colorize = true) : string{
+	public static function resolveTemplate(string $template, array $context, ?array $fallbackInfos = null, bool $colorize = true) : string{
+		$fallbackInfos = $fallbackInfos ?? [static function(){
+				return new CommonInfo(Server::getInstance());
+			}];
 		$offset = 0;
 		$output = "";
 		while($offset < strlen($template) - 2){
@@ -68,7 +73,7 @@ final class InfoAPI{
 				}
 				$iden = substr($template, $offset, $next - $offset);
 				$offset = $next + 1;
-				$output .= self::resolve($iden, $context);
+				$output .= self::resolve($iden, $context, $fallbackInfos);
 			}elseif($colorize && $char === "&" && strpos("0123456789abcdefklmnor", $template{$offset}) !== false){
 				$output .= TextFormat::ESCAPE;
 			}else{
@@ -81,13 +86,13 @@ final class InfoAPI{
 	/**
 	 * Resolves an info identifier.
 	 *
-	 * @param string $iden    the info identifier
-	 * @param Info[] $context the context infos
+	 * @param string    $iden    the info identifier
+	 * @param Info[]    $context the context infos
+	 * @param Closure[] $fallbackInfos
 	 *
 	 * @return string the resolved value
-	 * @throws InvalidArgumentException
 	 */
-	public static function resolve(string $iden, array $context) : string{
+	public static function resolve(string $iden, array $context, array $fallbackInfos) : string{
 		if(isset($context[$iden])){
 			return $context[$iden]->toString();
 		}
@@ -102,10 +107,11 @@ final class InfoAPI{
 			}
 		}
 
-		$info = new CommonInfo(Server::getInstance());
-		$result = InfoRegistry::getInstance()->resolve(explode(" ", $iden), $info);
-		if($result !== null){
-			return $result;
+		foreach($fallbackInfos as $info){
+			$result = InfoRegistry::getInstance()->resolve(explode(" ", $iden), $info);
+			if($result !== null){
+				return $result;
+			}
 		}
 
 		throw new InvalidArgumentException("Unresolved info \"$iden\"");
