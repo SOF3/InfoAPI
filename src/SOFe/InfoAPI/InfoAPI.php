@@ -69,7 +69,7 @@ final class InfoAPI{
 				$iden = substr($template, $offset, $next - $offset);
 				$offset = $next + 1;
 				$output .= self::resolve($iden, $info);
-			}elseif($char === "&" && strpos("0123456789abcdefklmnor", $template{$offset}) !== false){
+			}elseif($colorize && $char === "&" && strpos("0123456789abcdefklmnor", $template{$offset}) !== false){
 				$output .= TextFormat::ESCAPE;
 			}else{
 				$output .= $char;
