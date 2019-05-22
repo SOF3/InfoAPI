@@ -20,6 +20,8 @@
 
 namespace SOFe\InfoAPI;
 
+use Generator;
+use pocketmine\Server;
 use UnexpectedValueException;
 
 /**
@@ -30,12 +32,16 @@ use UnexpectedValueException;
 class ContextInfo extends Info{
 	/** @var array|Info[] */
 	private $infos;
+	/** @var bool */
+	private $commonFallback;
 
 	/**
 	 * @param Info[] $infos
+	 * @param bool   $commonFallback
 	 */
-	public function __construct(array $infos){
+	public function __construct(array $infos, bool $commonFallback = true){
 		$this->infos = $infos;
+		$this->commonFallback = $commonFallback;
 	}
 
 	/**
@@ -52,6 +58,12 @@ class ContextInfo extends Info{
 			})){
 				return;
 			}
+		}
+	}
+
+	public function fallbackInfos() : Generator{
+		if($this->commonFallback){
+			yield new CommonInfo(Server::getInstance());
 		}
 	}
 

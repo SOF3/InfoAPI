@@ -13,6 +13,16 @@ Detail info:
 | pocketmine.block.damage | NumberInfo | block damage | 0, 1, 2, ... |
 | pocketmine.block.name | StringInfo | block name | "Air", "Water" |
 
+## CommonInfo
+> CommonInfo is usually directly available
+
+Detail info:
+
+| Name | Type | Description | Examples |
+| :---: | :---: | :---: | :---: |
+| pocketmine.server.players | NumberInfo | Number of online players | 0, 1, 2, ... |
+| pocketmine.server.max players | NumberInfo | Maximum limit of online players | 0, 1, 2, ... |
+
 ## LevelInfo
 Textual representation: the **folder name** of the world
 

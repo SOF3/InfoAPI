@@ -39,16 +39,16 @@ class LevelInfo extends Info{
 	}
 
 	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("pocketmine.level.custom name", function() : Info{
+		$event->matchAny(["pocketmine.level.custom name", "pocketmine.world.custom name"], function() : Info{
 				return new StringInfo($this->level->getName());
 		});
-		$event->matchAny(["pocketmine.name", "pocketmine.folder name"], function() : Info{
+		$event->matchAny(["pocketmine.level.name", "pocketmine.world.name", "pocketmine.level.folder name", "pocketmine.world.folder name"], function() : Info{
 				return new StringInfo($this->level->getFolderName());
 		});
-		$event->match("pocketmine.level.time", function() : Info{
+		$event->matchAny(["pocketmine.level.time", "pocketmine.world.time"], function() : Info{
 				return new NumberInfo($this->level->getTime()); // TODO better formatting: TimeInfo
 		});
-		$event->match("pocketmine.level.seed", function() : Info{
+		$event->matchAny(["pocketmine.level.seed", "pocketmine.world.time"], function() : Info{
 				return new NumberInfo($this->level->getSeed());
 			});
 	}
