@@ -45,25 +45,31 @@ class NumberInfo extends Info{
 		return sprintf("%g", $this->number);
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		/** @noinspection TypeUnsafeComparisonInspection */
-		if($this->number == (int) $this->number){
-			$event->match("pocketmine.number.ordinal", function() : Info{
-				$number = abs($this->number) % 100;
-				if($number !== 11 && $number % 10 === 1){
-					$suffix = "st";
-				}elseif($number !== 12 && $number % 10 === 2){
-					$suffix = "nd";
-				}elseif($number !== 13 && $number % 10 === 3){
-					$suffix = "rd";
-				}else{
-					$suffix = "th";
-				}
-				return new StringInfo($this->number . $suffix);
-			});
-		}
-		$event->matchAny(["pocketmine.number.percent", "pocketmine.number.percentage"], function() : Info{
-			return new StringInfo(sprintf("%g%%", $this->number * 100));
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetail(self::class, "pocketmine.number.ordinal", static function(NumberInfo $info){
+			/** @noinspection TypeUnsafeComparisonInspection */
+			if($info->number != (int) $info->number){
+				return null;
+			}
+			$number = abs($info->number) % 100;
+			if($number !== 11 && $number % 10 === 1){
+				$suffix = "st";
+			}elseif($number !== 12 && $number % 10 === 2){
+				$suffix = "nd";
+			}elseif($number !== 13 && $number % 10 === 3){
+				$suffix = "rd";
+			}else{
+				$suffix = "th";
+			}
+			return new StringInfo($info->number . $suffix);
+		});
+		$registry->addDetails(self::class, ["pocketmine.number.percent", "pocketmine.number.percentage"], static function(NumberInfo $info){
+			return new StringInfo(sprintf("%g%%", $info->number*100));
 		});
 	}
 }

@@ -38,18 +38,23 @@ class LevelInfo extends Info{
 		return $this->level->getFolderName();
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		$event->matchAny(["pocketmine.level.custom name", "pocketmine.world.custom name"], function() : Info{
-				return new StringInfo($this->level->getName());
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetails(self::class, ["pocketmine.level.custom name", "pocketmine.world.custom name"], static function(LevelInfo $info){
+			return new StringInfo($info->level->getName());
 		});
-		$event->matchAny(["pocketmine.level.name", "pocketmine.world.name", "pocketmine.level.folder name", "pocketmine.world.folder name"], function() : Info{
-				return new StringInfo($this->level->getFolderName());
+		$registry->addDetails(self::class, ["pocketmine.level.name", "pocketmine.world.name", "pocketmine.level.folder name", "pocketmine.world.folder name"], static function(LevelInfo $info){
+			return new StringInfo($info->level->getFolderName());
 		});
-		$event->matchAny(["pocketmine.level.time", "pocketmine.world.time"], function() : Info{
-				return new NumberInfo($this->level->getTime()); // TODO better formatting: TimeInfo
+		$registry->addDetails(self::class, ["pocketmine.level.time", "pocketmine.world.time"], static function(LevelInfo $info){
+			return new NumberInfo($info->level->getTime()); // TODO better formatting: TimeInfo
 		});
-		$event->matchAny(["pocketmine.level.seed", "pocketmine.world.time"], function() : Info{
-				return new NumberInfo($this->level->getSeed());
-			});
+		$registry->addDetails(self::class, ["pocketmine.level.seed", "pocketmine.world.time"], static function(LevelInfo $info){
+			return new NumberInfo($info->level->getSeed());
+		});
 	}
 }

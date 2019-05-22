@@ -38,12 +38,17 @@ class StringInfo extends Info{
 		return $this->string;
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("pocketmine.string.uppercase", function() : Info{
-				return new StringInfo(function_exists("mb_strtoupper") ? mb_strtoupper($this->string) : strtoupper($this->string));
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetail(self::class, "pocketmine.string.uppercase", static function(StringInfo $info){
+			return new StringInfo(function_exists("mb_strtoupper") ? mb_strtoupper($info->string) : strtoupper($info->string));
 		});
-		$event->match("pocketmine.string.lowercase", function() : Info{
-				return new StringInfo(function_exists("mb_strtolower") ? mb_strtolower($this->string) : strtolower($this->string));
-			});
+		$registry->addDetail(self::class, "pocketmine.string.lowercase", static function(StringInfo $info){
+			return new StringInfo(function_exists("mb_strtolower") ? mb_strtolower($info->string) : strtolower($info->string));
+		});
 	}
 }

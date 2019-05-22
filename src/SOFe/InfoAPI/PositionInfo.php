@@ -40,21 +40,26 @@ class PositionInfo extends Info{
 		return sprintf("(%g, %g, %g) @ %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("pocketmine.pos.x", function() : Info{
-			return new NumberInfo($this->position->getX());
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetail(self::class, "pocketmine.pos.x", static function(PositionInfo $info){
+			return new NumberInfo($info->position->getX());
 		});
-		$event->match("pocketmine.pos.y", function() : Info{
-			return new NumberInfo($this->position->getY());
+		$registry->addDetail(self::class, "pocketmine.pos.y", static function(PositionInfo $info){
+			return new NumberInfo($info->position->getY());
 		});
-		$event->match("pocketmine.pos.z", function() : Info{
-			return new NumberInfo($this->position->getZ());
+		$registry->addDetail(self::class, "pocketmine.pos.z", static function(PositionInfo $info){
+			return new NumberInfo($info->position->getZ());
 		});
-		$event->matchAny([
+		$registry->addDetails(self::class, [
 			"pocketmine.pos.level",
 			"pocketmine.pos.world",
-		], function(){
-			return new LevelInfo($this->position->getLevel());
+		], static function(PositionInfo $info){
+			return new LevelInfo($info->position->getLevel());
 		});
 	}
 }

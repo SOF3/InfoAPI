@@ -55,17 +55,21 @@ class RatioInfo extends Info{
 		return sprintf("%g / %g", $this->value, $this->max);
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		$event->matchAny(["pocketmine.ratio.num", "pocketmine.ratio.value"], function() : Info{
-			return new NumberInfo($this->value);
-		}) || $event->matchAny(["pocketmine.ratio.denom", "pocketmine.ratio.max"], function() : Info{
-			return new NumberInfo($this->max);
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetails(self::class, ["pocketmine.ratio.num", "pocketmine.ratio.value"], static function(RatioInfo $info){
+			return new NumberInfo($info->value);
 		});
-	}
+		$registry->addDetails(self::class, ["pocketmine.ratio.denom", "pocketmine.ratio.max"], static function(RatioInfo $info){
+			return new NumberInfo($info->max);
+		});
 
-	public function fallbackInfos() : Generator{
-		if($this->max !== 0.0){
-			yield new NumberInfo($this->value / $this->max);
-		}
+		$registry->addFallback(self::class, static function(RatioInfo $info){
+			return $info->max !== 0.0 ? new NumberInfo($info->value / $info->max) : null;
+		});
 	}
 }

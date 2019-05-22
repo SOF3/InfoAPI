@@ -32,12 +32,17 @@ class CommonInfo extends Info{
 		$this->server = $server;
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("pocketmine.server.players", function(){
-			return new NumberInfo(count($this->server->getOnlinePlayers()));
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetail(self::class, "pocketmine.server.players", static function(CommonInfo $info){
+			return new NumberInfo(count($info->server->getOnlinePlayers()));
 		});
-		$event->match("pocketmine.server.max players", function(){
-			return new NumberInfo($this->server->getMaxPlayers());
+		$registry->addDetail(self::class, "pocketmine.server.max players", static function(CommonInfo $info){
+			return new NumberInfo($info->server->getMaxPlayers());
 		});
 	}
 

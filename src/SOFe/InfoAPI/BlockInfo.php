@@ -20,7 +20,6 @@
 
 namespace SOFe\InfoAPI;
 
-use Generator;
 use pocketmine\block\Block;
 
 /**
@@ -42,25 +41,32 @@ class BlockInfo extends Info{
 		return $this->block;
 	}
 
+	public function hasPosition() : bool{
+		return $this->hasPosition;
+	}
+
 	public function toString() : string{
 		return $this->block->getName();
 	}
 
-	public function defaults(InfoResolveEvent $event) : void{
-		$event->match("pocketmine.block.id", function(){
-				return new NumberInfo($this->block->getId());
+	/**
+	 * @param InfoRegistry $registry
+	 *
+	 * @internal Used by InfoAPI to register details
+	 */
+	public static function register(InfoRegistry $registry) : void{
+		$registry->addDetail(self::class, "pocketmine.block.id", static function(BlockInfo $info){
+			return new NumberInfo($info->block->getId());
 		});
-		$event->match("pocketmine.block.damage", function(){
-				return new NumberInfo($this->block->getDamage());
+		$registry->addDetail(self::class, "pocketmine.block.damage", static function(BlockInfo $info){
+			return new NumberInfo($info->block->getDamage());
 			});
-		$event->match("pocketmine.block.name", function(){
-			return new NumberInfo($this->block->getId());
+		$registry->addDetail(self::class, "pocketmine.block.name", static function(BlockInfo $info){
+			return new NumberInfo($info->block->getId());
 		});
-	}
 
-	public function fallbackInfos() : Generator{
-		if($this->hasPosition){
-			yield new PositionInfo($this->block);
-		}
+		$registry->addFallback(self::class, static function(BlockInfo $info){
+			return $info->hasPosition ? new PositionInfo($info->block) : null;
+		});
 	}
 }

@@ -20,12 +20,13 @@
 
 namespace SOFe\InfoAPI;
 
-use Generator;
 use function count;
 use function explode;
 
 /**
- * Represents something that can be a step or a result in info resolution
+ * Represents something that can be a step or a result in info resolution.
+ *
+ * All Info subclasses MUST extend Info directly. No immediate subclasses are allowed.
  */
 abstract class Info{
 	/**
@@ -34,34 +35,6 @@ abstract class Info{
 	 * @return string
 	 */
 	abstract public function toString() : string;
-
-	/**
-	 * If no info is resolved from the event listeners, this method is called to provide fallback values.
-	 *
-	 * It is guaranteed that `$event->getInfo() === $this`.
-	 *
-	 * @param InfoResolveEvent $event
-	 */
-	public function defaults(InfoResolveEvent $event) : void{
-	}
-
-	/**
-	 * If no info is resolved from the event listeners, and `defaults()` does not resolve any values,
-	 * this method would be called.
-	 *
-	 * It should yield instances of `Info`, on which new `InfoResolveEvent`s would be called.
-	 * If an Info is successfully resolved from the fallback Info, the value would be used directly.
-	 *
-	 * This is comparable to a (multi-)inheritance mechanism.
-	 * For example, `PlayerInfo` would yield `PositionInfo`, since `Player` contains all properties of `Position`.
-	 *
-	 * Each fallback info call involves a level of recursion. Beware infinite recursion loop.
-	 *
-	 * @return Generator
-	 */
-	public function fallbackInfos() : Generator{
-		false && yield;
-	}
 
 	/**
 	 * Returns a display name of this info type.

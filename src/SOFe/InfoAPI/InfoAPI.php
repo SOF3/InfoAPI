@@ -21,9 +21,9 @@
 namespace SOFe\InfoAPI;
 
 use InvalidArgumentException;
+use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use function explode;
-use function implode;
 use function strlen;
 use function strpos;
 use function substr;
@@ -33,14 +33,14 @@ final class InfoAPI{
 	 * Formats a template string with the context given
 	 *
 	 * @param string $template the template string, usually from a config value
-	 * @param Info   $info     the context, usually an instance of ContextInfo
+	 * @param Info[] $context  the context, an associative array of Info objects
 	 * @param bool   $colorize if set to true, replaces `&[0-9A-Fa-f]` with the color code.
 	 *
 	 * @return string
 	 *
 	 * @see ContextInfo
 	 */
-	public static function resolveTemplate(string $template, Info $info, bool $colorize = false) : string{
+	public static function resolveTemplate(string $template, array $context, bool $colorize = true) : string{
 		$offset = 0;
 		$output = "";
 		while($offset < strlen($template) - 2){
@@ -68,7 +68,7 @@ final class InfoAPI{
 				}
 				$iden = substr($template, $offset, $next - $offset);
 				$offset = $next + 1;
-				$output .= self::resolve($iden, $info);
+				$output .= self::resolve($iden, $context);
 			}elseif($colorize && $char === "&" && strpos("0123456789abcdefklmnor", $template{$offset}) !== false){
 				$output .= TextFormat::ESCAPE;
 			}else{
@@ -81,23 +81,33 @@ final class InfoAPI{
 	/**
 	 * Resolves an info identifier.
 	 *
-	 * @param string $iden the info identifier
-	 * @param Info   $info the context info
+	 * @param string $iden    the info identifier
+	 * @param Info[] $context the context infos
 	 *
 	 * @return string the resolved value
 	 * @throws InvalidArgumentException
 	 */
-	public static function resolve(string $iden, Info $info) : string{
-		$parts = explode(" ", $iden);
-		while(!empty($parts)){
-			$event = new InfoResolveEvent($parts, $info);
-			$event->call();
-			if(!$event->isCancelled()){
-				throw new InvalidArgumentException("Unresolved info \"" . implode(" ", $parts) . "\"");
-			}
-			$parts = $event->getResidue();
-			$info = $event->getResult();
+	public static function resolve(string $iden, array $context) : string{
+		if(isset($context[$iden])){
+			return $context[$iden]->toString();
 		}
-		return $info->toString();
+
+		foreach($context as $name => $info){
+			if(strpos($iden, $name . " ") === 0){
+				$residue = substr($iden, strlen($name) + 1);
+				$result = InfoRegistry::getInstance()->resolve(explode(" ", $residue), $info);
+				if($result !== null){
+					return $result;
+				}
+			}
+		}
+
+		$info = new CommonInfo(Server::getInstance());
+		$result = InfoRegistry::getInstance()->resolve(explode(" ", $iden), $info);
+		if($result !== null){
+			return $result;
+		}
+
+		throw new InvalidArgumentException("Unresolved info \"$iden\"");
 	}
 }
