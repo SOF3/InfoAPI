@@ -39,6 +39,7 @@ final class InfoAPI{
 	 * @param bool      $colorize      if set to true, replaces `&[0-9A-Fa-f]` with the color code.
 	 *
 	 * @return string
+	 * @throws InvalidArgumentException
 	 *
 	 * @see ContextInfo
 	 */
