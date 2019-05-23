@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\ui;
 
-use pocketmine\plugin\PluginBase;
-use SOFe\InfoAPI\ui\BrowseInfosCommand;
+use Exception;
 
-class Main extends PluginBase{
-	protected function onEnable() : void{
-		$this->getServer()->getCommandMap()->register("InfoAPI", new BrowseInfosCommand($this));
-	}
+class BrowseCancelledException extends Exception{
+
 }

@@ -21,10 +21,13 @@
 namespace SOFe\InfoAPI;
 
 use Closure;
+use Generator;
 use function array_slice;
 use function count;
 use function explode;
 use function get_class;
+use function implode;
+use function iterator_to_array;
 use function strpos;
 use function substr_count;
 
@@ -42,8 +45,11 @@ class InfoRegistry{
 	/** @var Closure[][] (ParentInfo::class) => [ (full.info.name) => (function(ParentInfo) : ?ChildInfo) ] */
 	private $graph = [];
 
+	/** @var PrincipalDetail[][] (ParentInfo::class) => PrincipalDetail[] */
+	private $principalGraph = [];
+
 	/** @var Closure[][] (BaseInfo::class) => [ (function(BaseInfo) : ?FallbackInfo) ] */
-	private $aliasesMap = [];
+	private $aliasMap = [];
 
 	private function __construct(){
 		BlockInfo::register($this);
@@ -73,6 +79,11 @@ class InfoRegistry{
 				}
 			}
 		}
+
+		if(!isset($this->principalGraph[$parentClass])){
+			$this->principalGraph[$parentClass] = [];
+		}
+		$this->principalGraph[$parentClass][] = new PrincipalDetail($names, $childGetter);
 	}
 
 	/**
@@ -87,10 +98,10 @@ class InfoRegistry{
 	 * @param Closure $fallbackGetter Given an instance of $baseClass, return an Info object, or null if not available
 	 */
 	public function addFallback(string $baseClass, Closure $fallbackGetter) : void{
-		if(!isset($this->aliasesMap[$baseClass])){
-			$this->aliasesMap[$baseClass] = [];
+		if(!isset($this->aliasMap[$baseClass])){
+			$this->aliasMap[$baseClass] = [];
 		}
-		$this->aliasesMap[] = $fallbackGetter;
+		$this->aliasMap[] = $fallbackGetter;
 	}
 
 	public function resolve(array $tokens, Info $info) : ?string{
@@ -108,8 +119,8 @@ class InfoRegistry{
 				}
 			}
 		}
-		if(isset($this->aliasesMap[$class])){
-			$closures = $this->aliasesMap[$class];
+		if(isset($this->aliasMap[$class])){
+			$closures = $this->aliasMap[$class];
 			foreach($closures as $closure){
 				/** @var Info|null $delegate */
 				$delegate = $closure($info);
@@ -122,5 +133,72 @@ class InfoRegistry{
 			}
 		}
 		return null;
+	}
+
+	public function listDetails(Info $info) : Generator{
+		if(isset($this->principalGraph[$class = get_class($info)])){
+			$details = $this->principalGraph[$class];
+			foreach($details as $detail){
+				$delegate = $detail->getClosure()($info);
+				if($delegate !== null){
+					yield $detail->getIdentifiers()[0] => $delegate;
+				}
+			}
+		}
+		if(isset($this->aliasMap[$class])){
+			foreach($this->aliasMap[$class] as $closure){
+				$delegate = $closure($info);
+				if($delegate !== null){
+					yield from $this->listDetails($delegate);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param Info $info
+	 *
+	 * @return PrincipalDetail[]
+	 */
+	public function listMinifiedDetails(Info $info) : array{
+		// TODO unit testing required
+		/** @var string[][]|PrincipalDetail[][] $list */
+		$list = [];
+		$used = [];
+		foreach($this->listDetails($info) as $identifier => $detail){
+			$parts = explode(".", $identifier);
+			for($i = count($parts) - 1; $i >= 0; $i--){
+				$joined = implode(".", array_slice($parts, $i));
+				if(isset($used[$joined])){
+					$collisionIndex = $used[$joined];
+					/** @var string $thatName */
+					/** @var PrincipalDetail $thatDetail */
+					[&$thatName, $thatDetail] = $list[$collisionIndex];
+					if($thatName !== $joined){
+						continue;
+					}
+
+					/** @noinspection PhpUnusedLocalVariableInspection */
+					$thatName = $thatDetail->increasePrecision($joined);
+					$used[$thatName] = $collisionIndex;
+
+					continue;
+				}
+
+				$used[$joined] = count($list);
+				$list[] = [$joined, $detail];
+				$added = true;
+				break;
+			}
+			if(!isset($added)){
+				// TODO warning: one info is completely masked by another
+			}
+		}
+
+		$output = [];
+		foreach($list as [$name, $detail]){
+			$output[$name] = $detail;
+		}
+		return $output;
 	}
 }
