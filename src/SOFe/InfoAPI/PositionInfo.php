@@ -20,7 +20,7 @@
 
 namespace SOFe\InfoAPI;
 
-use pocketmine\level\Position;
+use pocketmine\world\Position;
 use function sprintf;
 
 class PositionInfo extends Info{
@@ -37,7 +37,7 @@ class PositionInfo extends Info{
 
 	public function toString() : string{
 		/** @noinspection NullPointerExceptionInspection */
-		return sprintf("(%g, %g, %g) @ %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
+		return sprintf("(%g, %g, %g) @ %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getWorld()->getFolderName());
 	}
 
 	/**
@@ -59,7 +59,7 @@ class PositionInfo extends Info{
 			"pocketmine.pos.level",
 			"pocketmine.pos.world",
 		], static function(PositionInfo $info){
-			return new LevelInfo($info->position->getLevel());
+			return new WorldInfo($info->position->getWorld());
 		});
 	}
 }

@@ -20,7 +20,6 @@
 
 namespace SOFe\InfoAPI;
 
-use Generator;
 use InvalidArgumentException;
 use function gettype;
 use function is_numeric;

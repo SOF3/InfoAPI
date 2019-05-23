@@ -47,7 +47,7 @@ class InfoRegistry{
 
 	private function __construct(){
 		BlockInfo::register($this);
-		LevelInfo::register($this);
+		WorldInfo::register($this);
 		NumberInfo::register($this);
 		PlayerInfo::register($this);
 		PositionInfo::register($this);

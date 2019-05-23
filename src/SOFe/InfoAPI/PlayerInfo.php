@@ -20,8 +20,8 @@
 
 namespace SOFe\InfoAPI;
 
-use pocketmine\level\Level;
-use pocketmine\level\Position;
+use pocketmine\world\World;
+use pocketmine\world\Position;
 use pocketmine\math\VoxelRayTrace;
 use pocketmine\Player;
 
@@ -61,24 +61,25 @@ class PlayerInfo extends Info{
 			return new RatioInfo($info->player->getHealth() / 2, $info->player->getMaxHealth() / 2);
 		});
 		$registry->addDetail(self::class, "pocketmine.player.yaw", static function(PlayerInfo $info){
-			return new NumberInfo($info->player->getYaw());
+			return new NumberInfo($info->player->getLocation()->getYaw());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.pitch", static function(PlayerInfo $info){
 			return new NumberInfo($info->player->getPitch());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.eye", static function(PlayerInfo $info){
-			return new PositionInfo(Position::fromObject($info->player->asPosition()->add(0, $info->player->getEyeHeight(), 0), $info->player->asPosition()->getLevel()));
+			$position = $info->player->getPosition();
+			return new PositionInfo(Position::fromObject($position->add(0, $info->player->getEyeHeight(), 0), $position->getWorld()));
 		});
 		$registry->addDetail(self::class, "pocketmine.player.block below", static function(PlayerInfo $info){
 			$position = $info->player->asPosition();
 			$below = $position->floor()->subtract(0, 1, 0);
-			if($below->y > Level::Y_MAX){
-				$below->y = Level::Y_MAX;
+			if($below->y > World::Y_MAX){
+				$below->y = World::Y_MAX;
 			}elseif($below->y < 0){
 				$below->y = 0;
 			}
 			/** @noinspection NullPointerExceptionInspection */
-			$block = $position->getLevel()->getBlockAt($below->x, $below->y, $below->z);
+			$block = $position->getWorld()->getBlockAt($below->x, $below->y, $below->z);
 			return new BlockInfo($block);
 		});
 		$registry->addDetails(self::class, [
@@ -86,17 +87,17 @@ class PlayerInfo extends Info{
 			"pocketmine.player.block facing"
 		], static function(PlayerInfo $info){
 			$src = $info->player->asPosition();
-			/** @var Level $level */
-			$level = $src->getLevel();
+			/** @var World $world */
+			$world = $src->getWorld();
 			$src = $src->add(0, $info->player->getEyeHeight(), 0);
 			$trace = VoxelRayTrace::inDirection($src, $info->player->getDirectionVector(), 128);
 			foreach($trace as $pos){
-				$block = $level->getBlockAt($pos->x, $pos->y, $pos->z, true, false);
+				$block = $world->getBlockAt($pos->x, $pos->y, $pos->z, true, false);
 				if($block->isSolid()){
 					return new BlockInfo($block);
 				}
 			}
-			return new BlockInfo($level->getBlockAt($src->x, $src->y, $src->z, true, false));
+			return new BlockInfo($world->getBlockAt($src->x, $src->y, $src->z, true, false));
 		});
 
 		$registry->addFallback(self::class, static function(PlayerInfo $info){
