@@ -34,7 +34,7 @@ Simply add a space behind the info name, then add the detail name. You can repea
 A PlayerInfo has a detail RatioInfo called `health`, which represents the health of the player, so `${player health}` shows the player health. But we want a percentage. The RatioInfo has a detail StringInfo called `percent`, which converts the ratio into percentage, so we end up having this:
 
 ```
-<Steve (95%)> Hello world
+<Steve (95% health)> Hello world
 ```
 
 ### How to check what detailed info are available?
