@@ -28,7 +28,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\command\utils\InvalidCommandSyntaxException;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 use SOFe\AwaitGenerator\Await;

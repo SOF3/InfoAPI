@@ -27,7 +27,6 @@ use function count;
 use function explode;
 use function get_class;
 use function implode;
-use function iterator_to_array;
 use function strpos;
 use function substr_count;
 
@@ -190,7 +189,8 @@ class InfoRegistry{
 				$added = true;
 				break;
 			}
-			if(!isset($added)){
+            /** @noinspection PhpStatementHasEmptyBodyInspection (remove when done) */
+            if(!isset($added)){
 				// TODO warning: one info is completely masked by another
 			}
 		}

@@ -22,10 +22,8 @@ namespace SOFe\InfoAPI;
 
 use Closure;
 use function array_slice;
-use function assert;
 use function count;
 use function implode;
-use function substr;
 use function substr_count;
 
 /**

@@ -23,7 +23,7 @@ namespace SOFe\InfoAPI;
 use pocketmine\world\World;
 use pocketmine\world\Position;
 use pocketmine\math\VoxelRayTrace;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class PlayerInfo extends Info{
 	/** @var Player */
