@@ -32,6 +32,7 @@ use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 use SOFe\AwaitGenerator\Await;
+use SOFe\AwaitGenerator\AwaitException;
 use SOFe\InfoAPI\Info;
 use SOFe\InfoAPI\InfoRegistry;
 use SOFe\InfoAPI\PlayerInfo;
@@ -66,9 +67,13 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 
 		/** @var Player $target */
 		$info = new PlayerInfo($target);
-		Await::g2c($this->showInfo(InfoRegistry::getInstance(), [], $info, $sender),
-			null, [BrowseCancelledException::class => function(){
-			}]);
+		try{
+		    Await::g2c($this->showInfo(InfoRegistry::getInstance(), [], $info, $sender),
+                null, [BrowseCancelledException::class => function(){}]);
+        } catch(AwaitException $exception){
+		    $this->getPlugin()->getLogger()->warning($exception);
+		    $sender->sendMessage("Sorry something went wrong, please check the console and submit a issue.");
+        }
 	}
 
 	private function showInfo(InfoRegistry $registry, array $stack, Info $parent, CommandSender $sender) : Generator{
@@ -76,6 +81,7 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 		$prefix = empty($title) ? "" : "$title ";
 		$value = $parent->toString();
 		$details = [];
+		var_dump($parent);
 		foreach($registry->listMinifiedDetails($parent) as $name => $detail){
 			$optional = substr($detail, 0, strlen($detail) - strlen($name));
 			/** @var Info $child */

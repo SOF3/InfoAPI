@@ -185,7 +185,7 @@ class InfoRegistry{
 				}
 
 				$used[$joined] = count($list);
-				$list[] = [$joined, $detail];
+				$list[] = [$joined, $detail]; //<-- $detail still Info class causes problems..
 				$added = true;
 				break;
 			}
