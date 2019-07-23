@@ -32,7 +32,6 @@ use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 use SOFe\AwaitGenerator\Await;
-use SOFe\AwaitGenerator\AwaitException;
 use SOFe\InfoAPI\Info;
 use SOFe\InfoAPI\InfoRegistry;
 use SOFe\InfoAPI\PlayerInfo;
@@ -89,10 +88,10 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 				$sender->sendForm($form);
 				$choice = yield Await::ONCE;
 			}else{
-				$sender->sendMessage("$"."{$title}: " . TextFormat::YELLOW . $value);
+				$sender->sendMessage("\${".$title."}: " . TextFormat::YELLOW . $value);
 				$sender->sendMessage(TextFormat::BOLD . TextFormat::UNDERLINE . "Details");
 				foreach($details as $data){
-					$sender->sendMessage("- $"."{" . $prefix . $data["required"] . "}: " . TextFormat::AQUA . $data["value"] .
+					$sender->sendMessage("- \${" . $prefix . $data["required"] . "}: " . TextFormat::AQUA . $data["value"] .
 						TextFormat::WHITE . " (" . TextFormat::GRAY . $data["optional"] . TextFormat::WHITE . $data["required"] . ") " .
 						TextFormat::GREEN . "Type \"detail \" to see details"); //TODO
 				}
@@ -107,7 +106,7 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 	private function createInfoMenu(string $title, string $value, string $prefix, array $dataArray, Closure $onSubmit, Closure $onClose) : MenuForm{
 		$options = [];
 		foreach($dataArray as $data){
-			$options[] = new MenuOption("- $"."{" . $prefix . $data["required"] . "}: " . TextFormat::AQUA . $data["value"] .
+			$options[] = new MenuOption("- \${" . $prefix . $data["required"] . "}: " . TextFormat::AQUA . $data["value"] .
 				TextFormat::WHITE . "\n(" . TextFormat::GRAY . $data["optional"] . TextFormat::WHITE . $data["required"] . ")");
 		}
 		return new MenuForm($title, $value, $options, $onSubmit, $onClose);
