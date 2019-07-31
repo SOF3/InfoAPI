@@ -28,7 +28,7 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
 use pocketmine\command\utils\InvalidCommandSyntaxException;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 use SOFe\AwaitGenerator\Await;
@@ -66,9 +66,7 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 
 		/** @var Player $target */
 		$info = new PlayerInfo($target);
-		Await::g2c($this->showInfo(InfoRegistry::getInstance(), [], $info, $sender),
-			null, [BrowseCancelledException::class => function(){
-			}]);
+		Await::g2c($this->showInfo(InfoRegistry::getInstance(), [], $info, $sender), null, [BrowseCancelledException::class => function(){}]);
 	}
 
 	private function showInfo(InfoRegistry $registry, array $stack, Info $parent, CommandSender $sender) : Generator{
@@ -76,8 +74,8 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 		$prefix = empty($title) ? "" : "$title ";
 		$value = $parent->toString();
 		$details = [];
-		foreach($registry->listMinifiedDetails($parent) as $name => $detail){
-			$optional = substr($detail, 0, strlen($detail) - strlen($name));
+		foreach($registry->listMinifiedDetails($parent) as $name => [$detail, $info]){
+			$optional = substr($detail->getIdentifiers()[0], 0, strlen($detail->getIdentifiers()[0]) - strlen($name));
 			/** @var Info $child */
 			$child = $detail->getClosure()($parent);
 			$value = $child->toString();
@@ -90,12 +88,12 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 				$sender->sendForm($form);
 				$choice = yield Await::ONCE;
 			}else{
-				$sender->sendMessage("$\{$title}: " . TextFormat::YELLOW . $value);
+				$sender->sendMessage("\${".$title."}: " . TextFormat::YELLOW . $value);
 				$sender->sendMessage(TextFormat::BOLD . TextFormat::UNDERLINE . "Details");
 				foreach($details as $data){
-					$sender->sendMessage("- $\{" . $prefix . $data["required"] . "\}: " . TextFormat::AQUA . $data["value"] .
+					$sender->sendMessage("- \${" . $prefix . $data["required"] . "}: " . TextFormat::AQUA . $data["value"] .
 						TextFormat::WHITE . " (" . TextFormat::GRAY . $data["optional"] . TextFormat::WHITE . $data["required"] . ") " .
-						TextFormat::GREEN . "Type \"detail \" to see details");
+						TextFormat::GREEN . "Type \"detail \" to see details"); //TODO
 				}
 				$choice = yield $this->waitDetail();
 				// TODO implement
@@ -108,7 +106,7 @@ class BrowseInfosCommand extends Command implements PluginIdentifiableCommand{
 	private function createInfoMenu(string $title, string $value, string $prefix, array $dataArray, Closure $onSubmit, Closure $onClose) : MenuForm{
 		$options = [];
 		foreach($dataArray as $data){
-			$options[] = new MenuOption("- $\{" . $prefix . $data["required"] . "\}: " . TextFormat::AQUA . $data["value"] .
+			$options[] = new MenuOption("- \${" . $prefix . $data["required"] . "}: " . TextFormat::AQUA . $data["value"] .
 				TextFormat::WHITE . "\n(" . TextFormat::GRAY . $data["optional"] . TextFormat::WHITE . $data["required"] . ")");
 		}
 		return new MenuForm($title, $value, $options, $onSubmit, $onClose);

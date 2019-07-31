@@ -27,7 +27,6 @@ use function count;
 use function explode;
 use function get_class;
 use function implode;
-use function iterator_to_array;
 use function strpos;
 use function substr_count;
 
@@ -135,13 +134,17 @@ class InfoRegistry{
 		return null;
 	}
 
+    /**
+     * @param Info $info
+     * @return Generator|Info[]
+     */
 	public function listDetails(Info $info) : Generator{
 		if(isset($this->principalGraph[$class = get_class($info)])){
 			$details = $this->principalGraph[$class];
 			foreach($details as $detail){
 				$delegate = $detail->getClosure()($info);
 				if($delegate !== null){
-					yield $detail->getIdentifiers()[0] => $delegate;
+					yield $detail->getIdentifiers()[0] => [$detail, $delegate];
 				}
 			}
 		}
@@ -162,10 +165,10 @@ class InfoRegistry{
 	 */
 	public function listMinifiedDetails(Info $info) : array{
 		// TODO unit testing required
-		/** @var string[][]|PrincipalDetail[][] $list */
+		/** @var string[][]|PrincipalDetail[][]|Info[][] $list */
 		$list = [];
 		$used = [];
-		foreach($this->listDetails($info) as $identifier => $detail){
+		foreach($this->listDetails($info) as $identifier => [$detail, $info]){
 			$parts = explode(".", $identifier);
 			for($i = count($parts) - 1; $i >= 0; $i--){
 				$joined = implode(".", array_slice($parts, $i));
@@ -186,18 +189,19 @@ class InfoRegistry{
 				}
 
 				$used[$joined] = count($list);
-				$list[] = [$joined, $detail];
+				$list[] = [$joined, $detail, $info];
 				$added = true;
 				break;
 			}
+			/** @noinspection PhpStatementHasEmptyBodyInspection (remove when done) */
 			if(!isset($added)){
 				// TODO warning: one info is completely masked by another
 			}
 		}
 
 		$output = [];
-		foreach($list as [$name, $detail]){
-			$output[$name] = $detail;
+		foreach($list as [$name, $detail, $info]){
+			$output[$name] = [$detail, $info];
 		}
 		return $output;
 	}

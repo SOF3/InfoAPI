@@ -23,7 +23,7 @@ namespace SOFe\InfoAPI;
 use pocketmine\world\World;
 use pocketmine\world\Position;
 use pocketmine\math\VoxelRayTrace;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class PlayerInfo extends Info{
 	/** @var Player */
@@ -52,10 +52,17 @@ class PlayerInfo extends Info{
 			return new StringInfo($info->player->getNameTag());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.ip", static function(PlayerInfo $info){
-			return new StringInfo($info->player->getAddress());
+			return new StringInfo($info->player->getNetworkSession()->getIp());
+		});
+		$registry->addDetail(self::class, "pocketmine.player.port", static function(PlayerInfo $info) {
+			return new NumberInfo($info->player->getNetworkSession()->getPort());
+		});
+		$registry->addDetail(self::class, "pocketmine.player.address", static function(PlayerInfo $info){
+			// Maybe instead of ip/port/address etc separate, introduce NetworkInfo
+			return new StringInfo($info->player->getNetworkSession()->getIp().":".$info->player->getNetworkSession()->getPort());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.ping", static function(PlayerInfo $info){
-			return new NumberInfo($info->player->getPing());
+			return new NumberInfo($info->player->getNetworkSession()->getPing());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.health", static function(PlayerInfo $info){
 			return new RatioInfo($info->player->getHealth() / 2, $info->player->getMaxHealth() / 2);
