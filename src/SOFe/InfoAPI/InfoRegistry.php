@@ -193,8 +193,8 @@ class InfoRegistry{
 				$added = true;
 				break;
 			}
-            /** @noinspection PhpStatementHasEmptyBodyInspection (remove when done) */
-            if(!isset($added)){
+			/** @noinspection PhpStatementHasEmptyBodyInspection (remove when done) */
+			if(!isset($added)){
 				// TODO warning: one info is completely masked by another
 			}
 		}

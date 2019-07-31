@@ -54,13 +54,13 @@ class PlayerInfo extends Info{
 		$registry->addDetail(self::class, "pocketmine.player.ip", static function(PlayerInfo $info){
 			return new StringInfo($info->player->getNetworkSession()->getIp());
 		});
-        $registry->addDetail(self::class, "pocketmine.player.port", static function(PlayerInfo $info){
-            return new NumberInfo($info->player->getNetworkSession()->getPort());
-        });
+		$registry->addDetail(self::class, "pocketmine.player.port", static function(PlayerInfo $info) {
+			return new NumberInfo($info->player->getNetworkSession()->getPort());
+		});
 		$registry->addDetail(self::class, "pocketmine.player.address", static function(PlayerInfo $info){
-		    // Maybe instead of ip/port/address etc separate, introduce NetworkInfo
-		    return new StringInfo($info->getPlayer()->getNetworkSession()->getIp().":".$info->getPlayer()->getNetworkSession()->getPort());
-        });
+			// Maybe instead of ip/port/address etc separate, introduce NetworkInfo
+			return new StringInfo($info->player->getNetworkSession()->getIp().":".$info->player->getNetworkSession()->getPort());
+		});
 		$registry->addDetail(self::class, "pocketmine.player.ping", static function(PlayerInfo $info){
 			return new NumberInfo($info->player->getNetworkSession()->getPing());
 		});
