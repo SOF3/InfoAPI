@@ -42,16 +42,16 @@ class PlayerInfo extends Info{
 		$registry->addDetail(self::class, "pocketmine.player.name", static function(PlayerInfo $info){
 			return new StringInfo($info->player->getName());
 		});
-		$registry->addDetails(self::class, ["pocketmine.nick", "pocketmine.display name"], static function(PlayerInfo $info){
+		$registry->addDetails(self::class, ["pocketmine.player.nick", "pocketmine.player.display name"], static function(PlayerInfo $info){
 			return new StringInfo($info->player->getDisplayName());
 		});
 		$registry->addDetails(self::class, [
-				"pocketmine.nametag",
-				"pocketmine.name tag"
+				"pocketmine.player.nametag",
+				"pocketmine.player.name tag"
 		], static function(PlayerInfo $info){
 			return new StringInfo($info->player->getNameTag());
 		});
-		$registry->addDetail(self::class, "pocketmine.player.address", static function(PlayerInfo $info){
+		$registry->addDetail(self::class, "pocketmine.player.ip", static function(PlayerInfo $info){
 			return new StringInfo($info->player->getAddress());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.ping", static function(PlayerInfo $info){
