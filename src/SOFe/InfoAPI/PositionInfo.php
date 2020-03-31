@@ -3,7 +3,7 @@
 /*
  * InfoAPI
  *
- * Copyright (C) 2019 SOFe
+ * Copyright (C) 2019-2020 SOFe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 namespace SOFe\InfoAPI;
 
-use pocketmine\world\Position;
+use pocketmine\level\Position;
 use function sprintf;
 
 class PositionInfo extends Info{
@@ -37,7 +37,7 @@ class PositionInfo extends Info{
 
 	public function toString() : string{
 		/** @noinspection NullPointerExceptionInspection */
-		return sprintf("(%g, %g, %g) @ %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getWorld()->getFolderName());
+		return sprintf("(%g, %g, %g) @ %s", $this->position->x, $this->position->y, $this->position->z, $this->position->getLevel()->getFolderName());
 	}
 
 	/**
@@ -59,7 +59,7 @@ class PositionInfo extends Info{
 			"pocketmine.pos.level",
 			"pocketmine.pos.world",
 		], static function(PositionInfo $info){
-			return new WorldInfo($info->position->getWorld());
+			return new LevelInfo($info->position->getLevel());
 		});
 	}
 }

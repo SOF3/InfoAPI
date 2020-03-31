@@ -3,7 +3,7 @@
 /*
  * InfoAPI
  *
- * Copyright (C) 2019 SOFe
+ * Copyright (C) 2019-2020 SOFe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@
 
 namespace SOFe\InfoAPI;
 
-use pocketmine\world\World;
-use pocketmine\world\Position;
+use pocketmine\level\Level;
+use pocketmine\level\Position;
 use pocketmine\math\VoxelRayTrace;
-use pocketmine\player\Player;
+use pocketmine\Player;
 
 class PlayerInfo extends Info{
 	/** @var Player */
@@ -51,18 +51,11 @@ class PlayerInfo extends Info{
 		], static function(PlayerInfo $info){
 			return new StringInfo($info->player->getNameTag());
 		});
-		$registry->addDetail(self::class, "pocketmine.player.ip", static function(PlayerInfo $info){
-			return new StringInfo($info->player->getNetworkSession()->getIp());
-		});
-		$registry->addDetail(self::class, "pocketmine.player.port", static function(PlayerInfo $info) {
-			return new NumberInfo($info->player->getNetworkSession()->getPort());
-		});
 		$registry->addDetail(self::class, "pocketmine.player.address", static function(PlayerInfo $info){
-			// Maybe instead of ip/port/address etc separate, introduce NetworkInfo
-			return new StringInfo($info->player->getNetworkSession()->getIp().":".$info->player->getNetworkSession()->getPort());
+			return new StringInfo($info->player->getAddress());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.ping", static function(PlayerInfo $info){
-			return new NumberInfo($info->player->getNetworkSession()->getPing());
+			return new NumberInfo($info->player->getPing());
 		});
 		$registry->addDetail(self::class, "pocketmine.player.health", static function(PlayerInfo $info){
 			return new RatioInfo($info->player->getHealth() / 2, $info->player->getMaxHealth() / 2);
@@ -75,18 +68,18 @@ class PlayerInfo extends Info{
 		});
 		$registry->addDetail(self::class, "pocketmine.player.eye", static function(PlayerInfo $info){
 			$position = $info->player->getPosition();
-			return new PositionInfo(Position::fromObject($position->add(0, $info->player->getEyeHeight(), 0), $position->getWorld()));
+			return new PositionInfo(Position::fromObject($position->add(0, $info->player->getEyeHeight(), 0), $position->getLevel()));
 		});
 		$registry->addDetail(self::class, "pocketmine.player.block below", static function(PlayerInfo $info){
 			$position = $info->player->asPosition();
 			$below = $position->floor()->subtract(0, 1, 0);
-			if($below->y > World::Y_MAX){
-				$below->y = World::Y_MAX;
+			if($below->y > Level::Y_MAX){
+				$below->y = Level::Y_MAX;
 			}elseif($below->y < 0){
 				$below->y = 0;
 			}
 			/** @noinspection NullPointerExceptionInspection */
-			$block = $position->getWorld()->getBlockAt($below->x, $below->y, $below->z);
+			$block = $position->getLevel()->getBlockAt($below->x, $below->y, $below->z);
 			return new BlockInfo($block);
 		});
 		$registry->addDetails(self::class, [
@@ -94,8 +87,8 @@ class PlayerInfo extends Info{
 			"pocketmine.player.block facing"
 		], static function(PlayerInfo $info){
 			$src = $info->player->asPosition();
-			/** @var World $world */
-			$world = $src->getWorld();
+			/** @var Level $world */
+			$world = $src->getLevel();
 			$src = $src->add(0, $info->player->getEyeHeight(), 0);
 			$trace = VoxelRayTrace::inDirection($src, $info->player->getDirectionVector(), 128);
 			foreach($trace as $pos){

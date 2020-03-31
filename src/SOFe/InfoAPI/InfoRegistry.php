@@ -3,7 +3,7 @@
 /*
  * InfoAPI
  *
- * Copyright (C) 2019 SOFe
+ * Copyright (C) 2019-2020 SOFe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class InfoRegistry{
 
 	private function __construct(){
 		BlockInfo::register($this);
-		WorldInfo::register($this);
+		LevelInfo::register($this);
 		NumberInfo::register($this);
 		PlayerInfo::register($this);
 		PositionInfo::register($this);

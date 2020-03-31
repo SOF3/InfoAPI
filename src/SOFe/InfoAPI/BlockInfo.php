@@ -3,7 +3,7 @@
 /*
  * InfoAPI
  *
- * Copyright (C) 2019 SOFe
+ * Copyright (C) 2019-2020 SOFe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,14 @@ class BlockInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
+        $registry->addDetail(self::class, "pocketmine.block.id", static function(BlockInfo $info){
+            return new NumberInfo($info->block->getId());
+        });
+
+        $registry->addDetail(self::class, "pocketmine.block.damage", static function(BlockInfo $info){
+            return new NumberInfo($info->block->getDamage());
+        });
+
 		$registry->addDetail(self::class, "pocketmine.block.name", static function(BlockInfo $info){
 			return new NumberInfo($info->block->getId());
 		});
