@@ -51,7 +51,7 @@ class NumberInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetail(self::class, "pocketmine.number.ordinal", static function(NumberInfo $info){
+		$registry->addDetail("pocketmine.number.ordinal", static function(NumberInfo $info){
 			/** @noinspection TypeUnsafeComparisonInspection */
 			if($info->number != (int) $info->number){
 				return null;
@@ -68,7 +68,7 @@ class NumberInfo extends Info{
 			}
 			return new StringInfo($info->number . $suffix);
 		});
-		$registry->addDetails(self::class, ["pocketmine.number.percent", "pocketmine.number.percentage"], static function(NumberInfo $info){
+		$registry->addDetails(["pocketmine.number.percent", "pocketmine.number.percentage"], static function(NumberInfo $info){
 			return new StringInfo(sprintf("%g%%", $info->number*100));
 		});
 	}

@@ -38,10 +38,10 @@ class CommonInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetail(self::class, "pocketmine.server.players", static function(CommonInfo $info){
+		$registry->addDetail("pocketmine.server.players", static function(CommonInfo $info){
 			return new NumberInfo(count($info->server->getOnlinePlayers()));
 		});
-		$registry->addDetail(self::class, "pocketmine.server.max players", static function(CommonInfo $info){
+		$registry->addDetail("pocketmine.server.max-players", static function(CommonInfo $info){
 			return new NumberInfo($info->server->getMaxPlayers());
 		});
 	}

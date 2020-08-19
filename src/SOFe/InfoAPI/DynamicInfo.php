@@ -20,33 +20,18 @@
 
 namespace SOFe\InfoAPI;
 
-use function count;
-use function explode;
-use function get_class;
-use function sprintf;
-
 /**
- * Represents something that can be a step or a result in info resolution.
- *
- * All Info subclasses MUST extend Info directly. No immediate subclasses are allowed.
+ * A marker interface for Info implementations that support dynamic details.
  */
-abstract class Info{
+interface DynamicInfo{
 	/**
-	 * The string to get converted to if this info is used as a result
+	 * Resolves dynamic details.
 	 *
-	 * @return string
+	 * This method is only called if and only if
+	 * allowDynamic() returns true AND none of the registered details nor fallbacks resolve into anything.
+	 *
+	 * Only use this function to resolve details with truly dynamic names,
+	 * such as numbers (used in `MultiplyInfo`),
 	 */
-	abstract public function toString() : string;
-
-	/**
-	 * Returns a display name of this info type.
-	 *
-	 * Used in info browsers.
-	 *
-	 * @return string
-	 */
-	public function getInfoType() : string{
-		$pieces = explode("\\", __CLASS__);
-		return $pieces[count($pieces) - 1];
-	}
+	public function resolveDynamic(string $key) : ?Info;
 }

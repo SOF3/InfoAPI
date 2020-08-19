@@ -54,10 +54,4 @@ class PrincipalDetail{
 	public function getClosure() : Closure{
 		return $this->closure;
 	}
-
-	public function increasePrecision(string $name) : string{
-		// TODO unverified assumption: $name is always a suffix of implode(".", $this->identifiers)
-		$size = substr_count($name, ".") + 1;
-		return implode(".", array_slice($this->identifiers, count($this->identifiers) - 1 - $size));
-	}
 }

@@ -60,14 +60,14 @@ class RatioInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetails(self::class, ["pocketmine.ratio.num", "pocketmine.ratio.value"], static function(RatioInfo $info){
+		$registry->addDetails(["pocketmine.ratio.num", "pocketmine.ratio.value"], static function(RatioInfo $info){
 			return new NumberInfo($info->value);
 		});
-		$registry->addDetails(self::class, ["pocketmine.ratio.denom", "pocketmine.ratio.max"], static function(RatioInfo $info){
+		$registry->addDetails(["pocketmine.ratio.denom", "pocketmine.ratio.max"], static function(RatioInfo $info){
 			return new NumberInfo($info->max);
 		});
 
-		$registry->addFallback(self::class, static function(RatioInfo $info){
+		$registry->addFallback(static function(RatioInfo $info){
 			return $info->max !== 0.0 ? new NumberInfo($info->value / $info->max) : null;
 		});
 	}

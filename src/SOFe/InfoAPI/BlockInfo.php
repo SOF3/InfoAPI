@@ -55,11 +55,11 @@ class BlockInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetail(self::class, "pocketmine.block.name", static function(BlockInfo $info){
+		$registry->addDetail("pocketmine.block.name", static function(BlockInfo $info) : NumberInfo{
 			return new NumberInfo($info->block->getId());
 		});
 
-		$registry->addFallback(self::class, static function(BlockInfo $info){
+		$registry->addFallback(static function(BlockInfo $info) : ?PositionInfo{
 			return $info->hasPosition ? new PositionInfo($info->block) : null;
 		});
 	}

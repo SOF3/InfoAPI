@@ -44,16 +44,16 @@ class WorldInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetails(self::class, ["pocketmine.level.custom name", "pocketmine.world.custom name"], static function(WorldInfo $info){
+		$registry->addDetails(["pocketmine.level.custom-name", "pocketmine.world.custom-name"], static function(WorldInfo $info){
 			return new StringInfo($info->world->getDisplayName());
 		});
-		$registry->addDetails(self::class, ["pocketmine.level.name", "pocketmine.world.name", "pocketmine.level.folder name", "pocketmine.world.folder name"], static function(WorldInfo $info){
+		$registry->addDetails(["pocketmine.level.name", "pocketmine.world.name", "pocketmine.level.folder-name", "pocketmine.world.folder-name"], static function(WorldInfo $info){
 			return new StringInfo($info->world->getFolderName());
 		});
-		$registry->addDetails(self::class, ["pocketmine.level.time", "pocketmine.world.time"], static function(WorldInfo $info){
+		$registry->addDetails(["pocketmine.level.time", "pocketmine.world.time"], static function(WorldInfo $info){
 			return new NumberInfo($info->world->getTime()); // TODO better formatting: TimeInfo
 		});
-		$registry->addDetails(self::class, ["pocketmine.level.seed", "pocketmine.world.time"], static function(WorldInfo $info){
+		$registry->addDetails(["pocketmine.level.seed", "pocketmine.world.time"], static function(WorldInfo $info){
 			return new NumberInfo($info->world->getSeed());
 		});
 	}

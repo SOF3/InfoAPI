@@ -49,7 +49,7 @@ Another way is to use the `/info` command. `/info` displays the detail infos abo
 The \\ character is reserved for "escaping" special symbols. Here are some conversions:
 - If you really want to have a \\ character, type it twice: `\\`
 - If you really want to have `${` without getting replaced, type `\${` (or `$\{` is also OK)
-- If you want to insert a newline
+- If you want to insert a newline, type `\n`
 
 **Warning**: In some cases, you may need to double each \\, e.g. instead of typing \\\\, you might need to type \\\\\\\\ due to YAML encoding problems.
 

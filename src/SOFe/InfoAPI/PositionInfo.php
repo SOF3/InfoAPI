@@ -46,16 +46,16 @@ class PositionInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetail(self::class, "pocketmine.pos.x", static function(PositionInfo $info){
+		$registry->addDetail("pocketmine.pos.x", static function(PositionInfo $info){
 			return new NumberInfo($info->position->getX());
 		});
-		$registry->addDetail(self::class, "pocketmine.pos.y", static function(PositionInfo $info){
+		$registry->addDetail("pocketmine.pos.y", static function(PositionInfo $info){
 			return new NumberInfo($info->position->getY());
 		});
-		$registry->addDetail(self::class, "pocketmine.pos.z", static function(PositionInfo $info){
+		$registry->addDetail("pocketmine.pos.z", static function(PositionInfo $info){
 			return new NumberInfo($info->position->getZ());
 		});
-		$registry->addDetails(self::class, [
+		$registry->addDetails([
 			"pocketmine.pos.level",
 			"pocketmine.pos.world",
 		], static function(PositionInfo $info){

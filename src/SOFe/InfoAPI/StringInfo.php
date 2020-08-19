@@ -44,10 +44,10 @@ class StringInfo extends Info{
 	 * @internal Used by InfoAPI to register details
 	 */
 	public static function register(InfoRegistry $registry) : void{
-		$registry->addDetail(self::class, "pocketmine.string.uppercase", static function(StringInfo $info){
+		$registry->addDetail("pocketmine.string.uppercase", static function(StringInfo $info){
 			return new StringInfo(function_exists("mb_strtoupper") ? mb_strtoupper($info->string) : strtoupper($info->string));
 		});
-		$registry->addDetail(self::class, "pocketmine.string.lowercase", static function(StringInfo $info){
+		$registry->addDetail("pocketmine.string.lowercase", static function(StringInfo $info){
 			return new StringInfo(function_exists("mb_strtolower") ? mb_strtolower($info->string) : strtolower($info->string));
 		});
 	}
