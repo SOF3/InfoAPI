@@ -16,4 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: pmmp/setup@v1
-        target: ${{ matrix.target }}
+        with:
+          target: ${{ matrix.target }}
