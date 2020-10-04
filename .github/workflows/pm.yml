@@ -1,10 +1,10 @@
 name: PocketMine plugin CI
 on:
-	push: {}
-	pull_request:
-		types: [opened, reopened, synchronize]
-	release:
-		types: [published]
+  push: {}
+  pull_request:
+    types: [opened, reopened, synchronize]
+  release:
+    types: [published]
 jobs:
   pm:
     name: PocketMine
