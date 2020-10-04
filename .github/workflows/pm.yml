@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        target: [3.15.0, stable, minor.next, major.next]
+        target: [3.15.0, stable]
     steps:
       - uses: actions/checkout@v2
       - uses: pmmp/setup-action@v1
