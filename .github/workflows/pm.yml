@@ -1,0 +1,19 @@
+name: PocketMine plugin CI
+on:
+	push: {}
+	pull_request:
+		types: [opened, reopened, synchronize]
+	release:
+		types: [published]
+jobs:
+  pm:
+    name: PocketMine
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        target: [3.15.0, stable, minor.next, major.next]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pmmp/setup@v1
+        target: ${{ matrix.target }}
