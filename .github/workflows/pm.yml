@@ -18,3 +18,5 @@ jobs:
       - uses: pmmp/setup-action@v1
         with:
           target: ${{ matrix.target }}
+      - run: php -v
+      - run: php $HOME/PocketMine-MP.phar
