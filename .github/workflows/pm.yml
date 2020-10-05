@@ -19,4 +19,4 @@ jobs:
         with:
           target: ${{ matrix.target }}
       - run: php -v
-      - run: php $HOME/PocketMine-MP.phar
+      - run: "echo stop | php $HOME/PocketMine-MP.phar --no-wizard"
