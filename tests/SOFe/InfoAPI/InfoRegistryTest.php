@@ -3,7 +3,7 @@
 /*
  * InfoAPI
  *
- * Copyright (C) 2019 SOFe
+ * Copyright (C) 2019-2021 SOFe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,6 @@ final class InfoRegistryTest extends TestCase {
 		$registry->addDetail(TestInfo1::class, "bar", static function(TestInfo1 $te) {
 			return new TestInfo2($te->getString() . " bar");
 		});
-		self::assertSame("foo bar", $registry->resolve(new TestInfo1("foo"))
+		self::assertSame("foo bar", $registry->resolve(new TestInfo1("foo")));
 	}
 }
