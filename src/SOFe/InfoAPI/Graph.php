@@ -18,10 +18,27 @@
  * limitations under the License.
  */
 
-namespace SOFe\InfoAPI\ui;
+declare(strict_types=1);
 
-use Exception;
+namespace SOFe\InfoAPI;
 
-class BrowseCancelledException extends Exception{
+/**
+ * An from-adjacency list used to resolve expressions.
+ */
+final class Graph {
+	/** @phpstan-var array<class-string<Info>, EdgeList> */
+	private array $fromIndex = [];
 
+	public function __construct() {}
+
+	/**
+	 * Finds all paths starting from `$source` that matches `$expression`.
+	 *
+	 * @phpstan-var class-string<Info> $source
+	 * @phpstan-var array<int, ChildName> $expression
+	 * @phpstan-return array<int, ResolvedPath>
+	 */
+	public function pathFind(string $source, array $expression) : array {
+		// TODO implement
+	}
 }

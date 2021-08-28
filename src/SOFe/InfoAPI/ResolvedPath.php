@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -18,16 +19,15 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
-use PHPUnit\Framework\TestCase;
-
-final class InfoRegistryTest extends TestCase {
-	public function testSimple() {
-		$registry = new InfoRegistry;
-		$registry->addDetail(TestInfo1::class, "bar", static function(TestInfo1 $te) {
-			return new TestInfo2($te->getString() . " bar");
-		});
-		self::assertSame("foo bar", $registry->resolve(new TestInfo1("foo")));
-	}
+/**
+ * A path found in `Graph::pathFind`.
+ */
+final class ResolvedPath {
+	/** @phpstan-var array<int, Closure> */
+	private array $resolvers;
+	private EdgeWeight $weight;
 }

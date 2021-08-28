@@ -18,13 +18,10 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
 use pocketmine\plugin\PluginBase;
-use SOFe\InfoAPI\ui\BrowseInfosCommand;
 
-class Main extends PluginBase{
-	protected function onEnable() : void{
-		$this->getServer()->getCommandMap()->register("InfoAPI", new BrowseInfosCommand($this));
-	}
-}
+final class Main extends PluginBase {}

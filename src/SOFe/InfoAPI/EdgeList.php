@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -18,20 +19,11 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
-/**
- * A marker interface for Info implementations that support dynamic details.
- */
-interface DynamicInfo{
-	/**
-	 * Resolves dynamic details.
-	 *
-	 * This method is only called if and only if
-	 * allowDynamic() returns true AND none of the registered details nor fallbacks resolve into anything.
-	 *
-	 * Only use this function to resolve details with truly dynamic names,
-	 * such as numbers (used in `MultiplyInfo`),
-	 */
-	public function resolveDynamic(string $key) : ?Info;
+final class EdgeList {
+	/** @phpstan-var array<string, array<int, ListedEdge>> */
+	private array $edges = [];
 }

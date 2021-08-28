@@ -18,20 +18,16 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
-final class TestInfo1 extends Info{
-	private $string;
-
-	public function __construct(string $string){
-		$this->string = $string;
-	}
-
-	public function getString() : string{
-		return $this->string;
-	}
-
-	public function __toString() : string{
-		return $this->string;
-	}
+/**
+ * @internal A class holding the edge and its target node,
+ * used for storage in `EdgeList`.
+ */
+final class ListedEdge {
+	public Edge $edge;
+	/** @phpstan-var class-string<Info> */
+	public string $target;
 }

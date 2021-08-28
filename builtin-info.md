@@ -23,18 +23,18 @@ Detail info:
 | pocketmine.server.players | NumberInfo | Number of online players | 0, 1, 2, ... |
 | pocketmine.server.max players | NumberInfo | Maximum limit of online players | 0, 1, 2, ... |
 
-## LevelInfo
+## WorldInfo
 Textual representation: the **folder name** of the world
 
 Detail info:
 
 | Name | Type | Description | Examples |
 | :---: | :---: | :---: | :---: |
-| pocketmine.level.custom name | StringInfo | The world name in level.dat (not the folder name, may duplicate) | world |
-| pocketmine.level.folder name | StringInfo | The world name in level.dat (not the folder name, may duplicate) | world |
-| pocketmine.level.name |
-| pocketmine.level.time | NumberInfo | The number of ticks for level time | 0, 1, 2, ..., 24000, 24001, ... |
-| pocketmine.level.seed | NumberInfo | The level seed | 0, 129348215, ... |
+| pocketmine.world.custom name | StringInfo | The world name in level.dat (not the folder name, may duplicate) | world |
+| pocketmine.world.folder name | StringInfo | The world name in level.dat (not the folder name, may duplicate) | world |
+| pocketmine.world.name |
+| pocketmine.world.time | NumberInfo | The number of ticks for world time | 0, 1, 2, ..., 24000, 24001, ... |
+| pocketmine.world.seed | NumberInfo | The world seed | 0, 129348215, ... |
 
 ## NumberInfo
 Textual representation: the number with at most 6 significant figures, e.g.

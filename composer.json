@@ -1,0 +1,23 @@
+{
+    "name": "sofe/infoapi",
+    "type": "library",
+		"minimum-stability": "dev",
+    "require": {
+        "pocketmine/pocketmine-mp": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^0.12.96"
+    },
+    "license": "Apache-2.0",
+		"autoload": {
+			"psr-0": {
+				"SOFe\\InfoAPI\\": "src/"
+			}
+		},
+		"autoload-dev": {
+			"psr-0": {
+				"SOFe\\InfoAPI\\": "tests/"
+			}
+		}
+}

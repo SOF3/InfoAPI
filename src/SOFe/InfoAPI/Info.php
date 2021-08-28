@@ -18,35 +18,29 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
-use function count;
+use function array_slice;
 use function explode;
 use function get_class;
-use function sprintf;
 
-/**
- * Represents something that can be a step or a result in info resolution.
- *
- * All Info subclasses MUST extend Info directly. No immediate subclasses are allowed.
- */
-abstract class Info{
+abstract class Info {
 	/**
-	 * The string to get converted to if this info is used as a result
+	 * Displays this info in a template.
 	 *
-	 * @return string
+	 * Usually, this should be equivalent ot the `name` field of a named info.
 	 */
 	abstract public function toString() : string;
 
 	/**
-	 * Returns a display name of this info type.
+	 * Displays the type of this info for a user setting up templates.
 	 *
-	 * Used in info browsers.
-	 *
-	 * @return string
+	 * This value is used in documentation and info browser.
 	 */
-	public function getInfoType() : string{
-		$pieces = explode("\\", __CLASS__);
-		return $pieces[count($pieces) - 1];
+	public function getInfoType() : string {
+		$comps = explode("\\", get_class($this));
+		return array_slice($comps, -1)[0];
 	}
 }

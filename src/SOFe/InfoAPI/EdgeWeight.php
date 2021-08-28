@@ -18,20 +18,15 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
-final class TestInfo2 extends Info{
-	private $string;
+final class EdgeWeight {
+	public int $parentChild = 0;
+	public int $fallback = 0;
 
-	public function __construct(string $string){
-		$this->string = $string;
-	}
-
-	public function getString() : string{
-		return $this->string;
-	}
-
-	public function __toString() : string{
-		return $this->string;
+	static public function compare(EdgeWeight $a, EdgeWeight $b) : int {
+		return $a->fallback <=> $b->fallback;
 	}
 }

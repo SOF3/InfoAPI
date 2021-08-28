@@ -18,103 +18,80 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace SOFe\InfoAPI;
 
 use Closure;
-use InvalidArgumentException;
-use pocketmine\Server;
-use pocketmine\utils\TextFormat;
-use function explode;
-use function strlen;
-use function strpos;
-use function substr;
 
-final class InfoAPI{
-	/**
-	 * Formats a template string with the context given
-	 *
-	 * @param string    $template      the template string, usually from a config value
-	 * @param Info[]    $context       the context, an associative array of Info objects
-	 * @param Closure[] $fallbackInfos default [function(){ return new CommonInfo(); }]
-	 * @param bool      $colorize      if set to true, replaces `&[0-9A-Fa-f]` with the color code.
-	 *
-	 * @return string
-	 * @throws InvalidArgumentException
-	 *
-	 * @see ContextInfo
-	 */
-	public static function resolveTemplate(string $template, array $context, ?array $fallbackInfos = null, bool $colorize = true) : string{
-		$fallbackInfos = $fallbackInfos ?? [static function(){
-				return new CommonInfo(Server::getInstance());
-			}];
-		$offset = 0;
-		$output = "";
-		while($offset < strlen($template) - 2){
-			$char = $template{$offset++};
-			if($char === "\\"){
-				$char = $template{$offset++};
-				switch($char){
-					case "n":
-						$out = "\n";
-						break;
-					case "$":
-					case "{":
-					case "}";
-						$out = $char;
-						break;
-					default:
-						throw new InvalidArgumentException("Unknown escape sequence \"\\$char\"");
-				}
-				$output .= $out;
-			}elseif($char === "$" && $template{$offset} === "{"){
-				$offset++;
-				$next = strpos($template, "}", $offset);
-				if($next === false){
-					throw new InvalidArgumentException("Unclosed \${");
-				}
-				$iden = substr($template, $offset, $next - $offset);
-				$offset = $next + 1;
-				$output .= self::resolve($iden, $context, $fallbackInfos);
-			}elseif($colorize && $char === "&" && strpos("0123456789abcdefklmnor", $template{$offset}) !== false){
-				$output .= TextFormat::ESCAPE;
-			}else{
-				$output .= $char;
-			}
-		}
-		return $output;
+final class InfoAPI {
+	private Graph $graph;
+
+	private function __construct() {
+		$this->graph = new Graph;
 	}
 
 	/**
-	 * Resolves an info identifier.
+	 * Register a child info for infos of type `$class`.
 	 *
-	 * @param string    $iden    the info identifier
-	 * @param Info[]    $context the context infos
-	 * @param Closure[] $fallbackInfos
+	 * The name should be a unique dot-delimited string with increasing specificness.
+	 * It is recommended to use the format `plugin.info`
+	 * (or `plugin.module.info` if the plugin has multiple modules),
+	 * e.g. the money of a player from the `MultiEconomy` plugin
+	 * can be written as `multieconomy.money`.
 	 *
-	 * @return string the resolved value
+	 * It is advised that info names be as simple as possible and not to contain more than one word
+	 * (except the plugin name part, which should just be the lowercase of their exact name).
+	 * In the case that it is inevitable (plugin names),
+	 * names should be registered in the `camelCase` format.
+	 * However, infos are matched case-insensitively,
+	 * so `fooBar` and `foobar` are still the same name.
+	 *
+	 * @template P of Info
+	 * @template C of Info
+	 * @phpstan-param class-string<P>    $parent  The parent info class that this child can be resolved from.
+	 * @phpstan-param class-string<C>    $child   The child info class resolved into.
+	 * @phpstan-param string             $fqn     The fully-qualified, dot-separated name of this child info.
+	 * @phpstan-param Closure(P): C|null $resolve A closure to resolve the parent info into a child info,
+	 *                                            or `null` if not available for that instance.
 	 */
-	public static function resolve(string $iden, array $context, array $fallbackInfos) : string{
-		if(isset($context[$iden])){
-			return $context[$iden]->toString();
-		}
-
-		foreach($context as $name => $info){
-			if(strpos($iden, $name . " ") === 0){
-				$residue = substr($iden, strlen($name) + 1);
-				$result = InfoRegistry::getInstance()->resolve(explode(" ", $residue), $info);
-				if($result !== null){
-					return $result;
-				}
-			}
-		}
-
-		foreach($fallbackInfos as $info){
-			$result = InfoRegistry::getInstance()->resolve(explode(" ", $iden), $info);
-			if($result !== null){
-				return $result;
-			}
-		}
-
-		throw new InvalidArgumentException("Unresolved info \"$iden\"");
+	static public function provideInfo(string $parent, string $fqn, Closure $resolve) : void {
+		// TODO implement
 	}
+
+	/**
+	 * Registers a fallback info for infos of type `$class`.
+	 *
+	 * If a template writes `{foo bar}`, but `bar` is not found in `foo` (`FooInfo`),
+	 * InfoAPI will resort to searching `bar` in each fallback info of `FooInfo`.
+	 * Furthermore, if a fallback info has its own fallback info,
+	 * the fallback-fallback info will be transitively searched on.
+	 * The search follows a depth-first order,
+	 * and fallbacks of the same type are resolved in the order they are registered.
+	 *
+	 * `ChildInfo` should only be the fallback of `ParentInfo` if this is intended by
+	 * the plugin that declares `ParentInfo`
+	 * (or the plugin that declares `ChildInfo`, although this is discouraged).
+	 * Plugins adding fallback info should be aware of possible infinite recursion
+	 * if a loop in fallbacks is detected.
+	 *
+	 * @template P of Info
+	 * @template C of Info
+	 * @phpstan-param class-string<P>    $parent  The parent info class that this child can be resolved from.
+	 * @phpstan-param class-string<C>    $child   The child info class resolved into.
+	 * @phpstan-param Closure(P): C|null $resolve A closure to resolve the parent info into a child info,
+	 *                                            or `null` if not available for that instance.
+	 */
+	static public function provideFallback(string $class, Closure $resolve) : void {
+		// TODO implement
+	}
+
+	// SINGLETON BOILERPLATE //
+	/* {{{ */
+	private static ?InfoAPI $instance = null;
+
+	static private function getInstance() : InfoAPI {
+		return self::$instance = self::$instance ?? new self;
+	}
+	/* }}} */
 }
