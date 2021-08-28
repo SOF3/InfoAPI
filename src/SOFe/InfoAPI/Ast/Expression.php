@@ -20,13 +20,13 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\Ast;
 
-final class EdgeWeight {
-	public int $parentChild = 0;
-	public int $fallback = 0;
+/**
+ * An expression in a pair of braces that can be resolved.
+ */
+final class Expression {
+	public Path $path;
 
-	static public function compare(EdgeWeight $a, EdgeWeight $b) : int {
-		return $a->fallback <=> $b->fallback;
-	}
+	public ?Expression $alternative;
 }

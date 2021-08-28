@@ -20,14 +20,13 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\Graph;
 
-/**
- * @internal A class holding the edge and its target node,
- * used for storage in `EdgeList`.
- */
-final class ListedEdge {
-	public Edge $edge;
-	/** @phpstan-var class-string<Info> */
-	public string $target;
+final class EdgeWeight {
+	public int $parentChild = 0;
+	public int $fallback = 0;
+
+	static public function compare(EdgeWeight $a, EdgeWeight $b) : int {
+		return $a->fallback <=> $b->fallback;
+	}
 }

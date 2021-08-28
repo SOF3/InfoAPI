@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\Graph;
 
 /**
  * An instance of relationship between two nodes.

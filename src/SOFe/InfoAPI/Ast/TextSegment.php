@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -21,9 +20,11 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\Ast;
 
-final class EdgeList {
-	/** @phpstan-var array<string, array<int, ListedEdge>> */
-	private array $edges = [];
+/**
+ * A segment of (escapes-resolved) plain-text.
+ */
+final class TextSegment implements Segment {
+	public string $text;
 }

@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -21,13 +20,9 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\Ast;
 
 /**
- * A path found in `Graph::pathFind`.
+ * Either a `TextSegment` or an `InfoSegment`.
  */
-final class ResolvedPath {
-	/** @phpstan-var array<int, Closure> */
-	private array $resolvers;
-	private EdgeWeight $weight;
-}
+interface Segment {}

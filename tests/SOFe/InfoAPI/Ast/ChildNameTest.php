@@ -20,7 +20,7 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
+namespace SOFe\InfoAPI\Ast;
 
 use PHPUnit\Framework\TestCase;
 
