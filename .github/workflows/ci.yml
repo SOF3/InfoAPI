@@ -1,0 +1,80 @@
+name: CI
+on:
+  - push
+  - pull_request
+jobs:
+  phpunit:
+    name: Unit test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{matrix.php-version}}
+          tools: composer
+          coverage: xdebug2
+      - run: composer install --optimize-autoloader --ignore-platform-reqs
+      - name: phpunit test
+        env:
+          XDEBUG_MODE: coverage
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{secrets.CODECOV_SECRET}}
+          fail_ci_if_error: false
+  phpstan:
+    name: phpstan analyze
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{matrix.php-version}}
+          tools: composer
+      - run: composer update --optimize-autoloader --ignore-platform-reqs
+      - name: phpstan analyze
+        run: vendor/bin/phpstan
+  infection:
+    name: Mutation test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version:
+          - "7.4"
+          - "8.0"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{matrix.php-version}}
+          tools: composer
+          coverage: xdebug2
+      - run: composer update --optimize-autoloader
+      - name: infection
+        env:
+          XDEBUG_MODE: coverage
+        run: composer infection
+      - uses: actions/upload-artifact@v1
+        with:
+          name: infection.log
+          path: infection.log
+      - uses: actions/upload-artifact@v1
+        with:
+          name: infection-summary.log
+          path: infection-summary.log
+      - uses: actions/upload-artifact@v1
+        with:
+          name: infection-per-mutator.md
+          path: infection-per-mutator.md
