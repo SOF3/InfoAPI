@@ -64,7 +64,7 @@ jobs:
       - name: infection
         env:
           XDEBUG_MODE: coverage
-        run: composer infection
+        run: vendor/bin/infection -s
       - uses: actions/upload-artifact@v1
         with:
           name: infection.log
