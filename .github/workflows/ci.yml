@@ -24,7 +24,7 @@ jobs:
       - name: phpunit test
         env:
           XDEBUG_MODE: coverage
-        run: vendor/bin/phpunit tests --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
       - uses: codecov/codecov-action@v2
         with:
           files: coverage.xml
