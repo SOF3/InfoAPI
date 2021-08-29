@@ -26,5 +26,5 @@ namespace SOFe\InfoAPI\Ast;
  * A segment of (escapes-resolved) plain-text.
  */
 final class TextSegment implements Segment {
-	public string $text;
+	public string $text = "";
 }

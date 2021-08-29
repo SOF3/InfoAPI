@@ -22,9 +22,38 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Ast;
 
+use function explode;
+
 /**
  * A segment of brace-enclosed info.
  */
 final class InfoSegment implements Segment {
-	public Expression $coalscence;
+	public Expression $head;
+
+	static public function parse(string $string) : self {
+		$head = new Expression;
+		$expr = $head;
+		$first = true;
+		foreach(explode("|", $string) as $pathString) {
+			if(!$first) {
+				$expr->alternative = new Expression;
+				$expr = $expr->alternative;
+			}
+			$first = false;
+			$expr->path = self::parsePath($pathString);
+		}
+		$self = new self;
+		$self->head = $head;
+		return $self;
+	}
+
+	static private function parsePath(string $path) : Path {
+		$ret = new Path;
+		foreach(explode(" ", $path) as $part) {
+			if(strlen($part) > 0) {
+				$ret->names[] = ChildName::parse($part);
+			}
+		}
+		return $ret;
+	}
 }

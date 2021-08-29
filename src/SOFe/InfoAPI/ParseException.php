@@ -27,4 +27,8 @@ use Exception;
 /**
  * An exception occurred when parsing a template.
  */
-final class ParseException extends Exception {}
+final class ParseException extends Exception {
+	public function __construct(string $message, int $offset) {
+		parent::__construct($message, $offset);
+	}
+}

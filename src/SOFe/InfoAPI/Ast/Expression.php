@@ -28,5 +28,5 @@ namespace SOFe\InfoAPI\Ast;
 final class Expression {
 	public Path $path;
 
-	public ?Expression $alternative;
+	public ?Expression $alternative = null;
 }

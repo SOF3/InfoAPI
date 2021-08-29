@@ -25,16 +25,19 @@ namespace SOFe\InfoAPI\Ast;
 use count;
 
 final class ChildName {
-	/** @var non-empty-array<int, string> */
+	/** @phpstan-var non-empty-array<int, string> */
 	private array $parts;
 
 	/**
-	 * @param non-empty-array<int, string> $parts
+	 * @phpstan-param non-empty-array<int, string> $parts
 	 */
 	private function __construct(array $parts) {
 		$this->parts = $parts;
 	}
 
+	/**
+	 * Parses a field used to identify a parent-child relationship.
+	 */
 	static public function parse(string $fqn) : self {
 		return new self(explode(".", $fqn));
 	}
@@ -65,5 +68,12 @@ final class ChildName {
 		}
 
 		return true;
+	}
+
+	/**
+	 * @phpstan-return non-empty-array<int, string>
+	 */
+	public function getParts() : array {
+		return $this->parts;
 	}
 }
