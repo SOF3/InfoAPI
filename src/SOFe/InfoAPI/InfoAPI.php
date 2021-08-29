@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI;
 
 use Closure;
+use SOFe\InfoAPI\Graph\Graph;
 
 final class InfoAPI {
 	private Graph $graph;
@@ -49,13 +50,13 @@ final class InfoAPI {
 	 *
 	 * @template P of Info
 	 * @template C of Info
-	 * @phpstan-param class-string<P>    $parent  The parent info class that this child can be resolved from.
-	 * @phpstan-param class-string<C>    $child   The child info class resolved into.
-	 * @phpstan-param string             $fqn     The fully-qualified, dot-separated name of this child info.
-	 * @phpstan-param Closure(P): C|null $resolve A closure to resolve the parent info into a child info,
+	 * @phpstan-param class-string<P> $parent  The parent info class that this child can be resolved from.
+	 * @phpstan-param class-string<C> $child   The child info class resolved into.
+	 * @phpstan-param string          $fqn     The fully-qualified, dot-separated name of this child info.
+	 * @phpstan-param Closure(P): ?C  $resolve A closure to resolve the parent info into a child info,
 	 *                                            or `null` if not available for that instance.
 	 */
-	static public function provideInfo(string $parent, string $fqn, Closure $resolve) : void {
+	static public function provideInfo(string $parent, string $child, string $fqn, Closure $resolve) : void {
 		// TODO implement
 	}
 
@@ -77,12 +78,12 @@ final class InfoAPI {
 	 *
 	 * @template P of Info
 	 * @template C of Info
-	 * @phpstan-param class-string<P>    $parent  The parent info class that this child can be resolved from.
-	 * @phpstan-param class-string<C>    $child   The child info class resolved into.
-	 * @phpstan-param Closure(P): C|null $resolve A closure to resolve the parent info into a child info,
-	 *                                            or `null` if not available for that instance.
+	 * @phpstan-param class-string<P> $base     The base info class that this fallback is provided for.
+	 * @phpstan-param class-string<C> $fallback The fallback info class.
+	 * @phpstan-param Closure(P): ?C  $resolve  A closure to resolve the parent info into a child info,
+	 *                                          or `null` if not available for that instance.
 	 */
-	static public function provideFallback(string $class, Closure $resolve) : void {
+	static public function provideFallback(string $base, string $fallback, Closure $resolve) : void {
 		// TODO implement
 	}
 

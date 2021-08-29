@@ -60,7 +60,7 @@ final class Template {
 					if($until === false) {
 						throw new ParseException("Unmatched open brace. Use {{ to write a literal open brace.", $index);
 					}
-					$self->segments[] = InfoSegment::parse(substr($template, $index + 1, $until - $index - 1));
+					$self->segments[] = InfoSegment::parse(substr($template, $index + 1, $until - $index - 1), $index + 1);
 					$index = $until;
 				}
 			} elseif($template[$index] === "}") {

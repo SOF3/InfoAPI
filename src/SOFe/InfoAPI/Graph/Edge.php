@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use SOFe\InfoAPI\Ast\ChildName;
+
 /**
  * An instance of relationship between two nodes.
  */

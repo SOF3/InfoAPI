@@ -22,7 +22,10 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Ast;
 
+use SOFe\InfoAPI\ParseException;
+use function count;
 use function explode;
+use function strlen;
 
 /**
  * A segment of brace-enclosed info.
@@ -30,7 +33,7 @@ use function explode;
 final class InfoSegment implements Segment {
 	public Expression $head;
 
-	static public function parse(string $string) : self {
+	static public function parse(string $string, int $index) : self {
 		$head = new Expression;
 		$expr = $head;
 		$first = true;
@@ -40,20 +43,29 @@ final class InfoSegment implements Segment {
 				$expr = $expr->alternative;
 			}
 			$first = false;
-			$expr->path = self::parsePath($pathString);
+			$expr->path = self::parsePath($pathString, $index);
+
+			$index += strlen($pathString) + 1;
 		}
 		$self = new self;
 		$self->head = $head;
 		return $self;
 	}
 
-	static private function parsePath(string $path) : Path {
-		$ret = new Path;
+	static private function parsePath(string $path, int $index) : Path {
+		$names = [];
 		foreach(explode(" ", $path) as $part) {
 			if(strlen($part) > 0) {
-				$ret->names[] = ChildName::parse($part);
+				$names[] = ChildName::parse($part);
 			}
 		}
-		return $ret;
+
+		if(count($names) === 0) {
+			throw new ParseException("Empty template or coalescence path", $index);
+		}
+
+		$path = new Path;
+		$path->names = $names;
+		return $path;
 	}
 }

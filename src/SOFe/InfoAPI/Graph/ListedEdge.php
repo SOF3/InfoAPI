@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use SOFe\InfoAPI\Info;
+
 /**
  * @internal A class holding the edge and its target node,
  * used for storage in `EdgeList`.

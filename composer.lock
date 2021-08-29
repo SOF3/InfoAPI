@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5793ced7b76f77f46246794094e9ca45",
+    "content-hash": "834aa58e75836b1c96614068916ef9ac",
     "packages": [
         {
             "name": "adhocore/json-comment",
@@ -680,12 +680,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pmmp/PocketMine-MP.git",
-                "reference": "3fe6ce7d1fb5abab3079746a2b75a9a9c4eddd41"
+                "reference": "2139171a5525a89061cbadfa30f3f3f1243973b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pmmp/PocketMine-MP/zipball/3fe6ce7d1fb5abab3079746a2b75a9a9c4eddd41",
-                "reference": "3fe6ce7d1fb5abab3079746a2b75a9a9c4eddd41",
+                "url": "https://api.github.com/repos/pmmp/PocketMine-MP/zipball/2139171a5525a89061cbadfa30f3f3f1243973b4",
+                "reference": "2139171a5525a89061cbadfa30f3f3f1243973b4",
                 "shasum": ""
             },
             "require": {
@@ -771,7 +771,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-08-27T20:02:52+00:00"
+            "time": "2021-08-28T23:40:09+00:00"
         },
         {
             "name": "pocketmine/raklib",
@@ -2114,6 +2114,51 @@
             "time": "2021-03-17T13:42:18+00:00"
         },
         {
+            "name": "phpstan/extension-installer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/extension-installer.git",
+                "reference": "3f3e4da7353f6d5392436cd3a1943361e77239fe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/3f3e4da7353f6d5392436cd3a1943361e77239fe",
+                "reference": "3f3e4da7353f6d5392436cd3a1943361e77239fe",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1 || ^2.0",
+                "php": "^7.1 || ^8.0",
+                "phpstan/phpstan": ">=0.11.6"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2.0",
+                "phpstan/phpstan-strict-rules": "^0.11 || ^0.12"
+            },
+            "default-branch": true,
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PHPStan\\ExtensionInstaller\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\ExtensionInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer plugin for automatic installation of PHPStan extensions",
+            "support": {
+                "issues": "https://github.com/phpstan/extension-installer/issues",
+                "source": "https://github.com/phpstan/extension-installer/tree/master"
+            },
+            "time": "2021-05-15T11:05:43+00:00"
+        },
+        {
             "name": "phpstan/phpstan",
             "version": "dev-master",
             "source": {
@@ -2177,6 +2222,61 @@
                 }
             ],
             "time": "2021-08-27T11:17:10+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-phpunit",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-phpunit.git",
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0",
+                "phpstan/phpstan": "^0.12.92"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<7.0"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/phpstan-strict-rules": "^0.12.6",
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "phpstan-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.12-dev"
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon",
+                        "rules.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPUnit extensions and rules for PHPStan",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/0.12.22"
+            },
+            "time": "2021-08-12T10:53:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3618,7 +3718,9 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "pocketmine/pocketmine-mp": 20
+        "pocketmine/pocketmine-mp": 20,
+        "phpstan/phpstan-phpunit": 20,
+        "phpstan/extension-installer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -27,5 +27,5 @@ namespace SOFe\InfoAPI\Ast;
  */
 final class Path {
 	/** @phpstan-var non-empty-array<int, ChildName> */
-	public array $names = [];
+	public array $names;
 }

@@ -22,6 +22,9 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use SOFe\InfoAPI\Ast\ChildName;
+use SOFe\InfoAPI\Info;
+
 /**
  * An from-adjacency list used to resolve expressions.
  */
@@ -34,11 +37,12 @@ final class Graph {
 	/**
 	 * Finds all paths starting from `$source` that matches `$expression`.
 	 *
-	 * @phpstan-var class-string<Info> $source
-	 * @phpstan-var array<int, ChildName> $expression
-	 * @phpstan-return array<int, ResolvedPath>
+	 * @phpstan-param class-string<Info> $source
+	 * @phpstan-param array<int, ChildName> $expression
+	 * @phpstan-return ResolvedPath|null
 	 */
-	public function pathFind(string $source, array $expression) : array {
+	public function pathFind(string $source, array $expression) : ?ResolvedPath {
 		// TODO implement
+		return null;
 	}
 }

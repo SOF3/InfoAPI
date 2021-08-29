@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use Closure;
+
 /**
  * A path found in `Graph::pathFind`.
  */

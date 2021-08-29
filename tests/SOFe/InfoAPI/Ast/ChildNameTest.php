@@ -25,21 +25,21 @@ namespace SOFe\InfoAPI\Ast;
 use PHPUnit\Framework\TestCase;
 
 final class ChildNameTest extends TestCase {
-	public function testChildNameMatchExact() {
+	public function testChildNameMatchExact() : void {
 		self::assertChildNameMatch("a", "a", true);
 		self::assertChildNameMatch("a.b.c", "a.b.c", true);
 	}
 
-	public function testChildNameMatchSuffix() {
+	public function testChildNameMatchSuffix() : void {
 		self::assertChildNameMatch("a.b", "b", true);
 		self::assertChildNameMatch("a.b.c", "b.c", true);
 	}
 
-	public function testChildNameMatchSubsequence() {
+	public function testChildNameMatchSubsequence() : void {
 		self::assertChildNameMatch("a.b.c", "a.c", true);
 	}
 
-	public function testChildNameMismatchDifferentSuffix() {
+	public function testChildNameMismatchDifferentSuffix() : void {
 		self::assertChildNameMatch("a", "b", false);
 		self::assertChildNameMatch("a.b", "a", false);
 		self::assertChildNameMatch("a.b.d", "a.b.c", false);
@@ -47,13 +47,13 @@ final class ChildNameTest extends TestCase {
 		self::assertChildNameMatch("a.c.b", "a.b.c", false);
 	}
 
-	public function testChildNameMismatchMissingPart() {
+	public function testChildNameMismatchMissingPart() : void {
 		self::assertChildNameMatch("a.b", "a.b.c", false);
 		self::assertChildNameMatch("a.c", "a.b.c", false);
 		self::assertChildNameMatch("b.c", "a.b.c", false);
 	}
 
-	public function testChildNameMismatchOrder() {
+	public function testChildNameMismatchOrder() : void {
 		self::assertChildNameMatch("a.b", "b.a", false);
 		self::assertChildNameMatch("a.c.b", "a.b.c", false);
 		self::assertChildNameMatch("b.a.c", "a.b.c", false);
@@ -62,7 +62,7 @@ final class ChildNameTest extends TestCase {
 		self::assertChildNameMatch("c.b.a", "a.b.c", false);
 	}
 
-	static private function assertChildNameMatch(string $fullString, string $subString, bool $expect) {
+	static private function assertChildNameMatch(string $fullString, string $subString, bool $expect) : void {
 		$full = ChildName::parse($fullString);
 		$sub = ChildName::parse($subString);
 		self::assertSame($expect, $full->matches($sub));

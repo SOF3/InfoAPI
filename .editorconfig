@@ -3,3 +3,7 @@ root = true
 [*.php]
 indent_style = tab
 indent_size = 4
+
+[*.{neon,neon.dist}]
+indent_style = tab
+indent_size = 4
