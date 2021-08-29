@@ -22,8 +22,10 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use function count;
 use SOFe\InfoAPI\Ast\ChildName;
 use SOFe\InfoAPI\Info;
+use SplPriorityQueue;
 
 /**
  * An from-adjacency list used to resolve expressions.
@@ -42,7 +44,31 @@ final class Graph {
 	 * @phpstan-return ResolvedPath|null
 	 */
 	public function pathFind(string $source, array $expression) : ?ResolvedPath {
-		// TODO implement
+		$heap = new class extends SplPriorityQueue {
+			/**
+			 * @param mixed $a
+			 * @param mixed $b
+			 */
+			public function compare($a, $b) : int {
+				if($a instanceof EdgeWeight and $b instanceof EdgeWeight) {
+					return -EdgeWeight::compare($a, $b);
+				}
+				return $a <=> $b;
+			}
+		};
+		$heap->insert(new ResolvedPath($source), new EdgeWeight);
+
+		// TODO implement cycle detection
+		while(!$heap->isEmpty()) {
+			$path = $heap->extract();
+			$list = $this->fromIndex[$path->getTail()];
+			$step = count($path->getResolvers());
+			foreach($list->find($expression[$step]) as $edge) {
+				$newPath = $path->join($edge->edge->getResolver(), $edge->edge->isFallback(), $edge->target);
+				$heap->insert($newPath, $newPath->getWeight());
+			}
+		}
+
 		return null;
 	}
 }

@@ -22,7 +22,27 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use Generator;
+use SOFe\InfoAPI\Ast\ChildName;
+
 final class EdgeList {
 	/** @phpstan-var array<string, array<int, ListedEdge>> */
 	private array $edges = [];
+
+	/**
+	 * @phpstan-return Generator<int, ListedEdge, void, void>
+	 */
+	public function find(ChildName $pattern) : Generator {
+		$last = $pattern->getLastPart();
+		if(!isset($this->edges[$last])) {
+			return;
+		}
+
+		foreach($this->edges[$last] as $edge) {
+			$name = $edge->edge->getName();
+			if($name === null || $name->matches($pattern)) {
+				yield $edge;
+			}
+		}
+	}
 }

@@ -76,4 +76,8 @@ final class ChildName {
 	public function getParts() : array {
 		return $this->parts;
 	}
+
+	public function getLastPart() : string {
+		return $this->parts[count($this->parts) - 1];
+	}
 }

@@ -23,12 +23,61 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Graph;
 
 use Closure;
+use SOFe\InfoAPI\Info;
 
 /**
  * A path found in `Graph::pathFind`.
  */
 final class ResolvedPath {
-	/** @phpstan-var array<int, Closure> */
+	/** @phpstan-var array<int, Closure(Info): ?Info> */
 	private array $resolvers;
 	private EdgeWeight $weight;
+	/** @phpstan-var class-string<Info> */
+	private string $tail;
+
+	/**
+	 * @phpstan-param class-string<Info> $tail
+	 */
+	public function __construct(string $tail) {
+		$this->resolvers = [];
+		$this->weight = new EdgeWeight;
+		$this->tail = $tail;
+	}
+
+	/**
+	 * @phpstan-return array<int, Closure>
+	 */
+	public function getResolvers() : array {
+		return $this->resolvers;
+	}
+
+	public function getWeight() : EdgeWeight {
+		return $this->weight;
+	}
+
+	/**
+	 * Returns the info class that this path ends at.
+	 *
+	 * @phpstan-return class-string<Info>
+	 */
+	public function getTail() : string {
+		return $this->tail;
+	}
+
+	/**
+	 * @phpstan-param Closure(Info): ?Info $resolver
+	 * @phpstan-param class-string<Info>        $newTail
+	 */
+	public function join(Closure $resolver, bool $isFallback, string $newTail) : ResolvedPath {
+		$path = clone $this;
+		$path->resolvers[] = $resolver;
+		$path->weight = clone $path->weight;
+		if($isFallback) {
+			++$path->weight->fallback;
+		} else {
+			++$path->weight->parentChild;
+		}
+		$path->tail = $newTail;
+		return $path;
+	}
 }

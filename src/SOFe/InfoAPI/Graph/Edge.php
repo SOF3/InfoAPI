@@ -22,7 +22,9 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Graph;
 
+use Closure;
 use SOFe\InfoAPI\Ast\ChildName;
+use SOFe\InfoAPI\Info;
 
 /**
  * An instance of relationship between two nodes.
@@ -33,8 +35,12 @@ final class Edge {
 	 */
 	private ?ChildName $name;
 
-	private function __construct(?ChildName $name) {
+	/** @phpstan-var Closure(Info): ?Info */
+	private Closure $resolver;
+
+	private function __construct(?ChildName $name, Closure $resolver) {
 		$this->name = $name;
+		$this->resolver = $resolver;
 	}
 
 	public function isFallback() : bool {
@@ -46,6 +52,15 @@ final class Edge {
 	 */
 	public function getName() : ?ChildName {
 		return $this->name;
+	}
+
+	/**
+	 * A closure that maps the source info to the dest info.
+	 *
+	 * @phpstan-return Closure(Info): ?Info
+	 */
+	public function getResolver() : Closure {
+		return $this->resolver;
 	}
 
 	/**
@@ -61,15 +76,19 @@ final class Edge {
 
 	/**
 	 * Creates a parent-child info edge.
+	 *
+	 * @phpstan-param Closure(Info): ?Info $resolver
 	 */
-	static public function parentChild(ChildName $name) : self {
-		return new self($name);
+	static public function parentChild(ChildName $name, Closure $resolver) : self {
+		return new self($name, $resolver);
 	}
 
 	/**
 	 * Creates a fallback info edge.
+	 *
+	 * @phpstan-param Closure(Info): ?Info $resolver
 	 */
-	static public function fallback() : self {
-		return new self(null);
+	static public function fallback(Closure $resolver) : self {
+		return new self(null, $resolver);
 	}
 }
