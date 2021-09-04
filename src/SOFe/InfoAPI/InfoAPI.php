@@ -22,8 +22,10 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
+use function assert;
 use Closure;
-use SOFe\InfoAPI\Graph\Graph;
+use SOFe\InfoAPI\Ast\ChildName;
+use SOFe\InfoAPI\Graph\{Edge, Graph};
 
 final class InfoAPI {
 	private Graph $graph;
@@ -57,7 +59,12 @@ final class InfoAPI {
 	 *                                            or `null` if not available for that instance.
 	 */
 	static public function provideInfo(string $parent, string $child, string $fqn, Closure $resolve) : void {
-		// TODO implement
+		$self = self::getInstance();
+		$wrapper = static function(Info $info) use($parent, $resolve) : ?Info {
+			assert($info instanceof $parent, "InfoAPI internal error: pass info of type " . get_class($info) . " to resolver of type $parent");
+			return $resolve($info);
+		};
+		$self->graph->insert($parent, $child, Edge::parentChild(ChildName::parse($fqn), $wrapper));
 	}
 
 	/**
@@ -84,7 +91,12 @@ final class InfoAPI {
 	 *                                          or `null` if not available for that instance.
 	 */
 	static public function provideFallback(string $base, string $fallback, Closure $resolve) : void {
-		// TODO implement
+		$self = self::getInstance();
+		$wrapper = static function(Info $info) use($base, $resolve) : ?Info {
+			assert($info instanceof $base, "InfoAPI internal error: pass info of type " . get_class($info) . " to resolver of type $base");
+			return $resolve($info);
+		};
+		$self->graph->insert($base, $fallback, Edge::fallback($wrapper));
 	}
 
 	// SINGLETON BOILERPLATE //
