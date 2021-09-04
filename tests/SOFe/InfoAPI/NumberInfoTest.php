@@ -25,7 +25,7 @@ namespace SOFe\InfoAPI;
 use PHPUnit\Framework\TestCase;
 
 final class NumberInfoTest extends TestCase {
-	public function testOrdinalSt() {
+	public function testOrdinalSt() : void {
 		$api = InfoAPI::createForTesting();
 
 		Defaults::initAll($api);
@@ -38,7 +38,7 @@ final class NumberInfoTest extends TestCase {
 		self::assertSame("1st 11th 21st 221st", $actual);
 	}
 
-	public function testOrdinalNd() {
+	public function testOrdinalNd() : void {
 		$api = InfoAPI::createForTesting();
 
 		Defaults::initAll($api);
@@ -51,7 +51,7 @@ final class NumberInfoTest extends TestCase {
 		self::assertSame("2nd 12th 22nd 222nd", $actual);
 	}
 
-	public function testOrdinalRd() {
+	public function testOrdinalRd() : void {
 		$api = InfoAPI::createForTesting();
 
 		Defaults::initAll($api);
@@ -64,7 +64,7 @@ final class NumberInfoTest extends TestCase {
 		self::assertSame("3rd 13th 23rd 223rd", $actual);
 	}
 
-	public function testOrdinalTh() {
+	public function testOrdinalTh() : void {
 		$api = InfoAPI::createForTesting();
 
 		Defaults::initAll($api);
@@ -77,7 +77,7 @@ final class NumberInfoTest extends TestCase {
 		self::assertSame("4th 14th 24th 224th", $actual);
 	}
 
-	public function testPercent() {
+	public function testPercent() : void {
 		$api = InfoAPI::createForTesting();
 
 		Defaults::initAll($api);
