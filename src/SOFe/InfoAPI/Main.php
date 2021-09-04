@@ -24,4 +24,9 @@ namespace SOFe\InfoAPI;
 
 use pocketmine\plugin\PluginBase;
 
-final class Main extends PluginBase {}
+final class Main extends PluginBase {
+	public function onEnable() : void {
+		StringInfo::init();
+		NumberInfo::init();
+	}
+}
