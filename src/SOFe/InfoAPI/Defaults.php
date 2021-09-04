@@ -22,10 +22,9 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
-use pocketmine\plugin\PluginBase;
-
-final class Main extends PluginBase {
-	public function onEnable() : void {
-		Defaults::initAll(null);
+final class Defaults {
+	static public function initAll(?InfoAPI $api) : void {
+		StringInfo::init($api);
+		NumberInfo::init($api);
 	}
 }

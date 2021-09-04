@@ -44,26 +44,28 @@ final class NumberInfo extends Info {
 		return "number";
 	}
 
-	static public function init() : void {
+	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.number.ordinal",
 			static function(NumberInfo $info) : ?StringInfo {
-				$int = (int) $info->value;
-				if($info->value !== (float) $int){
+				$int = (int) $info->getValue();
+				if($info->value !== (float) $int) {
 					return null;
 				}
-				$int = abs($int) % 100;
-				if($int !== 11 && $int % 10 === 1){
+				$unit = abs($int) % 100;
+				if($unit !== 11 && $unit % 10 === 1) {
 					$suffix = "st";
-				}elseif($int !== 12 && $int % 10 === 2){
+				} elseif($unit !== 12 && $unit % 10 === 2) {
 					$suffix = "nd";
-				}elseif($int !== 13 && $int % 10 === 3){
+				} elseif($unit !== 13 && $unit % 10 === 3) {
 					$suffix = "rd";
-				}else{
+				} else {
 					$suffix = "th";
 				}
 				return new StringInfo($int . $suffix);
-			});
+			},
+			$api);
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.number.percent",
-			fn($info) => new StringInfo(sprintf("%g%%", $info->value)));
+			fn($info) => new StringInfo(sprintf("%g%%", $info->getValue())),
+			$api);
 	}
 }

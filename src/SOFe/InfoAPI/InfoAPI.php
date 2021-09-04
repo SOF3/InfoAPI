@@ -35,6 +35,7 @@ final class InfoAPI {
 
 	private function __construct() {
 		$this->graph = new Graph;
+		$this->cache = [];
 	}
 
 	/**
@@ -61,8 +62,8 @@ final class InfoAPI {
 	 * @phpstan-param Closure(P): ?C  $resolve A closure to resolve the parent info into a child info,
 	 *                                            or `null` if not available for that instance.
 	 */
-	static public function provideInfo(string $parent, string $child, string $fqn, Closure $resolve) : void {
-		$self = self::getInstance();
+	static public function provideInfo(string $parent, string $child, string $fqn, Closure $resolve, ?self $self = null) : void {
+		$self = $self ?? self::getInstance();
 		$wrapper = static function(Info $info) use($parent, $resolve) : ?Info {
 			assert($info instanceof $parent, "InfoAPI internal error: pass info of type " . get_class($info) . " to resolver of type $parent");
 			return $resolve($info);
@@ -93,8 +94,8 @@ final class InfoAPI {
 	 * @phpstan-param Closure(P): ?C  $resolve  A closure to resolve the parent info into a child info,
 	 *                                          or `null` if not available for that instance.
 	 */
-	static public function provideFallback(string $base, string $fallback, Closure $resolve) : void {
-		$self = self::getInstance();
+	static public function provideFallback(string $base, string $fallback, Closure $resolve, ?self $self = null) : void {
+		$self = $self ?? self::getInstance();
 		$wrapper = static function(Info $info) use($base, $resolve) : ?Info {
 			assert($info instanceof $base, "InfoAPI internal error: pass info of type " . get_class($info) . " to resolver of type $base");
 			return $resolve($info);
@@ -102,17 +103,15 @@ final class InfoAPI {
 		$self->graph->insert($base, $fallback, Edge::fallback($wrapper));
 	}
 
-	static public function resolve(string $templateString, Info $context, bool $cache = true) : string {
-		$template = self::compile(get_class($context), $templateString, $cache);
+	static public function resolve(string $templateString, Info $context, bool $cache = true, ?self $self = null) : string {
+		$template = self::compile(get_class($context), $templateString, $cache, $self ?? self::getInstance());
 		return $template->resolve($context);
 	}
 
 	/**
 	 * @phpstan-param class-string<Info> $source
 	 */
-	static private function compile(string $source, string $templateString, bool $cache) : Template {
-		$self = self::getInstance();
-
+	static private function compile(string $source, string $templateString, bool $cache, self $self) : Template {
 		if(isset($self->cache["$source:$templateString"])) {
 			return $self->cache["$source:$templateString"];
 		}
@@ -131,6 +130,13 @@ final class InfoAPI {
 
 	static private function getInstance() : InfoAPI {
 		return self::$instance = self::$instance ?? new self;
+	}
+
+	/**
+	 * @internal For unit tests only, do not use.
+	 */
+	static public function createForTesting() : self {
+		return new self;
 	}
 	/* }}} */
 }

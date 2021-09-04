@@ -29,6 +29,8 @@ use SOFe\InfoAPI\Info;
  * A segment of (escapes-resolved) plain-text.
  */
 final class Path implements Segment {
+	public const NULL_WRITE = "{unknown}"; // TODO any better solution?
+
 	/** @phpstan-var array<int, ResolvedPath> */
 	private array $paths;
 
@@ -46,6 +48,6 @@ final class Path implements Segment {
 				return $info->toString();
 			}
 		}
-		return "{unresolved info}"; // TODO any better solution?
+		return self::NULL_WRITE;
 	}
 }

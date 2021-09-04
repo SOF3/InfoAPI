@@ -44,10 +44,12 @@ final class StringInfo extends Info {
 		return "text";
 	}
 
-	static public function init() : void {
+	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.string.uppercase",
-			fn($info) => new StringInfo(mb_strtoupper($info->getValue())));
+			fn($info) => new StringInfo(mb_strtoupper($info->getValue())),
+			$api);
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.string.lowercase",
-			fn($info) => new StringInfo(mb_strtolower($info->getValue())));
+			fn($info) => new StringInfo(mb_strtolower($info->getValue())),
+			$api);
 	}
 }
