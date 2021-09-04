@@ -23,12 +23,15 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI;
 
 use function assert;
+use function get_class;
 use Closure;
 use SOFe\InfoAPI\Ast\ChildName;
 use SOFe\InfoAPI\Graph\{Edge, Graph};
 
 final class InfoAPI {
 	private Graph $graph;
+	/** @phpstan-var array<string, Template> */
+	private array $cache;
 
 	private function __construct() {
 		$this->graph = new Graph;
@@ -97,6 +100,29 @@ final class InfoAPI {
 			return $resolve($info);
 		};
 		$self->graph->insert($base, $fallback, Edge::fallback($wrapper));
+	}
+
+	static public function resolve(string $templateString, Info $context, bool $cache = true) : string {
+		$template = self::compile(get_class($context), $templateString, $cache);
+		return $template->resolve($context);
+	}
+
+	/**
+	 * @phpstan-param class-string<Info> $source
+	 */
+	static private function compile(string $source, string $templateString, bool $cache) : Template {
+		$self = self::getInstance();
+
+		if(isset($self->cache["$source:$templateString"])) {
+			return $self->cache["$source:$templateString"];
+		}
+
+		$template = Template::create($templateString, $source, $self->graph);
+		if($cache) {
+			$self->cache["$source:$templateString"] = $template;
+		}
+
+		return $template;
 	}
 
 	// SINGLETON BOILERPLATE //

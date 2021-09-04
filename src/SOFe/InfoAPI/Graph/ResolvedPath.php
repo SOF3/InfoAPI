@@ -80,4 +80,14 @@ final class ResolvedPath {
 		$path->tail = $newTail;
 		return $path;
 	}
+
+	public function resolve(Info $info) : ?Info {
+		foreach($this->resolvers as $resolver) {
+			$info = $resolver($info);
+			if($info === null) {
+				return null;
+			}
+		}
+		return $info;
+	}
 }
