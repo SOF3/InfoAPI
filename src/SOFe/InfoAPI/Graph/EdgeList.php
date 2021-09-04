@@ -29,7 +29,25 @@ final class EdgeList {
 	/** @phpstan-var array<string, array<int, ListedEdge>> */
 	private array $edges = [];
 
+	/** @phpstan-var array<int, ListedEdge> */
+	private array $fallbacks = [];
+
+	public function insert(ListedEdge $edge) : void {
+		$name = $edge->edge->getName();
+		if($name !== null) {
+			$last = $name->getLastPart();
+			if(!isset($this->edges[$last])) {
+				$this->edges[$last] = [];
+			}
+			$this->edges[$last][] = $edge;
+		} else {
+			$this->fallbacks[] = $edge;
+		}
+	}
+
 	/**
+	 * Returns all edges matching the pattern, as well as all fallbacks.
+	 *
 	 * @phpstan-return Generator<int, ListedEdge, void, void>
 	 */
 	public function find(ChildName $pattern) : Generator {
@@ -44,5 +62,7 @@ final class EdgeList {
 				yield $edge;
 			}
 		}
+
+		yield from $this->fallbacks;
 	}
 }

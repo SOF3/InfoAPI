@@ -37,6 +37,22 @@ final class Graph {
 	public function __construct() {}
 
 	/**
+	 * Inserts an edge into the graph.
+	 *
+	 * @phpstan-param class-string<Info> $src
+	 * @phpstan-param class-string<Info> $dest
+	 */
+	public function insert(string $src, string $dest, Edge $edge) : void {
+		if(!isset($this->fromIndex[$src])) {
+			$this->fromIndex[$src] = new EdgeList;
+		}
+		$le = new ListedEdge;
+		$le->edge = $edge;
+		$le->target = $dest;
+		$this->fromIndex[$src]->insert($le);
+	}
+
+	/**
 	 * Finds all paths starting from `$source` that matches `$expression`.
 	 *
 	 * @phpstan-param class-string<Info> $source
@@ -61,10 +77,17 @@ final class Graph {
 		// TODO implement cycle detection
 		while(!$heap->isEmpty()) {
 			$path = $heap->extract();
+			$step = $path->getWeight()->parentChild;
+			if($step === count($expression)) {
+				return $path;
+			}
+			if(!isset($this->fromIndex[$path->getTail()])) {
+				continue; // sink
+			}
 			$list = $this->fromIndex[$path->getTail()];
-			$step = count($path->getResolvers());
 			foreach($list->find($expression[$step]) as $edge) {
 				$newPath = $path->join($edge->edge->getResolver(), $edge->edge->isFallback(), $edge->target);
+
 				$heap->insert($newPath, $newPath->getWeight());
 			}
 		}
