@@ -55,7 +55,7 @@ final class RatioInfo extends Info {
 			fn($info) => new NumberInfo($info->getMax()),
 			$api);
 		InfoAPI::provideFallback(self::class, NumberInfo::class,
-			fn($info) => new NumberInfo($info->getCurrent() / $info->getMax()),
+			fn($info) => $info->getMax() !== 0.0 ? new NumberInfo($info->getCurrent() / $info->getMax()) : null,
 			$api);
 	}
 }
