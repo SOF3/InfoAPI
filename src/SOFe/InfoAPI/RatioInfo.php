@@ -48,10 +48,10 @@ final class RatioInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.number.current",
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.ratio.current",
 			fn($info) => new NumberInfo($info->getCurrent()),
 			$api);
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.number.max",
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.ratio.max",
 			fn($info) => new NumberInfo($info->getMax()),
 			$api);
 		InfoAPI::provideFallback(self::class, NumberInfo::class,
