@@ -69,13 +69,15 @@ final class InfoAPI {
 	 * @phpstan-param Closure(P): ?C  $resolve A closure to resolve the parent info into a child info,
 	 *                                            or `null` if not available for that instance.
 	 */
-	static public function provideInfo(string $parent, string $child, string $fqn, Closure $resolve, ?self $self = null) : void {
+	static public function provideInfo(string $parent, string $child, string $fqn, Closure $resolve, ?self $self = null) : Edge {
 		$self = $self ?? self::getInstance();
 		$wrapper = static function(Info $info) use($parent, $resolve) : ?Info {
 			assert($info instanceof $parent, "InfoAPI internal error: pass info of type " . get_class($info) . " to resolver of type $parent");
 			return $resolve($info);
 		};
-		$self->graph->insert($parent, $child, Edge::parentChild(ChildName::parse($fqn), $wrapper));
+		$edge = Edge::parentChild(ChildName::parse($fqn), $wrapper);
+		$self->graph->insert($parent, $child, $edge);
+		return $edge;
 	}
 
 	/**
@@ -101,13 +103,15 @@ final class InfoAPI {
 	 * @phpstan-param Closure(P): ?C  $resolve  A closure to resolve the parent info into a child info,
 	 *                                          or `null` if not available for that instance.
 	 */
-	static public function provideFallback(string $base, string $fallback, Closure $resolve, ?self $self = null) : void {
+	static public function provideFallback(string $base, string $fallback, Closure $resolve, ?self $self = null) : Edge {
 		$self = $self ?? self::getInstance();
 		$wrapper = static function(Info $info) use($base, $resolve) : ?Info {
 			assert($info instanceof $base, "InfoAPI internal error: pass info of type " . get_class($info) . " to resolver of type $base");
 			return $resolve($info);
 		};
-		$self->graph->insert($base, $fallback, Edge::fallback($wrapper));
+		$edge = Edge::fallback($wrapper);
+		$self->graph->insert($base, $fallback, $edge);
+		return $edge;
 	}
 
 	static public function resolve(string $templateString, Info $context, bool $cache = true, ?self $self = null) : string {

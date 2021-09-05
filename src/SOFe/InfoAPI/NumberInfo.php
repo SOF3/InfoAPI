@@ -45,7 +45,7 @@ final class NumberInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
-		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.number.ordinal",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.number.english.ordinal",
 			static function(NumberInfo $info) : ?StringInfo {
 				$int = (int) $info->getValue();
 				if($info->value !== (float) $int) {
@@ -63,9 +63,13 @@ final class NumberInfo extends Info {
 				}
 				return new StringInfo($int . $suffix);
 			},
-			$api);
+			$api)
+			->setMetadata("description", "The number's ordinal form in English (only works on non-negative integers)")
+			->setMetadata("example", "1st, 3rd, 112th");
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.number.percent",
 			fn($info) => new StringInfo(sprintf("%g%%", $info->getValue())),
-			$api);
+			$api)
+			->setMetadata("description", "Displays the number as a percentage")
+			->setMetadata("example", "12.3%");
 	}
 }

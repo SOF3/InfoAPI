@@ -38,6 +38,9 @@ final class Edge {
 	/** @phpstan-var Closure(Info): ?Info */
 	private Closure $resolver;
 
+	/** @phpstan-var array<string, string> */
+	private $metadata = [];
+
 	private function __construct(?ChildName $name, Closure $resolver) {
 		$this->name = $name;
 		$this->resolver = $resolver;
@@ -72,6 +75,21 @@ final class Edge {
 		} else {
 			++$weight->parentChild;
 		}
+	}
+
+	/**
+	 * Attaches a metadata string to this edge.
+	 */
+	public function setMetadata(string $key, string $value) : self {
+		$this->metadata[$key] = $value;
+		return $this;
+	}
+
+	/**
+	 * Returns a metadata string from this edge.
+	 */
+	public function getMetadata(string $key) : ?string {
+		return $this->metadata[$key] ?? null;
 	}
 
 	/**

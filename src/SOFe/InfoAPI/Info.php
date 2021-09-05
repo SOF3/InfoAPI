@@ -40,7 +40,7 @@ abstract class Info {
 	 * This value is used in documentation and info browser.
 	 */
 	static public function getInfoType() : string {
-		$comps = explode("\\", get_class($this));
+		$comps = explode("\\", static::class);
 		return array_slice($comps, -1)[0];
 	}
 }

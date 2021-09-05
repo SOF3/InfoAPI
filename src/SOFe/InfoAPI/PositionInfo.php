@@ -46,15 +46,22 @@ final class PositionInfo extends Info {
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.position.x",
 			fn($info) => $info->getValue()->getX(),
-			$api);
+			$api)
+			->setMetadata("description", "The X-coordinate of this position")
+			->setMetadata("example", "128 (in (128, 64, 256))");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.position.y",
 			fn($info) => $info->getValue()->getY(),
-			$api);
+			$api)
+			->setMetadata("description", "The Y-coordinate of this position")
+			->setMetadata("example", "64 (in (128, 64, 256))");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.position.z",
 			fn($info) => $info->getValue()->getZ(),
-			$api);
+			$api)
+			->setMetadata("description", "The Z-coordinate of this position")
+			->setMetadata("example", "256 (in (128, 64, 256))");
 		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.position.world",
 			fn($info) => $info->getValue()->getZ(),
-			$api);
+			$api)
+			->setMetadata("description", "The world containing this position");
 	}
 }

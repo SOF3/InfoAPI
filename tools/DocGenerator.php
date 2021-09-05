@@ -104,8 +104,8 @@ final class DocGenerator {
 		foreach($api->getGraph()->getFromIndex() as $src => $list) {
 			$output .= sprintf("## %s\n", ucfirst($src::getInfoType()));
 
-			$output .= "| Name | Output type |\n";
-			$output .= "| :---: | :---: |\n";
+			$output .= "| Name | Output type | Description | Example |\n";
+			$output .= "| :---: | :---: | :---: | :---: |\n";
 			foreach($list->iterAllEdges() as $listedEdge) {
 				$edge = $listedEdge->edge;
 				$dest = $listedEdge->target;
@@ -113,7 +113,8 @@ final class DocGenerator {
 				$name = $edge->getName();
 				$label = $name !== null ? sprintf("`%s`", $name->toString()) : "(fallback)";
 
-				$output .= sprintf("| %s | %s |\n", $label, ucfirst($dest::getInfoType()));
+				$output .= sprintf("| %s | %s | %s | %s |\n", $label, ucfirst($dest::getInfoType()),
+					$edge->getMetadata("description") ?? "", $edge->getMetadata("example") ?? null);
 			}
 			$output .= "\n";
 		}

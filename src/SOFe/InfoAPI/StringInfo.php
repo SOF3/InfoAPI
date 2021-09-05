@@ -47,9 +47,13 @@ final class StringInfo extends Info {
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.string.uppercase",
 			fn($info) => new StringInfo(mb_strtoupper($info->getValue())),
-			$api);
+			$api)
+			->setMetadata("description", "Convert the whole text to upper case")
+			->setMetadata("example", "HELLO WORLD");
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.string.lowercase",
 			fn($info) => new StringInfo(mb_strtolower($info->getValue())),
-			$api);
+			$api)
+			->setMetadata("description", "Convert the whole text to lower case")
+			->setMetadata("example", "hello world");
 	}
 }

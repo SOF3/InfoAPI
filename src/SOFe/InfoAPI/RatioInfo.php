@@ -50,12 +50,25 @@ final class RatioInfo extends Info {
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.ratio.current",
 			fn($info) => new NumberInfo($info->getCurrent()),
-			$api);
+			$api)
+			->setMetadata("description", "The current value of this proportion")
+			->setMetadata("example", "1 (for 1/3)");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.ratio.max",
 			fn($info) => new NumberInfo($info->getMax()),
-			$api);
+			$api)
+			->setMetadata("description", "The maximum value of this proportion")
+			->setMetadata("example", "3 (for 1/3)");
+		foreach(["remaining", "invert", "lost"] as $alias) {
+			InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.ratio.$alias",
+				fn($info) => new NumberInfo($info->getMax()),
+				$api)
+				->setMetadata("description", "One minus this proportion")
+				->setMetadata("example", "2/3 (for 1/3)");
+		}
 		InfoAPI::provideFallback(self::class, NumberInfo::class,
 			fn($info) => $info->getMax() !== 0.0 ? new NumberInfo($info->getCurrent() / $info->getMax()) : null,
-			$api);
+			$api)
+			->setMetadata("description", "The proportion as a fraction")
+			->setMetadata("exapmle", "0.33333 (for 1/3)");
 	}
 }
