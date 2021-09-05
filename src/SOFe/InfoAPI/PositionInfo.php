@@ -39,7 +39,7 @@ final class PositionInfo extends Info {
 		return sprintf("(%g, %g, %g) @ %s", $this->value->x, $this->value->y, $this->value->z, $this->value->getWorld()->getFolderName());
 	}
 
-	public function getInfoType() : string {
+	static public function getInfoType() : string {
 		return "position";
 	}
 

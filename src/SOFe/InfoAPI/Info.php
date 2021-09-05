@@ -39,7 +39,7 @@ abstract class Info {
 	 *
 	 * This value is used in documentation and info browser.
 	 */
-	public function getInfoType() : string {
+	static public function getInfoType() : string {
 		$comps = explode("\\", get_class($this));
 		return array_slice($comps, -1)[0];
 	}

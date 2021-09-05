@@ -65,4 +65,28 @@ final class EdgeList {
 
 		yield from $this->fallbacks;
 	}
+
+	/**
+	 * @phpstan-return array<string, array<int, ListedEdge>>
+	 */
+	public function getEdges() : array {
+		return $this->edges;
+	}
+
+	/**
+	 * @phpstan-return array<int, ListedEdge>
+	 */
+	public function getFallbacks() : array {
+		return $this->fallbacks;
+	}
+
+	/**
+	 * @phpstan-return Generator<mixed, ListedEdge, mixed, mixed>
+	 */
+	public function iterAllEdges() : Generator {
+		foreach($this->edges as $array) {
+			yield from $array;
+		}
+		yield from $this->fallbacks;
+	}
 }

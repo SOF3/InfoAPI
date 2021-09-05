@@ -249,7 +249,7 @@
         },
         {
             "name": "pocketmine/bedrock-protocol",
-            "version": "dev-master",
+            "version": "1.0.0+bedrock1.17.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pmmp/BedrockProtocol.git",
@@ -277,7 +277,6 @@
                 "phpstan/phpstan-strict-rules": "^0.12.10",
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -291,7 +290,7 @@
             "description": "An implementation of the Minecraft: Bedrock Edition protocol in PHP",
             "support": {
                 "issues": "https://github.com/pmmp/BedrockProtocol/issues",
-                "source": "https://github.com/pmmp/BedrockProtocol/tree/master"
+                "source": "https://github.com/pmmp/BedrockProtocol/tree/1.0.0+bedrock1.17.10"
             },
             "time": "2021-08-23T14:30:22+00:00"
         },
@@ -680,12 +679,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pmmp/PocketMine-MP.git",
-                "reference": "2139171a5525a89061cbadfa30f3f3f1243973b4"
+                "reference": "7d5b9295cbfdb7b8daa79d9385e4622328d1a2f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pmmp/PocketMine-MP/zipball/2139171a5525a89061cbadfa30f3f3f1243973b4",
-                "reference": "2139171a5525a89061cbadfa30f3f3f1243973b4",
+                "url": "https://api.github.com/repos/pmmp/PocketMine-MP/zipball/7d5b9295cbfdb7b8daa79d9385e4622328d1a2f6",
+                "reference": "7d5b9295cbfdb7b8daa79d9385e4622328d1a2f6",
                 "shasum": ""
             },
             "require": {
@@ -718,7 +717,7 @@
                 "netresearch/jsonmapper": "^4.0",
                 "php": "^8.0",
                 "php-64bit": "*",
-                "pocketmine/bedrock-protocol": "dev-master#88ae308a03e8e61ccfdddd42623efabe9e772b42",
+                "pocketmine/bedrock-protocol": "1.0.0+bedrock1.17.10",
                 "pocketmine/binaryutils": "^0.2.1",
                 "pocketmine/callback-validator": "^1.0.2",
                 "pocketmine/classloader": "dev-master",
@@ -737,7 +736,7 @@
                 "webmozart/path-util": "^2.3"
             },
             "require-dev": {
-                "phpstan/phpstan": "0.12.95",
+                "phpstan/phpstan": "0.12.98",
                 "phpstan/phpstan-phpunit": "^0.12.6",
                 "phpstan/phpstan-strict-rules": "^0.12.2",
                 "phpunit/phpunit": "^9.2"
@@ -771,7 +770,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-08-28T23:40:09+00:00"
+            "time": "2021-09-03T20:33:55+00:00"
         },
         {
             "name": "pocketmine/raklib",
@@ -1894,12 +1893,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "8cc8140db3302b990d824dc33b40ffc3b7d9b3ab"
+                "reference": "cb952c6f5c9a7b00e8de7f4ad61b56371395e0d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/8cc8140db3302b990d824dc33b40ffc3b7d9b3ab",
-                "reference": "8cc8140db3302b990d824dc33b40ffc3b7d9b3ab",
+                "url": "https://api.github.com/repos/infection/infection/zipball/cb952c6f5c9a7b00e8de7f4ad61b56371395e0d9",
+                "reference": "cb952c6f5c9a7b00e8de7f4ad61b56371395e0d9",
                 "shasum": ""
             },
             "require": {
@@ -1909,7 +1908,7 @@
                 "ext-libxml": "*",
                 "infection/abstract-testframework-adapter": "^0.5.0",
                 "infection/extension-installer": "^0.1.0",
-                "infection/include-interceptor": "^0.2.4",
+                "infection/include-interceptor": "^0.2.5",
                 "justinrainbow/json-schema": "^5.2.10",
                 "nikic/php-parser": "^4.10.3",
                 "ocramius/package-versions": "^1.9.0 || ^2.0",
@@ -2013,7 +2012,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-08-19T19:56:23+00:00"
+            "time": "2021-09-04T09:23:14+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2727,12 +2726,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "b193ac1f143b2a2a8aaafbc2843889bd4796a779"
+                "reference": "b263c9ad99de4f9b35375c00bd09b1441e4fd8be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b193ac1f143b2a2a8aaafbc2843889bd4796a779",
-                "reference": "b193ac1f143b2a2a8aaafbc2843889bd4796a779",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b263c9ad99de4f9b35375c00bd09b1441e4fd8be",
+                "reference": "b263c9ad99de4f9b35375c00bd09b1441e4fd8be",
                 "shasum": ""
             },
             "require": {
@@ -2784,7 +2783,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-27T11:17:10+00:00"
+            "time": "2021-09-03T08:19:05+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -2847,12 +2846,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "d96981c0d2718c56aea9eeb254d3159b808156c3"
+                "reference": "9a43a2a488965a839e5d5b6708cc0e294e5e1e9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/d96981c0d2718c56aea9eeb254d3159b808156c3",
-                "reference": "d96981c0d2718c56aea9eeb254d3159b808156c3",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/9a43a2a488965a839e5d5b6708cc0e294e5e1e9b",
+                "reference": "9a43a2a488965a839e5d5b6708cc0e294e5e1e9b",
                 "shasum": ""
             },
             "require": {
@@ -2916,7 +2915,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-08-17T14:56:04+00:00"
+            "time": "2021-08-30T06:30:49+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3165,12 +3164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ec22fa21dd3c8c1684ad577ef98fd2e67ad08279"
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ec22fa21dd3c8c1684ad577ef98fd2e67ad08279",
-                "reference": "ec22fa21dd3c8c1684ad577ef98fd2e67ad08279",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
+                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
                 "shasum": ""
             },
             "require": {
@@ -3248,7 +3247,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.9"
             },
             "funding": [
                 {
@@ -3260,7 +3259,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-08-27T11:54:19+00:00"
+            "time": "2021-08-31T06:47:40+00:00"
         },
         {
             "name": "psr/container",
@@ -4345,6 +4344,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-09-28T06:45:17+00:00"
         },
         {

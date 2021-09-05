@@ -40,7 +40,7 @@ final class StringInfo extends Info {
 		return $this->value;
 	}
 
-	public function getInfoType() : string {
+	static public function getInfoType() : string {
 		return "text";
 	}
 

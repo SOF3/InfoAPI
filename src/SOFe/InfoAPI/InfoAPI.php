@@ -39,6 +39,13 @@ final class InfoAPI {
 	}
 
 	/**
+	 * @internal Only for internal testing use.
+	 */
+	public function getGraph() : Graph {
+		return $this->graph;
+	}
+
+	/**
 	 * Register a child info for infos of type `$class`.
 	 *
 	 * The name should be a unique dot-delimited string with increasing specificness.

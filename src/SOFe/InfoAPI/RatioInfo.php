@@ -43,7 +43,7 @@ final class RatioInfo extends Info {
 		return sprintf("%g/%g", $this->current, $this->max);
 	}
 
-	public function getInfoType() : string {
+	static public function getInfoType() : string {
 		return "proportion";
 	}
 

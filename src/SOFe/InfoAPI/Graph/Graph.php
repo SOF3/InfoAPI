@@ -94,4 +94,11 @@ final class Graph {
 
 		return null;
 	}
+
+	/**
+	 * @phpstan-return array<class-string<Info>, EdgeList>
+	 */
+	public function getFromIndex() : array {
+		return $this->fromIndex;
+	}
 }

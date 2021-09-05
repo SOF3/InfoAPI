@@ -20,23 +20,23 @@
 
 declare(strict_types=1);
 
-namespace SOFe\InfoAPI;
-
-/**
- * @internal This class is only for InfoAPI internal setup
- */
-final class Defaults {
-	public const CLASSES = [
-		StringInfo::class,
-		NumberInfo::class,
-		RatioInfo::class,
-		PositionInfo::class,
-		WorldInfo::class,
-	];
-
-	static public function initAll(?InfoAPI $api) : void {
-		foreach(self::CLASSES as $class) {
-			$class::init($api);
-		}
-	}
+if(!isset($argv[1])) {
+	fwrite(STDERR, sprintf("Usage: %s %s <class name under SOFe\\InfoAPI>\n", PHP_BINARY, $argv[0]));
+	exit(1);
 }
+
+$class = \SOFe\InfoAPI::class . "\\" . $argv[1];
+
+require __DIR__ . "/vendor/autoload.php";
+
+if(!class_exists($class)) {
+	fwrite(STDERR, sprintf("Class %s not found\n", $class));
+	exit(1);
+}
+
+if(!method_exists($class, "main")) {
+	fwrite(STDERR, sprintf("%s is not an executable class\n", $class));
+	exit(1);
+}
+
+$class::main();

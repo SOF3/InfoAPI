@@ -22,7 +22,8 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Ast;
 
-use count;
+use function count;
+use function implode;
 
 final class ChildName {
 	/** @phpstan-var non-empty-array<int, string> */
@@ -79,5 +80,9 @@ final class ChildName {
 
 	public function getLastPart() : string {
 		return $this->parts[count($this->parts) - 1];
+	}
+
+	public function toString() : string {
+		return implode(".", $this->parts);
 	}
 }

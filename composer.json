@@ -13,14 +13,14 @@
         "infection/infection": "dev-master"
     },
     "license": "Apache-2.0",
-		"autoload": {
-			"psr-0": {
-				"SOFe\\InfoAPI\\": "src/"
-			}
-		},
-		"autoload-dev": {
-			"psr-0": {
-				"SOFe\\InfoAPI\\": "tests/"
-			}
-		}
+    "autoload": {
+        "psr-0": {
+            "SOFe\\InfoAPI\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SOFe\\InfoAPI\\": ["tests/", "tools/"]
+        }
+    }
 }

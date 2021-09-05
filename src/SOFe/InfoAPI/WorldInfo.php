@@ -39,8 +39,8 @@ final class WorldInfo extends Info {
 		return $this->value->getFolderName();
 	}
 
-	public function getInfoType() : string {
-		return "position";
+	static public function getInfoType() : string {
+		return "world";
 	}
 
 	static public function init(?InfoAPI $api) : void {

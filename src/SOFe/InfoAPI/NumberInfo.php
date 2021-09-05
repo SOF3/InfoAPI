@@ -40,7 +40,7 @@ final class NumberInfo extends Info {
 		return sprintf("%g", $this->value);
 	}
 
-	public function getInfoType() : string {
+	static public function getInfoType() : string {
 		return "number";
 	}
 
