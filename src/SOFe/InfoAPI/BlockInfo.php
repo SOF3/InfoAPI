@@ -53,7 +53,7 @@ final class BlockInfo extends Info {
 			$api)
 			->setMetadata("description", "The position of the block");
 		InfoAPI::provideFallback(self::class, BlockTypeInfo::class,
-			fn($info) => new BlockTypeInfo($info->value)
+			fn($info) => new BlockTypeInfo($info->value),
 			$api)
 			->setMetadata("description", "The block type");
 	}

@@ -22,7 +22,10 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
+use pocketmine\math\VoxelRayTrace;
 use pocketmine\player\Player;
+use pocketmine\world\Position;
+use pocketmine\world\World;
 
 final class PlayerInfo extends Info {
 	private Player $value;
@@ -70,7 +73,7 @@ final class PlayerInfo extends Info {
 			->setMetadata("description", "The player client port")
 			->setMetadata("example", "61234");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.ping",
-			fn($info) => new NumberInfo($info->getValue()->getNetworkSession()->getPing()),
+			fn($info) => new NumberInfo((float) $info->getValue()->getNetworkSession()->getPing()),
 			$api)
 			->setMetadata("description", "The player ping, in milliseconds")
 			->setMetadata("example", "15");
@@ -102,14 +105,14 @@ final class PlayerInfo extends Info {
 			->setMetadata("example", "(128, 65.8, 128)");
 		InfoAPI::provideInfo(self::class, BlockInfo::class, "infoapi.player.blockBelow",
 			static function(PlayerInfo $info) : BlockInfo {
-				$position = $info->getValue()->asPosition();
+				$position = $info->getValue()->getPosition();
 				$below = $position->floor()->subtract(0, 1, 0);
 				if($below->y > World::Y_MAX){
 					$below->y = World::Y_MAX;
 				}elseif($below->y < 0){
 					$below->y = 0;
 				}
-				$block = $position->getWorld()->getBlockAt($below->x, $below->y, $below->z);
+				$block = $position->getWorld()->getBlockAt((int) $below->x, (int) $below->y, (int) $below->z);
 				return new BlockInfo($block);
 			},
 			$api)
@@ -117,25 +120,25 @@ final class PlayerInfo extends Info {
 			->setMetadata("example", "grass at (128, 64, 128)");
 		InfoAPI::provideInfo(self::class, BlockInfo::class, "infoapi.player.blockFacing",
 			static function(PlayerInfo $info) : BlockInfo {
-				$src = $info->getValue()->asPosition();
+				$src = $info->getValue()->getPosition();
 				/** @var World $world */
 				$world = $src->getWorld();
 				$src = $src->add(0, $info->getValue()->getEyeHeight(), 0);
 				$trace = VoxelRayTrace::inDirection($src, $info->getValue()->getDirectionVector(), 128);
 				foreach($trace as $pos){
-					$block = $world->getBlockAt($pos->x, $pos->y, $pos->z, true, false);
+					$block = $world->getBlockAt((int) $pos->x, (int) $pos->y, (int) $pos->z, true, false);
 					if($block->isSolid()){
 						return new BlockInfo($block);
 					}
 				}
-				return new BlockInfo($world->getBlockAt($src->x, $src->y, $src->z, true, false));
+				return new BlockInfo($world->getBlockAt((int) $src->x, (int) $src->y, (int) $src->z, true, false));
 			},
 			$api)
 			->setMetadata("description", "The block that the player looks at")
 			->setMetadata("example", "grass at (128, 64, 130)");
 
 		InfoAPI::provideFallback(self::class, PositionInfo::class,
-			fn($info) => $info->getValue()->asPosition(),
+			fn($info) => $info->getValue()->getPosition(),
 			$api)
 			->setMetadata("description", "The position of the player feet");
 	}
