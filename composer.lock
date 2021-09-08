@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0d4e165d04930dddf9005f17ce325cd",
+    "content-hash": "c311dedc4aca838ceac740acb2e15e0a",
     "packages": [
         {
             "name": "adhocore/json-comment",
@@ -675,16 +675,16 @@
         },
         {
             "name": "pocketmine/pocketmine-mp",
-            "version": "dev-master",
+            "version": "4.0.0-BETA1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pmmp/PocketMine-MP.git",
-                "reference": "7d5b9295cbfdb7b8daa79d9385e4622328d1a2f6"
+                "reference": "210b9c7b75fe3183600e85f9f4a24ef125fcb1cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pmmp/PocketMine-MP/zipball/7d5b9295cbfdb7b8daa79d9385e4622328d1a2f6",
-                "reference": "7d5b9295cbfdb7b8daa79d9385e4622328d1a2f6",
+                "url": "https://api.github.com/repos/pmmp/PocketMine-MP/zipball/210b9c7b75fe3183600e85f9f4a24ef125fcb1cf",
+                "reference": "210b9c7b75fe3183600e85f9f4a24ef125fcb1cf",
                 "shasum": ""
             },
             "require": {
@@ -758,7 +758,7 @@
             "homepage": "https://pmmp.io",
             "support": {
                 "issues": "https://github.com/pmmp/PocketMine-MP/issues",
-                "source": "https://github.com/pmmp/PocketMine-MP/tree/master"
+                "source": "https://github.com/pmmp/PocketMine-MP/tree/4.0.0-BETA1"
             },
             "funding": [
                 {
@@ -770,7 +770,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-09-03T20:33:55+00:00"
+            "time": "2021-09-07T13:19:29+00:00"
         },
         {
             "name": "pocketmine/raklib",
@@ -1893,12 +1893,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "cb952c6f5c9a7b00e8de7f4ad61b56371395e0d9"
+                "reference": "77b684ada43efd93e3ace7ea254aa9848d8ea9e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/cb952c6f5c9a7b00e8de7f4ad61b56371395e0d9",
-                "reference": "cb952c6f5c9a7b00e8de7f4ad61b56371395e0d9",
+                "url": "https://api.github.com/repos/infection/infection/zipball/77b684ada43efd93e3ace7ea254aa9848d8ea9e6",
+                "reference": "77b684ada43efd93e3ace7ea254aa9848d8ea9e6",
                 "shasum": ""
             },
             "require": {
@@ -2000,7 +2000,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/master"
+                "source": "https://github.com/infection/infection/tree/0.25.0"
             },
             "funding": [
                 {
@@ -2012,7 +2012,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-09-04T09:23:14+00:00"
+            "time": "2021-09-04T12:13:36+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -2505,12 +2505,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "c212334d39ff968e45e03ca594ace12c4dc2da93"
+                "reference": "44e31d19a6e81eb6ede34ef40c5687247d6eaaf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/c212334d39ff968e45e03ca594ace12c4dc2da93",
-                "reference": "c212334d39ff968e45e03ca594ace12c4dc2da93",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/44e31d19a6e81eb6ede34ef40c5687247d6eaaf3",
+                "reference": "44e31d19a6e81eb6ede34ef40c5687247d6eaaf3",
                 "shasum": ""
             },
             "require": {
@@ -2555,7 +2555,7 @@
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
                 "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/master"
             },
-            "time": "2021-08-26T12:24:56+00:00"
+            "time": "2021-09-05T10:40:50+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2726,12 +2726,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "b263c9ad99de4f9b35375c00bd09b1441e4fd8be"
+                "reference": "5604593b002a836e359d121b6da8bf7aadc3e74c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b263c9ad99de4f9b35375c00bd09b1441e4fd8be",
-                "reference": "b263c9ad99de4f9b35375c00bd09b1441e4fd8be",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5604593b002a836e359d121b6da8bf7aadc3e74c",
+                "reference": "5604593b002a836e359d121b6da8bf7aadc3e74c",
                 "shasum": ""
             },
             "require": {
@@ -2783,7 +2783,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-03T08:19:05+00:00"
+            "time": "2021-09-08T12:15:49+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -3164,12 +3164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b"
+                "reference": "945290fc212307359838e14f678b373ae71f8e51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
-                "reference": "ea8c2dfb1065eb35a79b3681eee6e6fb0a6f273b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/945290fc212307359838e14f678b373ae71f8e51",
+                "reference": "945290fc212307359838e14f678b373ae71f8e51",
                 "shasum": ""
             },
             "require": {
@@ -3247,7 +3247,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.9"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5"
             },
             "funding": [
                 {
@@ -3259,7 +3259,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-08-31T06:47:40+00:00"
+            "time": "2021-09-08T05:59:55+00:00"
         },
         {
             "name": "psr/container",
@@ -4525,12 +4525,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "cb2a5f4cca05663d1b7a911c6e4d85e965e45d1f"
+                "reference": "349cd1e5552ce44e844961c8c4c28ce4f9ffc8d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/cb2a5f4cca05663d1b7a911c6e4d85e965e45d1f",
-                "reference": "cb2a5f4cca05663d1b7a911c6e4d85e965e45d1f",
+                "url": "https://api.github.com/repos/symfony/console/zipball/349cd1e5552ce44e844961c8c4c28ce4f9ffc8d0",
+                "reference": "349cd1e5552ce44e844961c8c4c28ce4f9ffc8d0",
                 "shasum": ""
             },
             "require": {
@@ -4616,7 +4616,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-25T21:09:35+00:00"
+            "time": "2021-09-07T11:18:59+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4692,12 +4692,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "0aa348e9f3f49878da6790484069ea75b5f8ce27"
+                "reference": "2d9fb8108eb8447f5a3189d666c54a242240e67e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/0aa348e9f3f49878da6790484069ea75b5f8ce27",
-                "reference": "0aa348e9f3f49878da6790484069ea75b5f8ce27",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/2d9fb8108eb8447f5a3189d666c54a242240e67e",
+                "reference": "2d9fb8108eb8447f5a3189d666c54a242240e67e",
                 "shasum": ""
             },
             "require": {
@@ -4748,7 +4748,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-17T14:20:01+00:00"
+            "time": "2021-09-07T15:45:17+00:00"
         },
         {
             "name": "symfony/finder",
@@ -5567,7 +5567,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "pocketmine/pocketmine-mp": 20,
         "phpstan/phpstan-phpunit": 20,
         "phpstan/extension-installer": 20,
         "infection/infection": 20

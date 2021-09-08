@@ -1,5 +1,5 @@
 name: InfoAPI
 author: SOFe
 version: 1.0.0
-api: 4.0.0
+api: 4.0.0-Beta1
 main: SOFe\InfoAPI\Main
