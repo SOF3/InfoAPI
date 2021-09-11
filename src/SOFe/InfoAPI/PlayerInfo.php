@@ -48,7 +48,7 @@ final class PlayerInfo extends Info {
 
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.name",
-			fn($info) => ($info->getValue()->getName()),
+			fn($info) => new StringInfo($info->getValue()->getName()),
 			$api)
 			->setMetadata("description", "The player name")
 			->setMetadata("example", "Steve");

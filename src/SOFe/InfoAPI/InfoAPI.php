@@ -77,6 +77,7 @@ final class InfoAPI {
 		};
 		$edge = Edge::parentChild(ChildName::parse($fqn), $wrapper);
 		$self->graph->insert($parent, $child, $edge);
+		$self->cache = [];
 		return $edge;
 	}
 
@@ -111,6 +112,7 @@ final class InfoAPI {
 		};
 		$edge = Edge::fallback($wrapper);
 		$self->graph->insert($base, $fallback, $edge);
+		$self->cache = [];
 		return $edge;
 	}
 

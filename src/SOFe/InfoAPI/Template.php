@@ -61,6 +61,7 @@ final class Template {
 		}
 
 		$self = new self;
+		$self->source = $source;
 		$self->segments = $segments;
 		return $self;
 	}
