@@ -59,6 +59,8 @@ There are multiple ways to check what infos you can use.
 #### Check the plugin description
 TODO: requires standardized description format
 
+https://sof3.github.io/InfoAPI/defaults.html
+
 #### Use the `/info` command
 TODO: requires plugins to register help keys, then finish the UI
 
