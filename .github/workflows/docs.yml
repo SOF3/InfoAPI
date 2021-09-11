@@ -32,6 +32,7 @@ jobs:
 
       - name: Build documentation
         run: php runTool.php DocGenerator
+      - run: cp README.md docs/README.md
 
       - name: Git commit
         run: git add -A && git commit -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
