@@ -1,17 +1,20 @@
 # Builtin info types
 ## Text
+
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.string.uppercase` | Text | Convert the whole text to upper case | HELLO WORLD |
 | `infoapi.string.lowercase` | Text | Convert the whole text to lower case | hello world |
 
 ## Number
+
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.number.english.ordinal` | Text | The number's ordinal form in English (only works on non-negative integers) | 1st, 3rd, 112th |
 | `infoapi.number.percent` | Text | Displays the number as a percentage | 12.3% |
 
 ## Proportion
+
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.ratio.current` | Number | The current value of this proportion | 1 (for 1/3) |
@@ -22,6 +25,7 @@
 | (fallback) | Number | The proportion as a fraction |  |
 
 ## Position
+
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.position.x` | Number | The X-coordinate of this position | 128 (in (128, 64, 256)) |
@@ -30,6 +34,7 @@
 | `infoapi.position.world` | World | The world containing this position |  |
 
 ## World
+
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.world.name` | Number | The folder name of this world | world (2) |
