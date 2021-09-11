@@ -1,0 +1,68 @@
+digraph InfoAPI_Defaults {
+	graph [pad=0.5, nodesep=0.5];
+	SOFe_InfoAPI_StringInfo [label = "text", shape = "box"]
+	SOFe_InfoAPI_NumberInfo [label = "number", shape = "box"]
+	SOFe_InfoAPI_RatioInfo [label = "proportion", shape = "box"]
+	SOFe_InfoAPI_PositionInfo [label = "position", shape = "box"]
+	SOFe_InfoAPI_WorldInfo [label = "world", shape = "box"]
+	_anon_edge_0 [label = "infoapi.string.uppercase", shape = "diamond"]
+	SOFe_InfoAPI_StringInfo -> _anon_edge_0
+	_anon_edge_0 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_1 [label = "infoapi.string.lowercase", shape = "diamond"]
+	SOFe_InfoAPI_StringInfo -> _anon_edge_1
+	_anon_edge_1 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_2 [label = "infoapi.number.english.ordinal", shape = "diamond"]
+	SOFe_InfoAPI_NumberInfo -> _anon_edge_2
+	_anon_edge_2 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_3 [label = "infoapi.number.percent", shape = "diamond"]
+	SOFe_InfoAPI_NumberInfo -> _anon_edge_3
+	_anon_edge_3 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_4 [label = "infoapi.ratio.current", shape = "diamond"]
+	SOFe_InfoAPI_RatioInfo -> _anon_edge_4
+	_anon_edge_4 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_5 [label = "infoapi.ratio.max", shape = "diamond"]
+	SOFe_InfoAPI_RatioInfo -> _anon_edge_5
+	_anon_edge_5 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_6 [label = "infoapi.ratio.remaining", shape = "diamond"]
+	SOFe_InfoAPI_RatioInfo -> _anon_edge_6
+	_anon_edge_6 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_7 [label = "infoapi.ratio.invert", shape = "diamond"]
+	SOFe_InfoAPI_RatioInfo -> _anon_edge_7
+	_anon_edge_7 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_8 [label = "infoapi.ratio.lost", shape = "diamond"]
+	SOFe_InfoAPI_RatioInfo -> _anon_edge_8
+	_anon_edge_8 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_9 [label = "(fallback)", shape = "diamond"]
+	SOFe_InfoAPI_RatioInfo -> _anon_edge_9
+	_anon_edge_9 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_10 [label = "infoapi.position.x", shape = "diamond"]
+	SOFe_InfoAPI_PositionInfo -> _anon_edge_10
+	_anon_edge_10 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_11 [label = "infoapi.position.y", shape = "diamond"]
+	SOFe_InfoAPI_PositionInfo -> _anon_edge_11
+	_anon_edge_11 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_12 [label = "infoapi.position.z", shape = "diamond"]
+	SOFe_InfoAPI_PositionInfo -> _anon_edge_12
+	_anon_edge_12 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_13 [label = "infoapi.position.world", shape = "diamond"]
+	SOFe_InfoAPI_PositionInfo -> _anon_edge_13
+	_anon_edge_13 -> SOFe_InfoAPI_WorldInfo
+	_anon_edge_14 [label = "infoapi.world.name", shape = "diamond"]
+	SOFe_InfoAPI_WorldInfo -> _anon_edge_14
+	_anon_edge_14 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_15 [label = "infoapi.world.folderName", shape = "diamond"]
+	SOFe_InfoAPI_WorldInfo -> _anon_edge_15
+	_anon_edge_15 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_16 [label = "infoapi.world.customName", shape = "diamond"]
+	SOFe_InfoAPI_WorldInfo -> _anon_edge_16
+	_anon_edge_16 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_17 [label = "infoapi.world.displayName", shape = "diamond"]
+	SOFe_InfoAPI_WorldInfo -> _anon_edge_17
+	_anon_edge_17 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_18 [label = "infoapi.world.time", shape = "diamond"]
+	SOFe_InfoAPI_WorldInfo -> _anon_edge_18
+	_anon_edge_18 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_19 [label = "infoapi.world.seed", shape = "diamond"]
+	SOFe_InfoAPI_WorldInfo -> _anon_edge_19
+	_anon_edge_19 -> SOFe_InfoAPI_NumberInfo
+}

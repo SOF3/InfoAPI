@@ -1,57 +1,77 @@
 # InfoAPI
 The standard for user config variables.
 
-## FAQ for users
-### How to add info into my config?
-First, check what infos the plugin provides. For example, a chat formatting plugin might have an info called `player` which represents the player chatting, and an info called `message` which represents the message to be sent.
+## User guide (for config setup)
+### Formatting infos
+InfoAPI formats your text using placeholders called "info".
+You can put the info in `{}` and it will be replaced into the actual value.
 
+For example, if you are using a chat plugin
+that provides an info called `player`
+which represents the player chatting,
+and an info called `message` which represents the message to be sent.
 Then you can customize the chat message like this:
+
 ```
 <{player}> {message}
 ```
 
-If the player is called `Steve` and the message is `Hello world`, the formatted chat message would become `<Steve> Hello world`.
-
-Each `{...}` will be replaced by the info called `...`.
-
-### How to add detailed info?
-Different types of info have different details. For example, an info representing a player (we call it PlayerInfo) has a detail called `ip`. So if your config has the customized chat message like this:
-```
-<{player} @ {player ip}> {message}
-```
-
-This will become something like:
-```
-<Steve @ 12.34.56.78> Hello world
-```
-
-Simply add a space behind the info name, then add the detail name. You can repeat this process:
+If the player is called `Steve` and the message is `Hello world`, the formatted chat message would become
 
 ```
-<{player} ({player health percent} health)> {message}
+<Steve> Hello world
 ```
 
-A PlayerInfo has a detail RatioInfo called `health`, which represents the health of the player, so `{player health}` shows the player health. But we want a percentage. The RatioInfo has a detail StringInfo called `percent`, which converts the ratio into percentage, so we end up having this:
+### More detailed templates
+Some types of infos provide extra details.
+For example, an info representing a player has a detail called `health`.
+So you can write the detail name after the original info name
+(separated by a space):
 
 ```
-<Steve (95% health)> Hello world
+[{player health}] <{player}> {message}
 ```
 
-### How to check what detailed info are available?
-One way is to check for docs. Each plugin provides some details for different types of info. For example, a factions plugin might provide a detail for PlayerInfo called `faction`, which represents the player's faction. InfoAPI itself provides some common details, which you can find [here](builtin-info.md).
+This will become
 
-Another way is to use the `/info` command. `/info` displays the detail infos about a specific player, but you can click into them and see what they support.
+```
+[9.5/10] <Steve> Hello world
+```
 
-### Escape codes
-> - (Or: What if I really want to type `{}` without replacement?)
+You can get details of details!
+The player health is a proportion.
+Proportion infos have a detail called `percent`,
+which converts the fraction into a percentage:
 
-Simply write `{{` `}}` when you want `{` `}`.
+```
+[{player health percent}] <{player}> {message}
+```
 
-> What if I really want `{{` `}}`?
+This will become
 
-Write `{{{{` `}}}}`. Just duplicate every brace. Simple.
+```
+[95%] <Steve> Hello world
+```
 
-## For developers:
+### Checking available info types
+There are multiple ways to check what infos you can use.
+
+#### Check the plugin description
+TODO: requires standardized description format
+
+https://sof3.github.io/InfoAPI/defaults.html
+
+#### Use the `/info` command
+TODO: requires plugins to register help keys, then finish the UI
+
+### How to write `{}` if I don't want it replaced?
+Simply write `{{` or `}}` when you want `{` or `}`.
+
+> What if I really want `{{` or `}}`?
+
+Write `{{{{` or `}}}}`. Just duplicate every brace. Simple.
+
+## Developer guide
 ### Providing info for InfoAPI
 If your plugin stores data (esp. about players, etc.), you can expose your data to InfoAPI so that users can use these data in other plugins.
 
@@ -132,9 +152,7 @@ final class MyInfo extends ContextInfo {
 	public StringInfo $message;
 	public PlayerInfo $speaker;
 }
-```
-
-If you need to resolve at multiple places with different argument sets,
+``` If you need to resolve at multiple places with different argument sets,
 create a new class for each set of arguments.
 InfoAPI is strict about the keys provided and properties declared:
 The keys that appear in the `InfoAPI::resolve` array must be
@@ -158,3 +176,7 @@ final class MyInfo extends ContextInfo {
 	public PlayerInfo $speaker;
 }
 ```
+
+Do NOT use `ContextInfo` for return values in `provideInfo`/`provideFallback`!
+`ContextInfo` is only for the convenient creation when resolving.
+Please refer to the previous guide if you are actively *providing* some info.
