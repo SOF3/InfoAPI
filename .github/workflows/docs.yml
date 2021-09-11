@@ -29,6 +29,7 @@ jobs:
           repository: SOF3/InfoAPI
           ssh-key: ${{secrets.SITE_KEY}}
           path: docs
+          ref: gh-pages
 
       - name: Build documentation
         run: php runTool.php DocGenerator
