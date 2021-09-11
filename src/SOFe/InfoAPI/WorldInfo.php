@@ -45,32 +45,32 @@ final class WorldInfo extends Info {
 
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.name",
-			fn($info) => $info->getValue()->getFolderName(),
+			fn($info) => new StringInfo($info->getValue()->getFolderName()),
 			$api)
 			->setMetadata("description", "The folder name of this world")
 			->setMetadata("example", "world (2)");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.folderName",
-			fn($info) => $info->getValue()->getFolderName(),
+			fn($info) => new StringInfo($info->getValue()->getFolderName()),
 			$api)
 			->setMetadata("description", "The folder name of this world")
 			->setMetadata("example", "world (2)");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.customName",
-			fn($info) => $info->getValue()->getDisplayName(),
+			fn($info) => new StringInfo($info->getValue()->getDisplayName()),
 			$api)
 			->setMetadata("description", "The display name of this world")
 			->setMetadata("example", "world");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.displayName",
-			fn($info) => $info->getValue()->getDisplayName(),
+			fn($info) => new StringInfo($info->getValue()->getDisplayName()),
 			$api)
 			->setMetadata("description", "The display name of this world")
 			->setMetadata("example", "world");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.time",
-			fn($info) => $info->getValue()->getTime(),
+			fn($info) => new NumberInfo($info->getValue()->getTime()),
 			$api)
 			->setMetadata("description", "The current world time, in ticks")
 			->setMetadata("example", "12000");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.seed",
-			fn($info) => $info->getValue()->getSeed(),
+			fn($info) => new NumberInfo($info->getValue()->getSeed()),
 			$api)
 			->setMetadata("description", "The seed of this world")
 			->setMetadata("example", "world");
