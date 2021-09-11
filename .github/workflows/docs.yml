@@ -10,6 +10,9 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v2
 
+      - name: Install graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
       - name: Install toolchain
         uses: shivammathur/setup-php@v2
         with:
@@ -31,7 +34,7 @@ jobs:
         run: php runTool.php DocGenerator
 
       - name: Git commit
-        run: git commit --allow-empty -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
+        run: git commit -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
         working-directory: docs
       - name: Push pages
         run: git push
