@@ -104,6 +104,7 @@ final class DocGenerator {
 		foreach($api->getGraph()->getFromIndex() as $src => $list) {
 			$output .= sprintf("## %s\n", ucfirst($src::getInfoType()));
 
+			$output .= "\n";
 			$output .= "| Name | Output type | Description | Example |\n";
 			$output .= "| :---: | :---: | :---: | :---: |\n";
 			foreach($list->iterAllEdges() as $listedEdge) {
