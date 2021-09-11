@@ -44,3 +44,34 @@
 | `infoapi.world.time` | Number | The current world time, in ticks | 12000 |
 | `infoapi.world.seed` | Number | The seed of this world | world |
 
+## Block
+
+| Name | Output type | Description | Example |
+| :---: | :---: | :---: | :---: |
+| (fallback) | Position | The position of the block |  |
+| (fallback) | Block type | The block type |  |
+
+## Common
+
+| Name | Output type | Description | Example |
+| :---: | :---: | :---: | :---: |
+| `infoapi.server.players` | Number | Number of online players | 16 / 20 |
+
+## Player
+
+| Name | Output type | Description | Example |
+| :---: | :---: | :---: | :---: |
+| `infoapi.player.name` | Number | The player name | Steve |
+| `infoapi.player.nick` | Text | The player display name in chat | Steve |
+| `infoapi.player.nametag` | Text | The player nametag | Steve |
+| `infoapi.player.ip` | Text | The player IP address | 12.34.56.78 |
+| `infoapi.player.port` | Number | The player client port | 61234 |
+| `infoapi.player.ping` | Number | The player ping, in milliseconds | 15 |
+| `infoapi.player.health` | Number | The player health (number of hearts) | 10 |
+| `infoapi.player.yaw` | Number | The player yaw orientation, in degrees | 2700 |
+| `infoapi.player.pitch` | Number | The player pitch orientation, in degrees | 90 |
+| `infoapi.player.eye` | Position | The player's eye position | (128, 65.8, 128) |
+| `infoapi.player.blockBelow` | Block | The block that the player steps on | grass at (128, 64, 128) |
+| `infoapi.player.blockFacing` | Block | The block that the player looks at | grass at (128, 64, 130) |
+| (fallback) | Position | The position of the player feet |  |
+
