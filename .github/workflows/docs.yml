@@ -34,7 +34,7 @@ jobs:
         run: php runTool.php DocGenerator
 
       - name: Git commit
-        run: git commit -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
+        run: git add -A && git commit -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
         working-directory: docs
       - name: Push pages
         run: git push
