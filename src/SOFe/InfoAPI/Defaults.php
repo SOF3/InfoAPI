@@ -32,6 +32,10 @@ final class Defaults {
 		RatioInfo::class,
 		PositionInfo::class,
 		WorldInfo::class,
+		BlockTypeInfo::class,
+		BlockInfo::class,
+		CommonInfo::class,
+		PlayerInfo::class,
 	];
 
 	static public function initAll(?InfoAPI $api) : void {
