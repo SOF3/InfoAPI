@@ -45,6 +45,9 @@ final class BlockTypeInfo extends Info {
 
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.block.name",
-			fn($info) => $info->getValue()->getName());
+			fn($info) => new StringInfo($info->getValue()->getName()),
+			$api)
+			->setMetadata("description", "The name of the block type")
+			->setMetadata("example", "stone");
 	}
 }

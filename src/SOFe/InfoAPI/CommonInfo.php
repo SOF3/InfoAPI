@@ -46,7 +46,7 @@ final class CommonInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.server.players",
+		InfoAPI::provideInfo(self::class, RatioInfo::class, "infoapi.server.players",
 			fn($info) => new RatioInfo(
 				count($info->getValue()->getOnlinePlayers()),
 				$info->getValue()->getMaxPlayers()
