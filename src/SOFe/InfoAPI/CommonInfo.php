@@ -38,11 +38,11 @@ final class CommonInfo extends Info {
 	}
 
 	public function toString() : string {
-		return $this->value->getName();
+		throw new RuntimeException("CommonInfo must not be returned as a provided info");
 	}
 
 	static public function getInfoType() : string {
-		throw new RuntimeException("CommonInfo must not be returned as a provided info");
+		return "common";
 	}
 
 	static public function init(?InfoAPI $api) : void {
