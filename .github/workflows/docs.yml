@@ -36,7 +36,7 @@ jobs:
       - run: cp README.md docs/README.md
 
       - name: Git commit
-        run: git add -A && git commit -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
+        run: git add -A && git commit --allow-empty -m "Documentation build for SOF3/InfoAPI@${{github.sha}}"
         working-directory: docs
       - name: Push pages
         run: git push
