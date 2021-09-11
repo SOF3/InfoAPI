@@ -1,5 +1,6 @@
 projects:
   InfoAPI:
+    lint: false
     libs:
       - src: SOF3/pmforms/pmforms
         version: ^1.0.0
