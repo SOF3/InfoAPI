@@ -44,6 +44,12 @@
 | `infoapi.world.time` | Number | The current world time, in ticks | 12000 |
 | `infoapi.world.seed` | Number | The seed of this world | world |
 
+## Block type
+
+| Name | Output type | Description | Example |
+| :---: | :---: | :---: | :---: |
+| `infoapi.block.name` | Text | The name of the block type | stone |
+
 ## Block
 
 | Name | Output type | Description | Example |
@@ -55,7 +61,7 @@
 
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
-| `infoapi.server.players` | Number | Number of online players | 16 / 20 |
+| `infoapi.server.players` | Proportion | Number of online players | 16 / 20 |
 
 ## Player
 
