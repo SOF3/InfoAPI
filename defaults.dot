@@ -93,31 +93,34 @@ digraph InfoAPI_Defaults {
 	_anon_edge_27 [label = "infoapi.player.health", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_27
 	_anon_edge_27 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_28 [label = "infoapi.player.yaw", shape = "diamond"]
+	_anon_edge_28 [label = "infoapi.player.health", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_28
 	_anon_edge_28 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_29 [label = "infoapi.player.pitch", shape = "diamond"]
+	_anon_edge_29 [label = "infoapi.player.yaw", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_29
 	_anon_edge_29 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_30 [label = "infoapi.player.nick", shape = "diamond"]
+	_anon_edge_30 [label = "infoapi.player.pitch", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_30
-	_anon_edge_30 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_31 [label = "infoapi.player.nametag", shape = "diamond"]
+	_anon_edge_30 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_31 [label = "infoapi.player.nick", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_31
 	_anon_edge_31 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_32 [label = "infoapi.player.ip", shape = "diamond"]
+	_anon_edge_32 [label = "infoapi.player.nametag", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_32
 	_anon_edge_32 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_33 [label = "infoapi.player.eye", shape = "diamond"]
+	_anon_edge_33 [label = "infoapi.player.ip", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_33
-	_anon_edge_33 -> SOFe_InfoAPI_PositionInfo
-	_anon_edge_34 [label = "(fallback)", shape = "diamond"]
+	_anon_edge_33 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_34 [label = "infoapi.player.eye", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_34
 	_anon_edge_34 -> SOFe_InfoAPI_PositionInfo
-	_anon_edge_35 [label = "infoapi.player.blockBelow", shape = "diamond"]
+	_anon_edge_35 [label = "(fallback)", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_35
-	_anon_edge_35 -> SOFe_InfoAPI_BlockInfo
-	_anon_edge_36 [label = "infoapi.player.blockFacing", shape = "diamond"]
+	_anon_edge_35 -> SOFe_InfoAPI_PositionInfo
+	_anon_edge_36 [label = "infoapi.player.blockBelow", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_36
 	_anon_edge_36 -> SOFe_InfoAPI_BlockInfo
+	_anon_edge_37 [label = "infoapi.player.blockFacing", shape = "diamond"]
+	SOFe_InfoAPI_PlayerInfo -> _anon_edge_37
+	_anon_edge_37 -> SOFe_InfoAPI_BlockInfo
 }
