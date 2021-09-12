@@ -78,10 +78,10 @@ final class PlayerInfo extends Info {
 			->setMetadata("description", "The player ping, in milliseconds")
 			->setMetadata("example", "15");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.health",
-			fn($info) => new NumberInfo($info->getValue()->getHealth() / 2.),
+			fn($info) => new RatioInfo($info->getValue()->getHealth() / 2., $info->getValue()->getMaxHealth() / 2.),
 			$api)
 			->setMetadata("description", "The player health (number of hearts)")
-			->setMetadata("example", "10");
+			->setMetadata("example", "9.5/10");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.yaw",
 			fn($info) => new NumberInfo($info->getValue()->getLocation()->getYaw()),
 			$api)
