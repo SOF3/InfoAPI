@@ -74,7 +74,6 @@
 | `infoapi.player.port` | Number | The player client port | 61234 |
 | `infoapi.player.ping` | Number | The player ping, in milliseconds | 15 |
 | `infoapi.player.health` | Number | The player health (number of hearts) | 9.5/10 |
-| `infoapi.player.health` | Number | The player health (number of hearts) | 10 |
 | `infoapi.player.yaw` | Number | The player yaw orientation, in degrees | 2700 |
 | `infoapi.player.pitch` | Number | The player pitch orientation, in degrees | 90 |
 | `infoapi.player.eye` | Position | The player's eye position | (128, 65.8, 128) |
