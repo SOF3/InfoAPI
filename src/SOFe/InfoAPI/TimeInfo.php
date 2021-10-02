@@ -87,6 +87,6 @@ final class TimeInfo extends Info {
 	}
 
 	public function toString() : string {
-		return $this->value->format("Y-m-d H:i:s");
+		return $this->value->format("Y-m-d H:i:s.u");
 	}
 }
