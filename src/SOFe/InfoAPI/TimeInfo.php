@@ -22,12 +22,13 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
+use DateTime;
 use function date;
 
 final class TimeInfo extends Info {
-	private float $value;
+	private DateTime $value;
 
-	public function __construct(float $value) {
+	public function __construct(DateTime $value) {
 		$this->value = $value;
 	}
 
@@ -81,11 +82,11 @@ final class TimeInfo extends Info {
 			->setMetadata("description", "The hour part of a time");*/
 	}
 
-	public function getValue() : float {
+	public function getValue() : DateTime {
 		return $this->value;
 	}
 
 	public function toString() : string {
-		return date("Y-m-d H:i:s", $i = (int)$this->value) . "." . substr((string)($this->value - $i), 2);
+		return $this->value->format("Y-m-d H:i:s");
 	}
 }
