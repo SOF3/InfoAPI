@@ -35,6 +35,7 @@ final class Defaults {
 		BlockTypeInfo::class,
 		BlockInfo::class,
 		CommonInfo::class,
+		FormatInfo::class,
 		PlayerInfo::class,
 	];
 
