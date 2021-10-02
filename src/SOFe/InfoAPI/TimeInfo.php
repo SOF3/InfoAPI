@@ -51,31 +51,31 @@ final class TimeInfo extends Info {
 			$api)
 			->setMetadata("description", "The date part of a date")
 			->setMetadata("example", "2");
-		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.time.weekday",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.time.weekday",
 			fn($info) => new StringInfo(date("D", $info->getValue())),
 			$api)
 			->setMetadata("description", "The weekday part of a date")
 			->setMetadata("example", "Thu");
-		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.time.hour",
-			fn($info) => new StringInfo(date("H", $info->getValue())),
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.hour",
+			fn($info) => new NumberInfo((float)date("H", $info->getValue())),
 			$api)
 			->setMetadata("description", "The hour part of a time")
 			->setMetadata("example", "15");
-		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.time.minute",
-			fn($info) => new StringInfo(date("i", $info->getValue())),
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.minute",
+			fn($info) => new NumberInfo((float)date("i", $info->getValue())),
 			$api)
 			->setMetadata("description", "The minute part of a time")
 			->setMetadata("example", "4");
-		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.time.second",
-			fn($info) => new StringInfo(date("s", $info->getValue())),
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.second",
+			fn($info) => new NumberInfo((float)date("s", $info->getValue())),
 			$api)
 			->setMetadata("description", "The second part of a time")
 			->setMetadata("example", "5");
-/*		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.time.elapsed",
+/*		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.elapsed",
 			fn($info) => new StringInfo(date("H", $info->getValue())),
 			$api)
 			->setMetadata("description", "The hour part of a time");
-		InfoAPI::provideInfo(self::class, WorldInfo::class, "infoapi.time.remaining",
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.remaining",
 			fn($info) => new StringInfo(date("H", $info->getValue())),
 			$api)
 			->setMetadata("description", "The hour part of a time");*/
