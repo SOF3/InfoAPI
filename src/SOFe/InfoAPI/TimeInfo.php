@@ -28,6 +28,10 @@ use function date;
 final class TimeInfo extends Info {
 	private DateTime $value;
 
+	/**
+	 * @param DateTime $value
+	 * @see DateTime::createFromFormat()
+	 */
 	public function __construct(DateTime $value) {
 		$this->value = $value;
 	}
