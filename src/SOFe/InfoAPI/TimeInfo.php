@@ -90,6 +90,6 @@ fn($info) => new NumberInfo((float)$this->getValue()->format("Y")),
 	}
 
 	public function toString() : string {
-		return $this->value->format("Y-m-d H:i:s.u");
+		return $this->value->format("Y-m-d H:i:s");
 	}
 }
