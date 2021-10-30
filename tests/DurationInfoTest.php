@@ -35,39 +35,44 @@ final class DurationInfoTest extends TestCase {
 		self::assertSame($expected, $actual);
 	}
 
-	public function testDays() {
+	public function testDays() : void {
 		self::implTest("3", "{test days}", 86400.0 * 3.8);
 	}
 
-	public function testRawDays() {
+	public function testRawDays() : void {
 		// note to future changes: ensure that the multiplied value is exact under IEEE754/binary64
 		self::implTest("3.8", "{test rawDays}", 86400.0 * 3.8);
 	}
 
-	public function testHours() {
+	public function testHours() : void {
 		self::implTest("3", "{test hours}", 3600.0 * 3.8);
 	}
 
-	public function testRawHours() {
+	public function testRawHours() : void {
 		// note to future changes: ensure that the multiplied value is exact under IEEE754/binary64
 		self::implTest("3.8", "{test rawHours}", 3600.0 * 3.8);
 	}
 
-	public function testMinutes() {
+	public function testMinutes() : void {
 		self::implTest("3", "{test minutes}", 60.0 * 3.8);
 	}
 
-	public function testRawMinutes() {
+	public function testRawMinutes() : void {
 		// note to future changes: ensure that the multiplied value is exact under IEEE754/binary64
 		self::implTest("3.8", "{test rawMinutes}", 60.0 * 3.8);
 	}
 
-	public function testSeconds() {
+	public function testSeconds() : void {
 		self::implTest("3", "{test seconds}", 3.8);
 	}
 
-	public function testRawSeconds() {
+	public function testRawSeconds() : void {
 		// note to future changes: ensure that the multiplied value is exact under IEEE754/binary64
 		self::implTest("3.8", "{test rawSeconds}", 3.8);
+	}
+
+	public function testToString() : void {
+		$time = 57.0 + 58.0 * 60.0 + 23.0 * 3600.0 + 86400.0;
+		self::implTest("1 days 23 hours 58 minutes 57 seconds", "{test}", $time);
 	}
 }

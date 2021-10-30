@@ -28,7 +28,7 @@ final class TimeInfoTest extends TestCase {
 	private const MAGIC_TIMESTAMP = 1136214245; // 2006-01-02 15:04:05 UTC, 2006-01-02 23:04:05 Asia/Singapore, Monday
 	private const MAGIC_TIMEZONE = "Asia/Singapore"; // UTC+8, no DST
 
-	static private function implTest(string $expected, string $template) {
+	static private function implTest(string $expected, string $template) : void {
 		$api = InfoAPI::createForTesting();
 
 		Defaults::initAll($api);
