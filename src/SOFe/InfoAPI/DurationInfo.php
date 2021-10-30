@@ -23,11 +23,20 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI;
 
 use const INF;
+use function count;
 use function floor;
 use function fmod;
+use function implode;
 use function ucfirst;
 
 final class DurationInfo extends Info {
+	private const UNITS = [
+		"days" => 86400.0,
+		"hours" => 3600.0,
+		"minutes" => 60.0,
+		"seconds" => 1.0,
+	];
+
 	private float $value;
 
 	/**
@@ -42,16 +51,15 @@ final class DurationInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
-		foreach([
-			"days" => [INF, 86400.0],
-			"hours" => [86400.0, 3600.0],
-			"minutes" => [3600.0, 60.0],
-			"seconds" => [60.0, 1.0],
-		] as $name => [$modSuper, $mod]) {
+		$modLast = INF;
+
+		foreach(self::UNITS as $name => $mod) {
 			InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.duration.$name",
-				fn($info) => new NumberInfo(self::rounded($info->getValue(), $mod, $modSuper)), $api);
+				fn($info) => new NumberInfo(self::rounded($info->getValue(), $mod, $modLast)), $api);
 			InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.duration.raw" . ucfirst($name),
 				fn($info) => new NumberInfo($info->getValue() / $mod), $api);
+
+			$modLast = $mod;
 		}
 	}
 
@@ -68,6 +76,23 @@ final class DurationInfo extends Info {
 	}
 
 	public function toString() : string {
-		// TODO
+		$output = [];
+
+		$modLast = INF;
+
+		foreach(self::UNITS as $name => $mod) {
+			$rounded = self::rounded($this->getValue(), $mod, $modLast);
+			if($rounded > 0.0) {
+				$output[] = "$rounded $name";
+			}
+
+			$modLast = $mod;
+		}
+
+		if(count($output) === 0) {
+			return "immediately";
+		}
+
+		return implode(" ", $output);
 	}
 }
