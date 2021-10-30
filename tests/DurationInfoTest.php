@@ -74,5 +74,10 @@ final class DurationInfoTest extends TestCase {
 	public function testToString() : void {
 		$time = 57.0 + 58.0 * 60.0 + 23.0 * 3600.0 + 86400.0;
 		self::implTest("1 days 23 hours 58 minutes 57 seconds", "{test}", $time);
+
+		self::implTest("immediately", "{test}", 0.0);
+
+		$time = 57.0 + 58.0 * 60.0 + 23.0 * 3600.0 + 86400.0;
+		self::implTest("-1 days 23 hours 58 minutes 57 seconds", "{test}", -$time);
 	}
 }

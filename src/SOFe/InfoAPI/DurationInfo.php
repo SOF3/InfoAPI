@@ -80,8 +80,15 @@ final class DurationInfo extends Info {
 
 		$modLast = INF;
 
+		$value = $this->getValue();
+
+		$negative = $value < 0;
+		if($negative) {
+			$value *= -1.0;
+		}
+
 		foreach(self::UNITS as $name => $mod) {
-			$rounded = self::rounded($this->getValue(), $mod, $modLast);
+			$rounded = self::rounded($value, $mod, $modLast);
 			if($rounded > 0.0) {
 				$output[] = "$rounded $name";
 			}
@@ -93,6 +100,7 @@ final class DurationInfo extends Info {
 			return "immediately";
 		}
 
-		return implode(" ", $output);
+		$negativeSign = $negative ? "-" : "";
+		return $negativeSign . implode(" ", $output);
 	}
 }
