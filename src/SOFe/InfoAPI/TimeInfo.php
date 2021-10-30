@@ -28,11 +28,19 @@ final class TimeInfo extends Info {
 	private DateTime $value;
 
 	/**
-	 * @param DateTime $value
 	 * @see DateTime::createFromFormat()
 	 */
 	public function __construct(DateTime $value) {
 		$this->value = $value;
+	}
+
+	/**
+	 * Creates a TimeInfo from a timestamp.
+	 */
+	static public function createFromTimestamp(int $timestamp) : self {
+		$dateTime = new DateTime;
+		$dateTime->setTimestamp($timestamp);
+		return new self($dateTime);
 	}
 
 	static public function getInfoType() : string {
@@ -41,40 +49,41 @@ final class TimeInfo extends Info {
 
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.year",
-			fn($info) => new NumberInfo((float)$this->getValue()->format("Y")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("Y")),
 			$api)
 			->setMetadata("description", "The year part of a date")
 			->setMetadata("example", "2006");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.month",
-			fn($info) => new NumberInfo((float)$this->getValue()->format("m")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("m")),
 			$api)
 			->setMetadata("description", "The month part of a date")
 			->setMetadata("example", "1");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.date",
-			fn($info) => new NumberInfo((float)$this->getValue()->format("j")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("j")),
 			$api)
 			->setMetadata("description", "The date part of a date")
 			->setMetadata("example", "2");
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.time.weekday",
-			fn($info) => new StringInfo($this->getValue()->format("D")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("D")),
 			$api)
 			->setMetadata("description", "The weekday part of a date")
 			->setMetadata("example", "Thu");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.hour",
-			fn($info) => new NumberInfo((float)$this->getValue()->format("H")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("H")),
 			$api)
 			->setMetadata("description", "The hour part of a time")
 			->setMetadata("example", "15");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.minute",
-			fn($info) => new NumberInfo((float)$this->getValue()->format("i")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("i")),
 			$api)
 			->setMetadata("description", "The minute part of a time")
 			->setMetadata("example", "4");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.second",
-			fn($info) => new NumberInfo((float)$this->getValue()->format("s")),
+			fn($info) => new NumberInfo((float) $info->getValue()->format("s")),
 			$api)
 			->setMetadata("description", "The second part of a time")
 			->setMetadata("example", "5");
+
 /*		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.elapsed",
 fn($info) => new NumberInfo((float)$this->getValue()->format("Y")),
 			$api)

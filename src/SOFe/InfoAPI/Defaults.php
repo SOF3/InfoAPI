@@ -37,6 +37,7 @@ final class Defaults {
 		CommonInfo::class,
 		FormatInfo::class,
 		PlayerInfo::class,
+		TimeInfo::class,
 	];
 
 	static public function initAll(?InfoAPI $api) : void {
