@@ -22,25 +22,30 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
-use DateTime;
+use function date;
+use function fmod;
+use function idate;
+use function microtime;
+use function time;
 
 final class TimeInfo extends Info {
-	private DateTime $value;
+	private int $seconds;
+	private int $micros;
 
 	/**
-	 * @see DateTime::createFromFormat()
+	 * @param int $seconds the Unix timestamp in seconds, e.g. returned by `time()`.
+	 * @param int $micros the number of microseconds in the current second,
+	 * effectively (but not precisely) `fmod(microtime(true), 1.0) * 1e6`.
 	 */
-	public function __construct(DateTime $value) {
-		$this->value = $value;
+	public function __construct(int $seconds, int $micros = 0) {
+		$this->seconds = $seconds;
+		$this->micros = $micros;
 	}
 
-	/**
-	 * Creates a TimeInfo from a timestamp.
-	 */
-	static public function createFromTimestamp(int $timestamp) : self {
-		$dateTime = new DateTime;
-		$dateTime->setTimestamp($timestamp);
-		return new self($dateTime);
+	static public function fromMicrotime(float $microtime) : self {
+		$seconds = (int) $microtime;
+		$micros = (int) (fmod($microtime, 1.0) * 1e6);
+		return new self($seconds, $micros);
 	}
 
 	static public function getInfoType() : string {
@@ -49,56 +54,74 @@ final class TimeInfo extends Info {
 
 	static public function init(?InfoAPI $api) : void {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.year",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("Y")),
+			fn($info) => new NumberInfo((float) idate("Y", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The year part of a date")
 			->setMetadata("example", "2006");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.month",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("m")),
+			fn($info) => new NumberInfo((float) idate("m", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The month part of a date")
 			->setMetadata("example", "1");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.date",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("j")),
+			fn($info) => new NumberInfo((float) idate("d", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The date part of a date")
 			->setMetadata("example", "2");
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.time.weekday",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("D")),
+			fn($info) => new StringInfo(date("D", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The weekday part of a date")
 			->setMetadata("example", "Thu");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.hour",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("H")),
+			fn($info) => new NumberInfo((float) idate("H", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The hour part of a time")
 			->setMetadata("example", "15");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.minute",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("i")),
+			fn($info) => new NumberInfo((float) idate("i", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The minute part of a time")
 			->setMetadata("example", "4");
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.second",
-			fn($info) => new NumberInfo((float) $info->getValue()->format("s")),
+			fn($info) => new NumberInfo((float) idate("s", $info->getSeconds())),
 			$api)
 			->setMetadata("description", "The second part of a time")
 			->setMetadata("example", "5");
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.micro",
+			fn($info) => new NumberInfo((float) $info->getMicros()),
+			$api)
+			->setMetadata("description", "The microsecond part of a time")
+			->setMetadata("example", "0");
 
-/*		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.elapsed",
-fn($info) => new NumberInfo((float)$this->getValue()->format("Y")),
-			$api)
-			->setMetadata("description", "The hour part of a time");
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.time.remaining",
-			fn($info) => new StringInfo(date("H", $info->getValue())),
-			$api)
-			->setMetadata("description", "The hour part of a time");*/
+		InfoAPI::provideInfo(self::class, DurationInfo::class, "infoapi.time.elapsed",
+			fn($info) => new DurationInfo(microtime(true) - $info->asMicrotime()), $api);
+		InfoAPI::provideInfo(self::class, DurationInfo::class, "infoapi.time.remaining",
+			fn($info) => new DurationInfo($info->asMicrotime() - microtime(true)), $api);
+
+		InfoAPI::provideInfo(CommonInfo::class, self::class, "infoapi.time.now",
+			fn($_) => new TimeInfo(time()), $api);
 	}
 
-	public function getValue() : DateTime {
-		return $this->value;
+	public function getSeconds() : int {
+		return $this->seconds;
+	}
+
+	public function getMicros() : int {
+		return $this->micros;
+	}
+
+	/**
+	 * Approximate the timestamp as a float like in `microtime(true)` format.
+	 * The value should be precise up to microseconds on 64-bit systems.
+	 */
+	public function asMicrotime() : float {
+		$ret = (float) $this->seconds;
+		$ret += $this->micros * 1e-6;
+		return $ret;
 	}
 
 	public function toString() : string {
-		return $this->value->format("Y-m-d H:i:s");
+		return date("Y-m-d H:i:s", $this->getSeconds());
 	}
 }

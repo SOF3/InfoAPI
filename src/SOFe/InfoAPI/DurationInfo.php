@@ -27,6 +27,7 @@ use function count;
 use function floor;
 use function fmod;
 use function implode;
+use function microtime;
 use function ucfirst;
 
 final class DurationInfo extends Info {
@@ -61,6 +62,11 @@ final class DurationInfo extends Info {
 
 			$modLast = $mod;
 		}
+
+		InfoAPI::provideInfo(self::class, TimeInfo::class, "infoapi.duration.later",
+			fn($info) => TimeInfo::fromMicrotime(microtime(true) + $info->getValue()));
+		InfoAPI::provideInfo(self::class, TimeInfo::class, "infoapi.duration.ago",
+			fn($info) => TimeInfo::fromMicrotime(microtime(true) - $info->getValue()));
 	}
 
 	static private function rounded(float $value, float $mod, float $modSuper) : float {
