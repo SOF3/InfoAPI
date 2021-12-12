@@ -1,5 +1,5 @@
 {
-    "name": "sofe/infoapi",
+    "name": "sof3/infoapi",
     "type": "library",
 		"minimum-stability": "dev",
     "require": {
