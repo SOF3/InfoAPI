@@ -3,7 +3,7 @@
     "type": "library",
 		"minimum-stability": "dev",
     "require": {
-        "pocketmine/pocketmine-mp": "4.0.0-Beta1"
+        "pocketmine/pocketmine-mp": "4.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
