@@ -4,7 +4,6 @@
  * InfoAPI
  *
  * Copyright (C) 2019-2021 SOFe
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -52,14 +51,13 @@ final class EdgeList {
 	 */
 	public function find(ChildName $pattern) : Generator {
 		$last = $pattern->getLastPart();
-		if(!isset($this->edges[$last])) {
-			return;
-		}
 
-		foreach($this->edges[$last] as $edge) {
-			$name = $edge->edge->getName();
-			if($name === null || $name->matches($pattern)) {
-				yield $edge;
+		if(isset($this->edges[$last])) {
+			foreach($this->edges[$last] as $edge) {
+				$name = $edge->edge->getName();
+				if($name === null || $name->matches($pattern)) {
+					yield $edge;
+				}
 			}
 		}
 
