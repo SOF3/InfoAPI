@@ -77,14 +77,20 @@ final class Graph {
 		// TODO implement cycle detection
 		while(!$heap->isEmpty()) {
 			$path = $heap->extract();
+
+			// This is the number of expression segments we have resolved.
 			$step = $path->getWeight()->parentChild;
 			if($step === count($expression)) {
 				return $path;
 			}
+
 			if(!isset($this->fromIndex[$path->getTail()])) {
-				continue; // sink
+				// This is a dead path.
+				continue;
 			}
+
 			$list = $this->fromIndex[$path->getTail()];
+
 			foreach($list->find($expression[$step]) as $edge) {
 				$newPath = $path->join($edge->edge->getResolver(), $edge->edge->isFallback(), $edge->target);
 

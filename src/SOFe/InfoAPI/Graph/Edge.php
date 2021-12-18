@@ -109,4 +109,11 @@ final class Edge {
 	static public function fallback(Closure $resolver) : self {
 		return new self(null, $resolver);
 	}
+
+	public function __debugInfo() {
+		return [
+			"name" => $this->name,
+			"metadata" => $this->metadata,
+		];
+	}
 }
