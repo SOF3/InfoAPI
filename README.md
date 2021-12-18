@@ -152,7 +152,8 @@ final class MyInfo extends ContextInfo {
 	public StringInfo $message;
 	public PlayerInfo $speaker;
 }
-``` If you need to resolve at multiple places with different argument sets,
+```
+If you need to resolve at multiple places with different argument sets,
 create a new class for each set of arguments.
 InfoAPI is strict about the keys provided and properties declared:
 The keys that appear in the `InfoAPI::resolve` array must be
