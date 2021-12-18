@@ -1,15 +1,14 @@
 {
     "name": "sof3/infoapi",
     "type": "library",
-		"minimum-stability": "dev",
     "require": {
         "pocketmine/pocketmine-mp": "4.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "^0.12.96",
-        "phpstan/phpstan-phpunit": "0.12.x-dev",
-        "phpstan/extension-installer": "dev-master",
+        "phpunit/phpunit": "^9.5.0",
+        "phpstan/phpstan": "^1.2.0",
+        "phpstan/phpstan-phpunit": "^1.0.0",
+        "phpstan/extension-installer": "^1.1.0",
         "infection/infection": "dev-master"
     },
     "license": "Apache-2.0",
