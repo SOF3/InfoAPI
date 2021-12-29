@@ -110,7 +110,10 @@ final class Edge {
 		return new self(null, $resolver);
 	}
 
-	public function __debugInfo() {
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function __debugInfo() : array {
 		return [
 			"name" => $this->name,
 			"metadata" => $this->metadata,

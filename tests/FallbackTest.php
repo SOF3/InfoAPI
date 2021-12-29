@@ -25,7 +25,7 @@ namespace SOFe\InfoAPI;
 use PHPUnit\Framework\TestCase;
 
 final class FallbackTest extends TestCase {
-	public function testFallback() {
+	public function testFallback() : void {
 		$api = InfoAPI::createForTesting();
 		InfoAPI::provideInfo(Dummy\B::class, Dummy\C::class, "b2c", fn($b) => new Dummy\C($b->toString()), $api);
 		InfoAPI::provideFallback(Dummy\A::class, Dummy\B::class, fn($a) => new Dummy\B($a->toString()), $api);

@@ -102,6 +102,10 @@ abstract class ContextInfo extends Info {
 				throw new RuntimeException("ContextInfo field ({$class->name}::{$property->name}) must explicitly declare their type as a single subclass of " . Info::class);
 			}
 
+			if(!$propertyClass->isSubclassOf(Info::class)) {
+				throw new RuntimeException("ContextInfo field ({$class->name}::{$property->name}) must explicitly declare their type as a single subclass of " . Info::class);
+			}
+
 			$doc = $property->getDocComment();
 			if(!is_string($doc)) {
 				$doc = "";
