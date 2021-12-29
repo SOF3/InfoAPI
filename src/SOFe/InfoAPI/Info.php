@@ -64,6 +64,7 @@ abstract class Info {
 				throw new ReflectionException("Property $property is untyped");
 			}
 
+			/** @var class-string<Info> $target */
 			$target = $type->getName();
 			$targetClass = new ReflectionClass($target);
 			if(!($targetClass->isSubclassOf(Info::class))) {

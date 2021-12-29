@@ -42,6 +42,7 @@ abstract class AnonInfo extends Info {
 	 *
 	 * @param string              $namespace the name of your plugin, optionally followed by `.module` if the plugin contains many modules
 	 * @param array<string, Info> $data
+	 * @param ?list<Info>         $fallbacks
 	 */
 	final public function __construct(string $namespace, private array $data,  ?array $fallbacks = null) {
 		$fallbacks = $fallbacks ?? [new CommonInfo(Server::getInstance())];
@@ -54,6 +55,7 @@ abstract class AnonInfo extends Info {
 			AnonInfo::$registered[$self] = true;
 
 			foreach($$data as $key => $value) {
+				/** @var class-string<Info> $to */
 				$to = get_class($value);
 				InfoAPI::provideInfo($self, $to, "$namespace.$key",
 					static function($instance) use($key) {
