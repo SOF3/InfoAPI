@@ -44,7 +44,7 @@ abstract class AnonInfo extends Info {
 	 * @param array<string, Info> $data
 	 * @param ?list<Info>         $fallbacks
 	 */
-	final public function __construct(string $namespace, private array $data,  ?array $fallbacks = null) {
+	final public function __construct(string $namespace, private array $data,  ?array $fallbacks = null, ?InfoAPI $api = null) {
 		$fallbacks = $fallbacks ?? [new CommonInfo(Server::getInstance())];
 		foreach($fallbacks as $fallback) {
 			$this->fallbacks[get_class($fallback)] = $fallback;
@@ -54,14 +54,13 @@ abstract class AnonInfo extends Info {
 		if(!isset(AnonInfo::$registered[$self])) {
 			AnonInfo::$registered[$self] = true;
 
-			foreach($$data as $key => $value) {
+			foreach($data as $key => $value) {
 				/** @var class-string<Info> $to */
 				$to = get_class($value);
 				InfoAPI::provideInfo($self, $to, "$namespace.$key",
 					static function($instance) use($key) {
 						return $instance->data[$key];
-					},
-				);
+					}, $api);
 			}
 
 			foreach($this->fallbacks as $value) {
@@ -69,7 +68,7 @@ abstract class AnonInfo extends Info {
 				InfoAPI::provideFallback($self, $to,
 					static function($instance) use($to) {
 						return $instance->fallbacks[$to];
-					});
+					}, $api);
 			}
 		}
 	}
