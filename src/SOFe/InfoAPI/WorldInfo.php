@@ -44,22 +44,22 @@ final class WorldInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.name",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.world.name",
 			fn($info) => new StringInfo($info->getValue()->getFolderName()),
 			$api)
 			->setMetadata("description", "The folder name of this world")
 			->setMetadata("example", "world (2)");
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.folderName",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.world.folderName",
 			fn($info) => new StringInfo($info->getValue()->getFolderName()),
 			$api)
 			->setMetadata("description", "The folder name of this world")
 			->setMetadata("example", "world (2)");
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.customName",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.world.customName",
 			fn($info) => new StringInfo($info->getValue()->getDisplayName()),
 			$api)
 			->setMetadata("description", "The display name of this world")
 			->setMetadata("example", "world");
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.displayName",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.world.displayName",
 			fn($info) => new StringInfo($info->getValue()->getDisplayName()),
 			$api)
 			->setMetadata("description", "The display name of this world")
