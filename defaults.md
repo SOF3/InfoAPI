@@ -98,7 +98,7 @@
 | `infoapi.player.name` | Number | The player name | Steve |
 | `infoapi.player.nick` | Text | The player display name in chat | Steve |
 | `infoapi.player.nametag` | Text | The player nametag | Steve |
-| `infoapi.player.uuid` | Number | The player UUID | 12345678-1234-5678-1234-567812345678 |
+| `infoapi.player.uuid` | Number | The player UUID in lowercase | 12345678-12ab-cd34-5e6f-567812345678 |
 | `infoapi.player.ip` | Text | The player IP address | 12.34.56.78 |
 | `infoapi.player.port` | Number | The player client port | 61234 |
 | `infoapi.player.ping` | Number | The player ping, in milliseconds | 15 |
