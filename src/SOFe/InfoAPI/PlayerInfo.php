@@ -65,8 +65,8 @@ final class PlayerInfo extends Info {
 		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.uuid",
 			fn($info) => new StringInfo($info->getValue()->getUniqueId()->toString()),
 			$api)
-			->setMetadata("description", "The player UUID")
-			->setMetadata("example", "12345678-1234-5678-1234-567812345678");
+			->setMetadata("description", "The player UUID in lowercase")
+			->setMetadata("example", "12345678-12ab-cd34-5e6f-567812345678");
 		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.player.ip",
 			fn($info) => new StringInfo($info->getValue()->getNetworkSession()->getIp()),
 			$api)
