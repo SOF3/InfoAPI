@@ -47,7 +47,7 @@ final class PlayerInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.name",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.player.name",
 			fn($info) => new StringInfo($info->getValue()->getName()),
 			$api)
 			->setMetadata("description", "The player name")
@@ -62,7 +62,7 @@ final class PlayerInfo extends Info {
 			$api)
 			->setMetadata("description", "The player nametag")
 			->setMetadata("example", "Steve");
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.uuid",
+		InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.player.uuid",
 			fn($info) => new StringInfo($info->getValue()->getUniqueId()->toString()),
 			$api)
 			->setMetadata("description", "The player UUID in lowercase")
@@ -82,7 +82,7 @@ final class PlayerInfo extends Info {
 			$api)
 			->setMetadata("description", "The player ping, in milliseconds")
 			->setMetadata("example", "15");
-		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.player.health",
+		InfoAPI::provideInfo(self::class, RatioInfo::class, "infoapi.player.health",
 			fn($info) => new RatioInfo($info->getValue()->getHealth() / 2., $info->getValue()->getMaxHealth() / 2.),
 			$api)
 			->setMetadata("description", "The player health (number of hearts)")
@@ -143,7 +143,7 @@ final class PlayerInfo extends Info {
 			->setMetadata("example", "grass at (128, 64, 130)");
 
 		InfoAPI::provideFallback(self::class, PositionInfo::class,
-			fn($info) => $info->getValue()->getPosition(),
+			fn($info) => new PositionInfo($info->getValue()->getPosition()),
 			$api)
 			->setMetadata("description", "The position of the player feet");
 	}
