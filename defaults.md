@@ -37,10 +37,10 @@
 
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
-| `infoapi.world.name` | Number | The folder name of this world | world (2) |
-| `infoapi.world.folderName` | Number | The folder name of this world | world (2) |
-| `infoapi.world.customName` | Number | The display name of this world | world |
-| `infoapi.world.displayName` | Number | The display name of this world | world |
+| `infoapi.world.name` | Text | The folder name of this world | world (2) |
+| `infoapi.world.folderName` | Text | The folder name of this world | world (2) |
+| `infoapi.world.customName` | Text | The display name of this world | world |
+| `infoapi.world.displayName` | Text | The display name of this world | world |
 | `infoapi.world.time` | Number | The current world time, in ticks | 12000 |
 | `infoapi.world.seed` | Number | The seed of this world | world |
 
@@ -95,14 +95,14 @@
 
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
-| `infoapi.player.name` | Number | The player name | Steve |
+| `infoapi.player.name` | Text | The player name | Steve |
 | `infoapi.player.nick` | Text | The player display name in chat | Steve |
 | `infoapi.player.nametag` | Text | The player nametag | Steve |
-| `infoapi.player.uuid` | Number | The player UUID in lowercase | 12345678-12ab-cd34-5e6f-567812345678 |
+| `infoapi.player.uuid` | Text | The player UUID in lowercase | 12345678-12ab-cd34-5e6f-567812345678 |
 | `infoapi.player.ip` | Text | The player IP address | 12.34.56.78 |
 | `infoapi.player.port` | Number | The player client port | 61234 |
 | `infoapi.player.ping` | Number | The player ping, in milliseconds | 15 |
-| `infoapi.player.health` | Number | The player health (number of hearts) | 9.5/10 |
+| `infoapi.player.health` | Proportion | The player health (number of hearts) | 9.5/10 |
 | `infoapi.player.yaw` | Number | The player yaw orientation, in degrees | 2700 |
 | `infoapi.player.pitch` | Number | The player pitch orientation, in degrees | 90 |
 | `infoapi.player.eye` | Position | The player's eye position | (128, 65.8, 128) |
