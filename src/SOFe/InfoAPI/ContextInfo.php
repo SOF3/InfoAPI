@@ -39,7 +39,7 @@ use pocketmine\utils\Utils;
 
 /**
  * @deprecated Use AnonInfo or SimpleInfo instead.
- * @link AnonInfo
+ * @see AnonInfo
  * @link SimpleInfo
  */
 abstract class ContextInfo extends Info {
