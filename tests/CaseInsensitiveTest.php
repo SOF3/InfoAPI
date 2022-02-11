@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 final class CaseInsensitiveTest extends TestCase {
 
-	private function provideInfo(InfoAPI $api) : void {
+	private static function provideInfo(InfoAPI $api) : void {
 		InfoAPI::provideInfo(Dummy\B::class, Dummy\C::class, "Dummy.B.ToC", fn($b) => new Dummy\C($b->toString()), $api);
 		InfoAPI::provideFallback(Dummy\A::class, Dummy\B::class, fn($a) => new Dummy\B($a->toString()), $api);
 	}
