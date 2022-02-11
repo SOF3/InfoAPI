@@ -24,6 +24,7 @@ namespace SOFe\InfoAPI\Ast;
 
 use function count;
 use function implode;
+use function strtolower;
 
 final class ChildName {
 	/** @phpstan-var non-empty-array<int, string> */
@@ -39,7 +40,10 @@ final class ChildName {
 	/**
 	 * Parses a field used to identify a parent-child relationship.
 	 */
-	static public function parse(string $fqn) : self {
+	static public function parse(string $fqn, bool $toLowercase = true) : self {
+		if ($toLowercase) {
+			$fqn = strtolower($fqn);
+		}
 		return new self(explode(".", $fqn));
 	}
 
