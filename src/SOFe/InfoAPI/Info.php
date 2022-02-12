@@ -68,7 +68,7 @@ abstract class Info {
 			$target = $type->getName();
 			$targetClass = new ReflectionClass($target);
 			if(!($targetClass->isSubclassOf(Info::class))) {
-				throw new ReflectionException("Property $property is untyped");
+				throw new ReflectionException("Property $property does not have a valid type");
 			}
 
 			InfoAPI::provideInfo($class, $target, "$namespace." . $property->getName(), function(Info $info) use($property) : ?Info {
