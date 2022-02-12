@@ -23,6 +23,7 @@ namespace SOFe\InfoAPI\Graph;
 
 use Generator;
 use SOFe\InfoAPI\Ast\ChildName;
+use function mb_strtolower;
 
 final class EdgeList {
 	/** @phpstan-var array<string, array<int, ListedEdge>> */
@@ -34,7 +35,7 @@ final class EdgeList {
 	public function insert(ListedEdge $edge) : void {
 		$name = $edge->edge->getName();
 		if($name !== null) {
-			$last = $name->getLastPart();
+			$last = mb_strtolower($name->getLastPart());
 			if(!isset($this->edges[$last])) {
 				$this->edges[$last] = [];
 			}
@@ -50,7 +51,7 @@ final class EdgeList {
 	 * @phpstan-return Generator<int, ListedEdge, void, void>
 	 */
 	public function find(ChildName $pattern) : Generator {
-		$last = $pattern->getLastPart();
+		$last = mb_strtolower($pattern->getLastPart());
 
 		if(isset($this->edges[$last])) {
 			foreach($this->edges[$last] as $edge) {
