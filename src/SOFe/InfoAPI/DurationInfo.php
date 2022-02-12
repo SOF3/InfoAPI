@@ -66,7 +66,7 @@ final class DurationInfo extends Info {
 				fn($info) => new NumberInfo($info->getValue() / $mod),
 				$api)
 				->setMetadata("description", "Number of $name")
-				->setMetadata("example", "3.5");
+				->setMetadata("example", "0.166667");
 
 			$nameLast = $name;
 			$modLast = $mod;
