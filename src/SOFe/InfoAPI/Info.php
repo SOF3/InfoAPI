@@ -22,6 +22,10 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
+use ReflectionClass;
+use ReflectionException;
+use ReflectionNamedType;
+
 use function array_slice;
 use function explode;
 use function get_class;
@@ -42,5 +46,34 @@ abstract class Info {
 	static public function getInfoType() : string {
 		$comps = explode("\\", static::class);
 		return array_slice($comps, -1)[0];
+	}
+
+	/**
+	 * @param class-string<Info> $class
+	 */
+	static public function registerByReflection(string $namespace, string $class, ?int $filter = null, ?InfoAPI $api = null) : void {
+		$reflect = new ReflectionClass($class);
+
+		foreach($reflect->getProperties($filter) as $property) {
+			if($property->isStatic() || !$property->isPublic()) {
+				continue;
+			}
+
+			$type = $property->getType();
+			if(!($type instanceof ReflectionNamedType)) {
+				throw new ReflectionException("Property $property does not have a valid type");
+			}
+
+			/** @var class-string<Info> $target */
+			$target = $type->getName();
+			$targetClass = new ReflectionClass($target);
+			if(!($targetClass->isSubclassOf(Info::class))) {
+				throw new ReflectionException("Property $property does not have a valid type");
+			}
+
+			InfoAPI::provideInfo($class, $target, "$namespace." . $property->getName(), function(Info $info) use($property) : ?Info {
+				return $property->getValue($info);
+			}, $api);
+		}
 	}
 }

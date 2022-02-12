@@ -37,6 +37,11 @@ use RuntimeException;
 use pocketmine\Server;
 use pocketmine\utils\Utils;
 
+/**
+ * @deprecated Use AnonInfo or SimpleInfo instead.
+ * @see AnonInfo
+ * @see SimpleInfo
+ */
 abstract class ContextInfo extends Info {
 	/** @phpstan-var array<string, true> */
 	private static array $registered = [];
