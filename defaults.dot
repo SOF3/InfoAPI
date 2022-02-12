@@ -249,4 +249,7 @@ digraph InfoAPI_Defaults {
 	_anon_edge_78 [label = "infoapi.duration.rawSeconds", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_78
 	_anon_edge_78 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_79 [label = "infoapi.duration.later", shape = "diamond"]
+	SOFe_InfoAPI_DurationInfo -> _anon_edge_79
+	_anon_edge_79 -> SOFe_InfoAPI_TimeInfo
 }

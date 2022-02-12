@@ -62,7 +62,7 @@
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.server.players` | Proportion | Number of online players | 16 / 20 |
-| `infoapi.time.now` | Time |  |  |
+| `infoapi.time.now` | Time | The current time |  |
 | (fallback) | Format |  |  |
 
 ## Format
@@ -122,19 +122,20 @@
 | `infoapi.time.minute` | Number | The minute part of a time | 4 |
 | `infoapi.time.second` | Number | The second part of a time | 5 |
 | `infoapi.time.micro` | Number | The microsecond part of a time | 0 |
-| `infoapi.time.elapsed` | Duration |  |  |
-| `infoapi.time.remaining` | Duration |  |  |
+| `infoapi.time.elapsed` | Duration | The duration from the time to now |  |
+| `infoapi.time.remaining` | Duration | The duration from now to the time |  |
 
 ## Duration
 
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
-| `infoapi.duration.days` | Number |  |  |
-| `infoapi.duration.rawDays` | Number |  |  |
-| `infoapi.duration.hours` | Number |  |  |
-| `infoapi.duration.rawHours` | Number |  |  |
-| `infoapi.duration.minutes` | Number |  |  |
-| `infoapi.duration.rawMinutes` | Number |  |  |
-| `infoapi.duration.seconds` | Number |  |  |
-| `infoapi.duration.rawSeconds` | Number |  |  |
+| `infoapi.duration.days` | Number | Number of days | 3 |
+| `infoapi.duration.rawDays` | Number | Number of days | 0.166667 |
+| `infoapi.duration.hours` | Number | Number of hours excluding whole days | 3 |
+| `infoapi.duration.rawHours` | Number | Number of hours | 0.166667 |
+| `infoapi.duration.minutes` | Number | Number of minutes excluding whole hours | 3 |
+| `infoapi.duration.rawMinutes` | Number | Number of minutes | 0.166667 |
+| `infoapi.duration.seconds` | Number | Number of seconds excluding whole minutes | 3 |
+| `infoapi.duration.rawSeconds` | Number | Number of seconds | 0.166667 |
+| `infoapi.duration.later` | Time | The time for this duration after now |  |
 
