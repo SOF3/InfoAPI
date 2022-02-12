@@ -52,19 +52,30 @@ final class DurationInfo extends Info {
 	}
 
 	static public function init(?InfoAPI $api) : void {
+		$nameLast = null;
 		$modLast = INF;
 
 		foreach(self::UNITS as $name => $mod) {
+			$exclude = $nameLast !== null ? " excluding whole $nameLast" : "";
 			InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.duration.$name",
-				fn($info) => new NumberInfo(self::rounded($info->getValue(), $mod, $modLast)), $api);
+				fn($info) => new NumberInfo(self::rounded($info->getValue(), $mod, $modLast)),
+				$api)
+				->setMetadata("description", "Number of $name" . $exclude)
+				->setMetadata("example", "3");
 			InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.duration.raw" . ucfirst($name),
-				fn($info) => new NumberInfo($info->getValue() / $mod), $api);
+				fn($info) => new NumberInfo($info->getValue() / $mod),
+				$api)
+				->setMetadata("description", "Number of $name")
+				->setMetadata("example", "0.166667");
 
+			$nameLast = $name;
 			$modLast = $mod;
 		}
 
 		InfoAPI::provideInfo(self::class, TimeInfo::class, "infoapi.duration.later",
-			fn($info) => TimeInfo::fromMicrotime(microtime(true) + $info->getValue()));
+			fn($info) => TimeInfo::fromMicrotime(microtime(true) + $info->getValue()),
+			$api)
+			->setMetadata("description", "The time for this duration after now");
 		InfoAPI::provideInfo(self::class, TimeInfo::class, "infoapi.duration.ago",
 			fn($info) => TimeInfo::fromMicrotime(microtime(true) - $info->getValue()));
 	}

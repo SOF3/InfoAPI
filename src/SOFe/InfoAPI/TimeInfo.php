@@ -95,12 +95,17 @@ final class TimeInfo extends Info {
 			->setMetadata("example", "0");
 
 		InfoAPI::provideInfo(self::class, DurationInfo::class, "infoapi.time.elapsed",
-			fn($info) => new DurationInfo(microtime(true) - $info->asMicrotime()), $api);
+			fn($info) => new DurationInfo(microtime(true) - $info->asMicrotime()),
+			$api)
+			->setMetadata("description", "The duration from the time to now");
 		InfoAPI::provideInfo(self::class, DurationInfo::class, "infoapi.time.remaining",
-			fn($info) => new DurationInfo($info->asMicrotime() - microtime(true)), $api);
+			fn($info) => new DurationInfo($info->asMicrotime() - microtime(true)),
+			$api)
+			->setMetadata("description", "The duration from now to the time");
 
 		InfoAPI::provideInfo(CommonInfo::class, self::class, "infoapi.time.now",
-			fn($_) => new TimeInfo(time()), $api);
+			fn($_) => new TimeInfo(time()), $api)
+			->setMetadata("description", "The current time");
 	}
 
 	public function getSeconds() : int {
