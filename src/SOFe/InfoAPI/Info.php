@@ -61,7 +61,7 @@ abstract class Info {
 
 			$type = $property->getType();
 			if(!($type instanceof ReflectionNamedType)) {
-				throw new ReflectionException("Property $property is untyped");
+				throw new ReflectionException("Property $property does not have a valid type");
 			}
 
 			/** @var class-string<Info> $target */
