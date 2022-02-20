@@ -74,5 +74,10 @@ final class WorldInfo extends Info {
 			$api)
 			->setMetadata("description", "The seed of this world")
 			->setMetadata("example", "world");
+		InfoAPI::provideInfo(self::class, NumberInfo::class, "infoapi.world.playerCount",
+			fn($info) => new NumberInfo(count($info->getValue()->getPlayers())),
+			$api)
+			->setMetadata("description", "The number of players in this world")
+			->setMetadata("example", "0");
 	}
 }
