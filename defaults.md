@@ -43,6 +43,7 @@
 | `infoapi.world.displayName` | Text | The display name of this world | world |
 | `infoapi.world.time` | Number | The current world time, in ticks | 12000 |
 | `infoapi.world.seed` | Number | The seed of this world | world |
+| `infoapi.world.playerCount` | Number | The number of players in this world | 0 |
 
 ## Block type
 
