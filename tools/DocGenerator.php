@@ -25,7 +25,6 @@ namespace SOFe\InfoAPI;
 use function explode;
 use function file_put_contents;
 use function mkdir;
-use function implode;
 use function shell_exec;
 use function sprintf;
 use function str_replace;
