@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Ast;
 
 /**
- * A path through Info resolution travresal.
+ * A path through Info resolution traversal.
  */
 final class Path {
 	/** @phpstan-var non-empty-array<int, ChildName> */
