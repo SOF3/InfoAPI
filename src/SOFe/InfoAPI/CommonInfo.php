@@ -29,6 +29,11 @@ use pocketmine\Server;
 final class CommonInfo extends Info {
 	private Server $value;
 
+	public static function create() : self {
+		$server = Server::getInstance();
+		return new self($server);
+	}
+
 	public function __construct(Server $value) {
 		$this->value = $value;
 	}
