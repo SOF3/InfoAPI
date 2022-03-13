@@ -22,12 +22,17 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
-use function count;
-use RuntimeException;
 use pocketmine\Server;
+use RuntimeException;
+use function count;
 
 final class CommonInfo extends Info {
 	private Server $value;
+
+	public static function create() : self {
+		$server = Server::getInstance();
+		return new self($server);
+	}
 
 	public function __construct(Server $value) {
 		$this->value = $value;
