@@ -22,9 +22,9 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
-use pocketmine\Server;
-use RuntimeException;
 use function count;
+use RuntimeException;
+use pocketmine\Server;
 
 final class CommonInfo extends Info {
 	private Server $value;
