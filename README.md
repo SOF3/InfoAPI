@@ -123,61 +123,31 @@ To use InfoAPI, add `InfoAPI` to the `depend` attribute in plugin.yml
 depend: [InfoAPI]
 ```
 
-Let's say the template string is retrieved with `$this->getConfig()->get("format")`.
-Extra placeholders are `{speaker}`, which refers to a `pocketmine\Player` object in the variable `$player`,
-and `{message}`, which refers to a string in the variable `$arg`.
-Then we can create the formatted string with this code:
+Let's say the template string is in the `format` key in your config.yml:
+
+```yaml
+format: "{gold}<{speaker}> {white}{message}"
+```
+
+`{gold}` and `{white}` are default infos defined in InfoAPI itself.
+`{speaker}` and `{message}` are extra placeholders
+which refer to the player `$player` and the string `$message`.
+We can create the formatted string with this code:
 
 ```php
 use SOFe\InfoAPI\{InfoAPI, PlayerInfo, StringInfo};
 
-// ...
-
-$formatted = InfoAPI::resolve($this->getConfig()->get("format"), new MyInfo([
+$format = $this->getConfig()->get("format");
+$text = InfoAPI::resolve($format, new class([
 	"message" => new StringInfo($msg),
 	"speaker" => new PlayerInfo($player),
-]));
+]) extends AnonInfo {});
 ```
 
-Then we create the class `MyInfo` according to the arguments we have:
+Each placeholder must be an instance of `Info`.
+InfoAPI provides several info types by default;
+you can check them from the wiki.
 
-```php
-<?php
-
-namespace Your\Plug\In;
-
-use SOFe\InfoAPI\{ContextInfo, PlayerInfo, StringInfo};
-
-final class MyInfo extends ContextInfo {
-	public StringInfo $message;
-	public PlayerInfo $speaker;
-}
-```
-If you need to resolve at multiple places with different argument sets,
-create a new class for each set of arguments.
-InfoAPI is strict about the keys provided and properties declared:
-The keys that appear in the `InfoAPI::resolve` array must be
-exactly the same as the property names in the custom info class.
-
-You may also add up to 1 line of doc comment to the properties in `MyInfo`,
-which are displayed to users in help menus.
-The doc comment can be multiline,
-but only the first line will be used as the description.
-Furthermore, add an `@example` tag to provide examples.
-
-```php
-final class MyInfo extends ContextInfo {
-	/** The message spoken by the player */
-	public StringInfo $message;
-
-	/**
-	 * The player who spoke the message
-	 * @example Steve
-	 */
-	public PlayerInfo $speaker;
-}
-```
-
-Do NOT use `ContextInfo` for return values in `provideInfo`/`provideFallback`!
+Do NOT use `AnonInfo` for return values in `provideInfo`/`provideFallback`!
 `ContextInfo` is only for the convenient creation when resolving.
 Please refer to the previous guide if you are actively *providing* some info.
