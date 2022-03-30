@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI;
 
 use function count;
+use function max;
 use RuntimeException;
 use pocketmine\Server;
 
@@ -59,5 +60,15 @@ final class CommonInfo extends Info {
 			$api)
 			->setMetadata("description", "Number of online players")
 			->setMetadata("example", "16 / 20");
+
+		$maxTps = 20;
+		InfoAPI::provideInfo(self::class, RatioInfo::class, "infoapi.server.tps",
+			fn($info) => new RatioInfo(
+				max($info->getValue()->getTicksPerSecond(), $maxTps),
+				$maxTps
+			),
+			$api)
+			->setMetadata("description", "Ticks per second of the server")
+			->setMetadata("example", "16.23 / 20");
 	}
 }
