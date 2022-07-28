@@ -1,0 +1,56 @@
+name: Poggit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+    - opened
+    - closed
+    branches:
+#    - poggit
+
+jobs:
+  gh-pages-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref || github.ref }}
+      - uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          target_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: If gh-pages branch not exists
+      #   run: echo "::error::Please create gh-pages branch"
+      #   if: failure()
+
+  phpdoc:
+    # https://github.com/phpDocumentor/phpDocumentor/issues/2242#issuecomment-1047359893
+    name: Generate docs/ and push to gh-pages branch
+    runs-on: ubuntu-latest
+    if: "!contains(github.event_name, 'pull_request') || (github.event.pull_request.merged && github.event.pull_request.user.login != 'github-actions[bot]')"
+    needs:
+    - gh-pages-sync
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: gh-pages
+    - name: Define link param under pull request event context
+      if: contains(github.event_name, 'pull_request')
+      id: link
+      run: |
+        echo "Event name: ${{ github.event_name }}"
+        echo "::set-output name=link::#${{ github.event.pull-request-number }}"
+    - name: Run phpdoc
+      run: |
+        docker run --rm -v $(pwd):/data phpdoc/phpdoc:3 -t .
+    - name: Set Git configs
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email ""
+    - name: git commit
+      run: |
+        git add docs/
+        git commit -m "Docs for ${{ steps.link.output.link || github.ref }}" || echo "No changes to commit"
+        git push
