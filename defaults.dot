@@ -156,103 +156,106 @@ digraph InfoAPI_Defaults {
 	_anon_edge_47 [label = "infoapi.format.italic", shape = "diamond"]
 	SOFe_InfoAPI_FormatInfo -> _anon_edge_47
 	_anon_edge_47 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_48 [label = "infoapi.player.name", shape = "diamond"]
-	SOFe_InfoAPI_PlayerInfo -> _anon_edge_48
+	_anon_edge_48 [label = "infoapi.format.line", shape = "diamond"]
+	SOFe_InfoAPI_FormatInfo -> _anon_edge_48
 	_anon_edge_48 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_49 [label = "infoapi.player.nick", shape = "diamond"]
+	_anon_edge_49 [label = "infoapi.player.name", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_49
 	_anon_edge_49 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_50 [label = "infoapi.player.nametag", shape = "diamond"]
+	_anon_edge_50 [label = "infoapi.player.nick", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_50
 	_anon_edge_50 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_51 [label = "infoapi.player.uuid", shape = "diamond"]
+	_anon_edge_51 [label = "infoapi.player.nametag", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_51
 	_anon_edge_51 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_52 [label = "infoapi.player.ip", shape = "diamond"]
+	_anon_edge_52 [label = "infoapi.player.uuid", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_52
 	_anon_edge_52 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_53 [label = "infoapi.player.port", shape = "diamond"]
+	_anon_edge_53 [label = "infoapi.player.ip", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_53
-	_anon_edge_53 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_54 [label = "infoapi.player.ping", shape = "diamond"]
+	_anon_edge_53 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_54 [label = "infoapi.player.port", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_54
 	_anon_edge_54 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_55 [label = "infoapi.player.yaw", shape = "diamond"]
+	_anon_edge_55 [label = "infoapi.player.ping", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_55
 	_anon_edge_55 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_56 [label = "infoapi.player.pitch", shape = "diamond"]
+	_anon_edge_56 [label = "infoapi.player.yaw", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_56
 	_anon_edge_56 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_57 [label = "infoapi.player.health", shape = "diamond"]
+	_anon_edge_57 [label = "infoapi.player.pitch", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_57
-	_anon_edge_57 -> SOFe_InfoAPI_RatioInfo
-	_anon_edge_58 [label = "infoapi.player.eye", shape = "diamond"]
+	_anon_edge_57 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_58 [label = "infoapi.player.health", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_58
-	_anon_edge_58 -> SOFe_InfoAPI_PositionInfo
-	_anon_edge_59 [label = "(fallback)", shape = "diamond"]
+	_anon_edge_58 -> SOFe_InfoAPI_RatioInfo
+	_anon_edge_59 [label = "infoapi.player.eye", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_59
 	_anon_edge_59 -> SOFe_InfoAPI_PositionInfo
-	_anon_edge_60 [label = "infoapi.player.blockBelow", shape = "diamond"]
+	_anon_edge_60 [label = "(fallback)", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_60
-	_anon_edge_60 -> SOFe_InfoAPI_BlockInfo
-	_anon_edge_61 [label = "infoapi.player.blockFacing", shape = "diamond"]
+	_anon_edge_60 -> SOFe_InfoAPI_PositionInfo
+	_anon_edge_61 [label = "infoapi.player.blockBelow", shape = "diamond"]
 	SOFe_InfoAPI_PlayerInfo -> _anon_edge_61
 	_anon_edge_61 -> SOFe_InfoAPI_BlockInfo
-	_anon_edge_62 [label = "infoapi.time.year", shape = "diamond"]
-	SOFe_InfoAPI_TimeInfo -> _anon_edge_62
-	_anon_edge_62 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_63 [label = "infoapi.time.month", shape = "diamond"]
+	_anon_edge_62 [label = "infoapi.player.blockFacing", shape = "diamond"]
+	SOFe_InfoAPI_PlayerInfo -> _anon_edge_62
+	_anon_edge_62 -> SOFe_InfoAPI_BlockInfo
+	_anon_edge_63 [label = "infoapi.time.year", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_63
 	_anon_edge_63 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_64 [label = "infoapi.time.date", shape = "diamond"]
+	_anon_edge_64 [label = "infoapi.time.month", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_64
 	_anon_edge_64 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_65 [label = "infoapi.time.hour", shape = "diamond"]
+	_anon_edge_65 [label = "infoapi.time.date", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_65
 	_anon_edge_65 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_66 [label = "infoapi.time.minute", shape = "diamond"]
+	_anon_edge_66 [label = "infoapi.time.hour", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_66
 	_anon_edge_66 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_67 [label = "infoapi.time.second", shape = "diamond"]
+	_anon_edge_67 [label = "infoapi.time.minute", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_67
 	_anon_edge_67 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_68 [label = "infoapi.time.micro", shape = "diamond"]
+	_anon_edge_68 [label = "infoapi.time.second", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_68
 	_anon_edge_68 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_69 [label = "infoapi.time.weekday", shape = "diamond"]
+	_anon_edge_69 [label = "infoapi.time.micro", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_69
-	_anon_edge_69 -> SOFe_InfoAPI_StringInfo
-	_anon_edge_70 [label = "infoapi.time.elapsed", shape = "diamond"]
+	_anon_edge_69 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_70 [label = "infoapi.time.weekday", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_70
-	_anon_edge_70 -> SOFe_InfoAPI_DurationInfo
-	_anon_edge_71 [label = "infoapi.time.remaining", shape = "diamond"]
+	_anon_edge_70 -> SOFe_InfoAPI_StringInfo
+	_anon_edge_71 [label = "infoapi.time.elapsed", shape = "diamond"]
 	SOFe_InfoAPI_TimeInfo -> _anon_edge_71
 	_anon_edge_71 -> SOFe_InfoAPI_DurationInfo
-	_anon_edge_72 [label = "infoapi.duration.days", shape = "diamond"]
-	SOFe_InfoAPI_DurationInfo -> _anon_edge_72
-	_anon_edge_72 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_73 [label = "infoapi.duration.rawDays", shape = "diamond"]
+	_anon_edge_72 [label = "infoapi.time.remaining", shape = "diamond"]
+	SOFe_InfoAPI_TimeInfo -> _anon_edge_72
+	_anon_edge_72 -> SOFe_InfoAPI_DurationInfo
+	_anon_edge_73 [label = "infoapi.duration.days", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_73
 	_anon_edge_73 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_74 [label = "infoapi.duration.hours", shape = "diamond"]
+	_anon_edge_74 [label = "infoapi.duration.rawDays", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_74
 	_anon_edge_74 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_75 [label = "infoapi.duration.rawHours", shape = "diamond"]
+	_anon_edge_75 [label = "infoapi.duration.hours", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_75
 	_anon_edge_75 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_76 [label = "infoapi.duration.minutes", shape = "diamond"]
+	_anon_edge_76 [label = "infoapi.duration.rawHours", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_76
 	_anon_edge_76 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_77 [label = "infoapi.duration.rawMinutes", shape = "diamond"]
+	_anon_edge_77 [label = "infoapi.duration.minutes", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_77
 	_anon_edge_77 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_78 [label = "infoapi.duration.seconds", shape = "diamond"]
+	_anon_edge_78 [label = "infoapi.duration.rawMinutes", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_78
 	_anon_edge_78 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_79 [label = "infoapi.duration.rawSeconds", shape = "diamond"]
+	_anon_edge_79 [label = "infoapi.duration.seconds", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_79
 	_anon_edge_79 -> SOFe_InfoAPI_NumberInfo
-	_anon_edge_80 [label = "infoapi.duration.later", shape = "diamond"]
+	_anon_edge_80 [label = "infoapi.duration.rawSeconds", shape = "diamond"]
 	SOFe_InfoAPI_DurationInfo -> _anon_edge_80
-	_anon_edge_80 -> SOFe_InfoAPI_TimeInfo
+	_anon_edge_80 -> SOFe_InfoAPI_NumberInfo
+	_anon_edge_81 [label = "infoapi.duration.later", shape = "diamond"]
+	SOFe_InfoAPI_DurationInfo -> _anon_edge_81
+	_anon_edge_81 -> SOFe_InfoAPI_TimeInfo
 }
