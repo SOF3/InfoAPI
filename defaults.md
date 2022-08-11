@@ -63,6 +63,7 @@
 | Name | Output type | Description | Example |
 | :---: | :---: | :---: | :---: |
 | `infoapi.server.players` | Proportion | Number of online players | 16 / 20 |
+| `infoapi.server.tps` | Proportion | Ticks per second of the server | 16.23 / 20 |
 | `infoapi.time.now` | Time | The current time |  |
 | (fallback) | Format |  |  |
 
