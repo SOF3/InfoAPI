@@ -61,6 +61,7 @@ final class FormatInfo extends Info {
 			"strikethrough" => TextFormat::STRIKETHROUGH,
 			"underline" => TextFormat::UNDERLINE,
 			"italic" => TextFormat::ITALIC,
+			"reset" => TextFormat::RESET,
 			"line" => "\n",
 		] as $name => $value) {
 			InfoAPI::provideInfo(self::class, StringInfo::class, "infoapi.format.$name",
