@@ -92,6 +92,7 @@
 | `infoapi.format.strikethrough` | Text | Change subsequent text format to strikethrough |  |
 | `infoapi.format.underline` | Text | Change subsequent text format to underline |  |
 | `infoapi.format.italic` | Text | Change subsequent text format to italic |  |
+| `infoapi.format.reset` | Text | Change subsequent text format to reset |  |
 | `infoapi.format.line` | Text | Change subsequent text format to line |  |
 
 ## Player
