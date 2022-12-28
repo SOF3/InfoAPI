@@ -31,10 +31,14 @@ use function strlen;
  * A segment of brace-enclosed info.
  */
 final class InfoSegment implements Segment {
+	/**
+	 * Paths collapsed nestly.
+	 * (An {@link Expression->alternative} holds the next coalescence path.)
+	 */
 	public Expression $head;
 
 	/**
-	 * @param string $string Content of brace-pair in InfoAPI template string.
+	 * @param string $string Content in a brace-pair among segments in InfoAPI template string.
 	 * @param int $index Where does a path starts in its superstring.
 	 */
 	static public function parse(string $string, int $index) : self {
@@ -50,7 +54,7 @@ final class InfoSegment implements Segment {
 			$first = false;
 			$expr->path = self::parsePath($pathString, $index);
 
-			// +1 to include the "|" of segmentation:
+			// +1 to include the "|" of path separation:
 			$index += strlen($pathString) + 1;
 		}
 		$self = new self;
