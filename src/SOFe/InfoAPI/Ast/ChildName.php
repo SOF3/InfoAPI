@@ -62,7 +62,7 @@ final class ChildName {
 		}
 
 
-		// Verify subsequence:
+		// Verify the middle parts of subsequence:
 		$match = 0;
 
 		for($req = 0; $req < count($pattern->parts); ++$req) {
