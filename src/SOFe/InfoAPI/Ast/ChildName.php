@@ -76,7 +76,7 @@ final class ChildName {
 			++$match;
 		}
 
-		// Is subsequence that last last until the end.
+		// Is subsequence that last until the end.
 		return true;
 	}
 
