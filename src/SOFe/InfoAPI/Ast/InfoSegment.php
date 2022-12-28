@@ -34,7 +34,7 @@ final class InfoSegment implements Segment {
 	public Expression $head;
 
 	/**
-	 * @param int $string Content of brace-pair in InfoAPI template string.
+	 * @param string $string Content of brace-pair in InfoAPI template string.
 	 * @param int $index Where does a path starts in its superstring.
 	 */
 	static public function parse(string $string, int $index) : self {
