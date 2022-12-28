@@ -53,22 +53,30 @@ final class ChildName {
 	 * AND the last parts of this child name and the pattern are the same.
 	 */
 	public function matches(ChildName $pattern) : bool {
+		// Verify the last part of subsequence:
 		if(mb_strtolower($this->parts[count($this->parts) - 1]) !== mb_strtolower($pattern->parts[count($pattern->parts) - 1])) {
+			// The middle parts MIGHT be a subsequence,
+			// but it does not last until the end.
+			// Hence, there is no reason for us to continue checking.
 			return false;
 		}
 
+
+		// Verify subsequence:
 		$match = 0;
 
 		for($req = 0; $req < count($pattern->parts); ++$req) {
 			while(mb_strtolower($this->parts[$match]) !== mb_strtolower($pattern->parts[$req])) {
 				++$match;
 				if($match >= count($this->parts)) {
+					// Not a subsequence.
 					return false;
 				}
 			}
 			++$match;
 		}
 
+		// Is subsequence that last last until the end.
 		return true;
 	}
 
