@@ -33,6 +33,10 @@ use function strlen;
 final class InfoSegment implements Segment {
 	public Expression $head;
 
+	/**
+	 * @param int $string Content of brace-pair in InfoAPI template string.
+	 * @param int $index Where does a path starts in its superstring.
+	 */
 	static public function parse(string $string, int $index) : self {
 		$head = new Expression;
 		$expr = $head;
@@ -40,11 +44,13 @@ final class InfoSegment implements Segment {
 		foreach(explode("|", $string) as $pathString) {
 			if(!$first) {
 				$expr->alternative = new Expression;
+				// Support two or more coalescence paths:
 				$expr = $expr->alternative;
 			}
 			$first = false;
 			$expr->path = self::parsePath($pathString, $index);
 
+			// +1 to include the "|" of segmentation:
 			$index += strlen($pathString) + 1;
 		}
 		$self = new self;
@@ -52,9 +58,14 @@ final class InfoSegment implements Segment {
 		return $self;
 	}
 
+	/**
+	 * @param string $path Reminder: paths in a superstring are separated by "|".
+	 * @param int $index Where does a path starts in its superstring.
+	 */
 	static private function parsePath(string $path, int $index) : Path {
 		$names = [];
 		foreach(explode(" ", $path) as $part) {
+			// Filter out empty parts as user might accidentally enter unnecessary spaces:
 			if(strlen($part) > 0) {
 				$names[] = ChildName::parse($part);
 			}
