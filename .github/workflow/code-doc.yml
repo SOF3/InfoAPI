@@ -1,4 +1,4 @@
-name: Code Doc
+name: Poggit
 
 on:
   workflow_dispatch:
