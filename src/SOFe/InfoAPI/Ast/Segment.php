@@ -23,6 +23,6 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Ast;
 
 /**
- * Either a `TextSegment` or an `InfoSegment`.
+ * Either a `TextSegment` or an `InfoSegment`. (Just like enums.)
  */
 interface Segment {}
