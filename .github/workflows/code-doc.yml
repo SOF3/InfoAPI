@@ -1,4 +1,4 @@
-name: Phpdoc
+name: Code Doc
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
 
   phpdoc:
     # https://github.com/phpDocumentor/phpDocumentor/issues/2242#issuecomment-1047359893
-    name: Generate phpdoc/ and push to gh-pages branch
+    name: Generate docs/ and push to gh-pages branch
     runs-on: ubuntu-latest
     if: "!contains(github.event_name, 'pull_request') || (github.event.pull_request.merged && github.event.pull_request.user.login != 'github-actions[bot]')"
     needs:
@@ -44,13 +44,13 @@ jobs:
         echo "::set-output name=link::#${{ github.event.pull-request-number }}"
     - name: Run phpdoc
       run: |
-        docker run --rm -v $(pwd):/data phpdoc/phpdoc:3 -t ./phpdoc
+        docker run --rm -v $(pwd):/data phpdoc/phpdoc:3 -t .
     - name: Set Git configs
       run: |
         git config user.name "github-actions[bot]"
         git config user.email ""
     - name: git commit
       run: |
-        git add phpdoc/
+        git add docs/
         git commit -m "Docs for ${{ steps.link.output.link || github.ref }}" || echo "No changes to commit"
         git push
