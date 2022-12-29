@@ -28,8 +28,6 @@ namespace SOFe\InfoAPI\Ast;
 final class Expression {
 	public Path $path;
 
-	/**
-	 * (Candidiates of coalescence paths in nest form.)
-	 */
+	/** Candidates of coalescence paths in a linked list. */
 	public ?Expression $alternative = null;
 }

@@ -23,8 +23,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Ast;
 
 /**
- * A segment of (escapes-resolved) plain-text.
- * (The segment that InfoAPI ignore.)
+ * A segment of (escapes-resolved) plain-text that gets appended to the output directly.
  */
 final class TextSegment implements Segment {
 	public string $text = "";

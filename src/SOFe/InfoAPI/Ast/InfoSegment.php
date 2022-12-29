@@ -32,29 +32,30 @@ use function strlen;
  */
 final class InfoSegment implements Segment {
 	/**
-	 * Paths collapsed nestly.
-	 * (An {@link Expression->alternative} holds the next coalescence path.)
+	 * Linked list of the coalescence path.
+	 * @see Expression->alternative
 	 */
 	public Expression $head;
 
 	/**
-	 * @param string $string Content in a brace-pair among segments in InfoAPI template string.
-	 * @param int $index Where does a path starts in its superstring.
+	 * @param string $string The substring inside braces
+	 * @param int $index Starting index of `$string` in the template.
 	 */
 	static public function parse(string $string, int $index) : self {
 		$head = new Expression;
+		// `$expr` is the tail of the linked list of expressions.
 		$expr = $head;
 		$first = true;
 		foreach(explode("|", $string) as $pathString) {
 			if(!$first) {
 				$expr->alternative = new Expression;
-				// Support two or more coalescence paths:
+				// Update the tail of the linked list
 				$expr = $expr->alternative;
 			}
 			$first = false;
 			$expr->path = self::parsePath($pathString, $index);
 
-			// +1 to include the "|" of path separation:
+			// +1 to include the "|" separator
 			$index += strlen($pathString) + 1;
 		}
 		$self = new self;
@@ -63,8 +64,8 @@ final class InfoSegment implements Segment {
 	}
 
 	/**
-	 * @param string $path Reminder: paths in a superstring are separated by "|".
-	 * @param int $index Where does a path starts in its superstring.
+	 * @param string $path A path string separated by `|` in an info segment.
+	 * @param int $index Starting index of `$path` in the template string.
 	 */
 	static private function parsePath(string $path, int $index) : Path {
 		$names = [];
