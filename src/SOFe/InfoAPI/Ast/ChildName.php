@@ -53,7 +53,7 @@ final class ChildName {
 	 * AND the last parts of this child name and the pattern are the same.
 	 */
 	public function matches(ChildName $pattern) : bool {
-		if(mb_strtolower($this->parts[count($this->parts) - 1]) !== mb_strtolower($pattern->parts[count($pattern->parts) - 1])) {
+		if(mb_strtolower($this->getLastPart()) !== mb_strtolower($pattern->getLastPart())) {
 			return false;
 		}
 
