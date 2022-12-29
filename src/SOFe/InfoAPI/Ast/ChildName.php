@@ -54,7 +54,7 @@ final class ChildName {
 	 */
 	public function matches(ChildName $pattern) : bool {
 		// Verify the last part of subsequence:
-		if(mb_strtolower($this->parts[count($this->parts) - 1]) !== mb_strtolower($pattern->parts[count($pattern->parts) - 1])) {
+		if(mb_strtolower($this->getLastPart()) !== mb_strtolower($pattern->getLastPart())) {
 			// The middle parts MIGHT be a subsequence,
 			// but it does not last until the end.
 			// Hence, there is no reason for us to continue checking.

@@ -59,5 +59,14 @@ final class CommonInfo extends Info {
 			$api)
 			->setMetadata("description", "Number of online players")
 			->setMetadata("example", "16 / 20");
+
+		InfoAPI::provideInfo(self::class, RatioInfo::class, "infoapi.server.tps",
+			fn($info) => new RatioInfo(
+				$info->getValue()->getTicksPerSecond(),
+				20
+			),
+			$api)
+			->setMetadata("description", "Ticks per second of the server")
+			->setMetadata("example", "16.23 / 20");
 	}
 }
