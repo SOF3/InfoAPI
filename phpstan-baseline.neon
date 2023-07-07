@@ -1,7 +1,2 @@
 parameters:
 	ignoreErrors:
-		-
-			message: "#^Dead catch \\- ReflectionException is never thrown in the try block\\.$#"
-			count: 1
-			path: src/SOFe/InfoAPI/ContextInfo.php
-
