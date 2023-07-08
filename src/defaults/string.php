@@ -4,46 +4,29 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Defaults;
 
-use pocketmine\command\CommandSender;
-use Shared\SOFe\InfoAPI\Info;
-use Shared\SOFe\InfoAPI\Node;
+use Shared\SOFe\InfoAPI\Display;
+use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\Registry;
 use Shared\SOFe\InfoAPI\Standard;
-use SOFe\InfoAPI\BaseMapping;
+use SOFe\InfoAPI\ReflectHintIndex;
+use SOFe\InfoAPI\ReflectUtil;
+
+use function is_string;
 use function mb_strtolower;
 use function mb_strtoupper;
 
 /**
  * Implements a standard string node.
  */
-final class StringNode implements Node, Info, Standard\StringNode {
-	public function __construct(public string $value) {
-	}
+final class Strings {
+	/**
+	 * @param Registry<Display> $displays
+	 * @param Registry<Mapping> $mappings
+	 */
+	public static function register(Registry $displays, Registry $mappings, ReflectHintIndex $hintsIndex) : void {
+		$displays->register(new Display(Standard\StringInfo::KIND, fn($value) => is_string($value) ? $value : Display::INVALID));
 
-	public function get() : string {
-		return $this->value;
-	}
-
-	public function getKind() : string {
-		return self::KIND;
-	}
-
-	public function display(CommandSender $target) : string {
-		return $this->value;
-	}
-
-	public static function register(Registry $registry) : void {
-		$registry->provideMapping(new BaseMapping(
-			sourceKind: Standard\StringNode::KIND,
-			targetKind: Standard\StringNode::KIND,
-			fqn: "infoapi:uppercase",
-			mapper: fn(Node $node) => $node instanceof Standard\StringNode ? new self(mb_strtolower($node->get())) : null,
-		));
-		$registry->provideMapping(new BaseMapping(
-			sourceKind: Standard\StringNode::KIND,
-			targetKind: Standard\StringNode::KIND,
-			fqn: "infoapi:lowercase",
-			mapper: fn(Node $node) => $node instanceof Standard\StringNode ? new self(mb_strtoupper($node->get())) : null,
-		));
+		ReflectUtil::addClosureMapping($mappings, $hintsIndex, "infoapi", ["upper", "uppercase"], fn(string $string) : string => mb_strtoupper($string));
+		ReflectUtil::addClosureMapping($mappings, $hintsIndex, "infoapi", ["lower", "lowercase"], fn(string $string) : string => mb_strtolower($string));
 	}
 }

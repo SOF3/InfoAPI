@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Constants for standard kinds shared between instances of the shaded virion.
+ *
+ * Each kind has its own class to allow adding new standard kinds in the future.
+ */
+namespace Shared\SOFe\InfoAPI\Standard;
+
+/**
+ * The base context that is the implicit mapping target of resolve contexts.
+ * Define mappings from this kind to expose "global functions".
+ */
+final class BaseContext {
+	public const KIND = "infoapi/base";
+}
+
+/** An info of type `string`, representing a generic string. */
+final class StringInfo {
+	public const KIND = "infoapi/string";
+}
+
+/** An info of type `int`, representing a generic integer. */
+final class IntInfo {
+	public const KIND = "infoapi/integer";
+}
+
+/** An info of type `float`, representing a generic float. */
+final class FloatInfo {
+	public const KIND = "infoapi/float";
+}
+
+/** An info of type `bool`, representing a generic bool. */
+final class BoolInfo {
+	public const KIND = "infoapi/bool";
+}
+
+/** An info of type `\pocketmine\player\Player`, representing an online player. */
+final class PlayerInfo {
+	public const KIND = "infoapi/player";
+}

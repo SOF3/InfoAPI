@@ -1,2 +1,26 @@
 parameters:
 	ignoreErrors:
+		-
+			message: "#^Static method SOFe\\\\InfoAPI\\\\DisplayIndex\\:\\:make\\(\\) is unused\\.$#"
+			count: 1
+			path: src/display.php
+
+		-
+			message: "#^Static method SOFe\\\\InfoAPI\\\\ImplicitMappingIndex\\:\\:make\\(\\) is unused\\.$#"
+			count: 1
+			path: src/mapping.php
+
+		-
+			message: "#^Static method SOFe\\\\InfoAPI\\\\NamedMappingIndex\\:\\:make\\(\\) is unused\\.$#"
+			count: 1
+			path: src/mapping.php
+
+		-
+			message: "#^Static method SOFe\\\\InfoAPI\\\\ReflectHintIndex\\:\\:make\\(\\) is unused\\.$#"
+			count: 1
+			path: src/reflect.php
+
+		-
+			message: "#^Unable to resolve the template type T in call to method static method SOFe\\\\InfoAPI\\\\ReflectUtil\\:\\:correctClosure\\(\\)$#"
+			count: 2
+			path: src/reflect.php

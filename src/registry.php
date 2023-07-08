@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
-use Shared\SOFe\InfoAPI\GlobalRegistrySingleton;
-use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\Registry;
 use function array_splice;
-use function array_unshift;
 use function count;
 
 /**
@@ -16,19 +13,26 @@ use function count;
  *
  * This implementation should be as simple as possible to minimize possible bugs.
  * For the sake of simplicity, indexing should be deferred to a separate wrapper object.
+ *
+ * @template T
+ * @implements Registry<T>
  */
-final class GlobalRegistry implements Registry {
-	/** @var list<Mapping> $mappings */
-	private array $mappings = [];
+final class RegistryImpl implements Registry {
+	/** @var T[] $objects */
+	private array $objects = [];
 
 	private int $generation = 0;
 
-	public static function getInstance() : Registry {
-		return GlobalRegistrySingleton::$global ??= new self;
+	/**
+	 * @param ?Registry<T> $field
+	 * @return Registry<T>
+	 */
+	public static function getInstance(?Registry &$field) : Registry {
+		return $field ??= new self;
 	}
 
-	public function provideMapping(Mapping $mapping) : void {
-		$this->mappings[] = $mapping;
+	public function register($object) : void {
+		$this->objects[] = $object;
 		$this->generation += 1;
 	}
 
@@ -36,55 +40,33 @@ final class GlobalRegistry implements Registry {
 		return $this->generation;
 	}
 
-	public function getAllMappings() : array {
-		return $this->mappings;
+	public function getAll() : array {
+		return $this->objects;
 	}
 }
 
 /**
- * Maintains a search index for mappings from multiple registries.
+ * Maintains search indices for objects from multiple registries.
+ *
+ * @template T
  */
-final class MappingIndex {
-	private static ?self $instance = null;
-
-	/**
-	 * Returns the MappingIndex singleton for this shaded version of InfoAPI.
-	 *
-	 * The default initialization includes a local registry with default mappings
-	 * and the global registry, the latter overriding the former in case of duplicates.
-	 * Users can add local registries through `addLocalRegistry`,
-	 * which only affects this MappingIndex instance,
-	 * hence only affecting this shaded version of InfoAPI.
-	 */
-	public static function get() : self {
-		if (self::$instance === null) {
-			$defaultRegistry = new GlobalRegistry;
-			Defaults\Index::register($defaultRegistry);
-			self::$instance = new self([$defaultRegistry, GlobalRegistry::getInstance()]);
-		}
-
-		return self::$instance;
-	}
-
+abstract class Index {
 	/** @var ?list<int> */
 	private ?array $lastSyncGenerations = null;
 
-	/** @var array<string, array<string, Mapping>> */
-	private array $namedMappings;
-
-	/** @var array<string, list<Mapping>> */
-	private array $implicitMappings;
-
 	/**
-	 * @param Registry[] $registries
+	 * @param Registry<T>[] $registries
 	 */
 	public function __construct(
 		private array $registries,
 	) {
 	}
 
-	public function addLocalRegistry(int $position, Registry ...$newRegistries) : void {
-		array_splice($this->registries, $position, 0, [$newRegistries]);
+	/**
+	 * @param Registry<T> $newRegistry
+	 */
+	public function addLocalRegistry(int $position, Registry $newRegistry) : void {
+		array_splice($this->registries, $position, 0, [$newRegistry]);
 	}
 
 	private function isSynced() : bool {
@@ -101,50 +83,27 @@ final class MappingIndex {
 		return true;
 	}
 
-	private function sync() : void {
+	public function sync() : void {
 		if ($this->isSynced()) {
 			return;
 		}
 
+		$this->reset();
 		$this->lastSyncGenerations = [];
-		$this->namedMappings = [];
-		$this->implicitMappings = [];
 
 		foreach ($this->registries as $i => $registry) {
 			$this->lastSyncGenerations[$i] = $registry->getGeneration();
 
-			foreach ($registry->getAllMappings()as $mapping) {
-				$source = $mapping->getSourceKind();
-
-				$name = (new FullyQualifiedName($mapping->getFullyQualifiedName()))->toString();
-				if (!isset($this->namedMappings[$source])) {
-					$this->namedMappings[$source] = [];
-				}
-				$this->namedMappings[$source][$name] = $mapping;
-
-				if ($mapping->canImplicit()) {
-					if (!isset($this->implicitMappings[$source])) {
-						$this->implicitMappings[$source] = [];
-					}
-					array_unshift($this->implicitMappings[$source], $mapping);
-				}
+			foreach ($registry->getAll() as $object) {
+				$this->index($object);
 			}
 		}
 	}
 
-	/**
-	 * @return array<string, Mapping>
-	 */
-	public function getNamed(string $sourceKind) : array {
-		$this->sync();
-		return $this->namedMappings[$sourceKind] ?? [];
-	}
+	public abstract function reset() : void;
 
 	/**
-	 * @return list<Mapping>
+	 * @param T $object
 	 */
-	public function getImplicit(string $sourceKind) : array {
-		$this->sync();
-		return $this->implicitMappings[$sourceKind] ?? [];
-	}
+	public abstract function index($object) : void;
 }
