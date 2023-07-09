@@ -53,3 +53,17 @@ final class FullyQualifiedName {
 		return $missing;
 	}
 }
+
+final class QualifiedRef {
+	/**
+	 * @param string[] $tokens
+	 */
+	public function __construct(
+		public array $tokens,
+	) {
+	}
+
+	public static function parse(string $text) : self {
+		return new self(explode(Mapping::FQN_SEPARATOR, $text));
+	}
+}

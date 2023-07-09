@@ -31,7 +31,12 @@
         "fmt": "vendor/bin/php-cs-fixer fix",
         "analyze": "vendor/bin/phpstan",
         "baseline": "vendor/bin/phpstan --generate-baseline --allow-empty-baseline",
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "all": [
+            "composer fmt",
+            "composer analyze",
+            "composer test"
+        ]
     },
     "config": {
         "allow-plugins": {

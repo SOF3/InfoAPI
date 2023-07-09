@@ -19,10 +19,11 @@ final class Mapping {
 	 */
 	public static ?Registry $global = null;
 
-	/**
-	 * The separator for imploding/exploding a fully-qualified name.
-	 */
+	/** The separator for imploding/exploding a fully-qualified name. */
 	public const FQN_SEPARATOR = ":";
+
+	/** The regex charset that tokens must match. */
+	public const FQN_TOKEN_REGEX_CHARSET = "A-Za-z0-9_-";
 
 	public function __construct(
 		/**
@@ -31,7 +32,7 @@ final class Mapping {
 		 * A fully-qualified name is a linear list of strings,
 		 * starting with the highest-level namespaces and ending with the short name.
 		 * A fully-qualified name should be matched by any subsequence of the linear list that ends with the same short name.
-		 * Each component of the fully-qualified name must not contain a `:`.
+		 * Each component of the fully-qualified name must match /[A-Za-z0-9_\-]/ and must not be `true` or `false`.
 		 *
 		 * A fully-qualified name must be unique among all mappings for the same source kind.
 		 *
@@ -68,11 +69,10 @@ final class Mapping {
 		 *
 		 * The closure should validate the types of source and args.
 		 * Invalid inputs should result in an invalid output.
-		 * Conventionally, "invalid" is represented by a null value,
-		 * but there is no special short-circuit behavior specified by the framework
-		 * to specially handle null values.
+		 * A null value is not necessarily short-circuited by the framework.
 		 * The `ReflectUtil` class short-circuits a single mapping to return null if inputs are invalid,
 		 * but subsequent mappings are still executed based on null.
+		 * A null output may be used for coalescence in tepmlating.
 		 *
 		 * @var Closure(mixed $source, mixed[] $args): mixed
 		 */

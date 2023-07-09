@@ -1,6 +1,16 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Negated boolean expression is always true\\.$#"
+			count: 1
+			path: src/ast.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: src/ast.php
+
+		-
 			message: "#^Static method SOFe\\\\InfoAPI\\\\DisplayIndex\\:\\:make\\(\\) is unused\\.$#"
 			count: 1
 			path: src/display.php
