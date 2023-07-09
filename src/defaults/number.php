@@ -69,5 +69,6 @@ final class Floats {
 		ReflectUtil::addClosureMapping($mappings, $hints, "infoapi", ["min", "minimum"], fn(float $v1, float $v2) : float => min($v1, $v2));
 
 		ReflectUtil::addClosureMapping($mappings, $hints, "infoapi", ["pow", "power"], fn(float $v1, float $v2) : float => pow($v1, $v2));
+		ReflectUtil::addClosureMapping($mappings, $hints, "infoapi", ["rec", "reciprocal", "inv", "inverse"], fn(float $value) : float => 1 / $value);
 	}
 }

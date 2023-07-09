@@ -228,10 +228,7 @@ final class ReflectHintIndex extends Index {
 	private static function make() : self {
 		/** @var Registry<ReflectHint> $defaults */
 		$defaults = new RegistryImpl;
-		foreach (Defaults\Index::STANDARD_KINDS as $class => $kind) {
-			/** @var class-string $class */ // HACK: $class may be primitive type names instead, but no need to fix it
-			ReflectUtil::knowKind(hints: $defaults, class: $class, kind: $kind);
-		}
+		Defaults\Index::registerStandardKinds($defaults);
 
 		/** @var Registry<ReflectHint> $global */
 		$global = RegistryImpl::getInstance(ReflectHint::$global);

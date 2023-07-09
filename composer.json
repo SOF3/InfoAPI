@@ -33,6 +33,7 @@
         "baseline": "vendor/bin/phpstan --generate-baseline --allow-empty-baseline",
         "test": "vendor/bin/phpunit",
         "all": [
+            "composer install --ignore-platform-reqs",
             "composer fmt",
             "composer analyze",
             "composer test"

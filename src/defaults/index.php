@@ -8,9 +8,11 @@ use pocketmine\player\Player;
 use pocketmine\Server;
 use Shared\SOFe\InfoAPI\Display;
 use Shared\SOFe\InfoAPI\Mapping;
+use Shared\SOFe\InfoAPI\ReflectHint;
 use Shared\SOFe\InfoAPI\Registry;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\ReflectHintIndex;
+use SOFe\InfoAPI\ReflectUtil;
 use SOFe\InfoAPI\RegistryImpl;
 
 final class Index {
@@ -31,6 +33,17 @@ final class Index {
 		Strings::register($displays, $mappings, $hints);
 		Ints::register($displays, $mappings, $hints);
 		Floats::register($displays, $mappings, $hints);
+		Bools::register($displays, $mappings, $hints);
+	}
+
+	/**
+	 * @param Registry<ReflectHint> $defaults
+	 */
+	public static function registerStandardKinds(Registry $defaults) : void {
+		foreach (self::STANDARD_KINDS as $class => $kind) {
+			/** @var class-string $class */ // HACK: $class may be primitive type names instead, but no need to fix it
+			ReflectUtil::knowKind(hints: $defaults, class: $class, kind: $kind);
+		}
 	}
 
 	/** @var ?array{Registry<Display>, Registry<Mapping>} */
