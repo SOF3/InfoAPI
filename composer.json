@@ -15,7 +15,7 @@
     },
     "license": "Apache-2.0",
     "autoload": {
-        "classmap": ["src", "shared"]
+        "classmap": ["shared", "lib"]
     },
     "autoload-dev": {
         "classmap": ["tests"]

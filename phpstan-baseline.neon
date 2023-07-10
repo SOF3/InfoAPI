@@ -3,15 +3,15 @@ parameters:
 		-
 			message: "#^Negated boolean expression is always true\\.$#"
 			count: 1
-			path: src/ast.php
+			path: lib/ast.php
 
 		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
-			path: src/ast.php
+			path: lib/ast.php
 
 
 		-
 			message: "#^Unable to resolve the template type T in call to method static method SOFe\\\\InfoAPI\\\\ReflectUtil\\:\\:correctClosure\\(\\)$#"
 			count: 2
-			path: src/reflect.php
+			path: lib/reflect.php
