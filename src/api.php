@@ -8,9 +8,9 @@ use Closure;
 use pocketmine\command\CommandSender;
 use pocketmine\plugin\Plugin;
 use Shared\SOFe\InfoAPI\Display;
+use Shared\SOFe\InfoAPI\KindHelp;
 use Shared\SOFe\InfoAPI\Mapping;
-use Shared\SOFe\InfoAPI\ReflectHint;
-use Shared\SOFe\InfoAPI\Registry;
+
 use function is_array;
 use function strtolower;
 
@@ -31,14 +31,13 @@ final class InfoAPI {
 	public static function addKind(
 		string $kind,
 		Closure $display,
+		?string $help = null,
 	) : void {
-		/** @var Registry<Display> $displays */
-		$displays = RegistryImpl::getInstance(Display::$global);
+		ReflectUtil::addClosureDisplay(self::defaultIndices(), $kind, $display);
 
-		/** @var Registry<ReflectHint> $hints */
-		$hints = RegistryImpl::getInstance(ReflectHint::$global);
-
-		ReflectUtil::addClosureDisplay($displays, $hints, $kind, $display);
+		if ($help !== null) {
+			self::defaultIndices()->registries->kindHelps->register(new KindHelp($kind, $help));
+		}
 	}
 
 	/**
@@ -50,20 +49,26 @@ final class InfoAPI {
 		Closure $closure,
 		?Closure $watchChanges = null,
 		bool $isImplicit = false,
+		string $help = "",
 	) : void {
-		/** @var Registry<Mapping> $mappings */
-		$mappings = RegistryImpl::getInstance(Mapping::$global);
-
-		$hints = ReflectHintIndex::getInstance();
-
 		ReflectUtil::addClosureMapping(
-			mappings:$mappings,
-			hints: $hints,
+			indices: self::defaultIndices(),
 			namespace: strtolower($plugin->getName()),
 			names: is_array($aliases) ? $aliases : [$aliases],
 			closure: $closure,
 			watchChanges: $watchChanges,
 			isImplicit: $isImplicit,
+			help: $help,
 		);
+	}
+
+	private static ?Indices $indices = null;
+
+	public static function defaultIndices() : Indices {
+		if (self::$indices === null) {
+			self::$indices = Indices::withDefaults(Registries::singletons());
+		}
+
+		return self::$indices;
 	}
 }

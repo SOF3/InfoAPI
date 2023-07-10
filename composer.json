@@ -15,10 +15,10 @@
     },
     "license": "Apache-2.0",
     "autoload": {
-        "classmap": ["src"]
+        "classmap": ["src", "shared"]
     },
     "autoload-dev": {
-        "classmap": ["tests/"]
+        "classmap": ["tests"]
     },
     "extra": {
         "virion": {

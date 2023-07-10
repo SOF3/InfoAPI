@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI;
 
+use Shared\SOFe\InfoAPI\Display;
+use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\Mapping;
+use Shared\SOFe\InfoAPI\ReflectHint;
 use Shared\SOFe\InfoAPI\Registry;
 use function array_splice;
 use function count;
@@ -106,4 +110,89 @@ abstract class Index {
 	 * @param T $object
 	 */
 	public abstract function index($object) : void;
+}
+
+final class Registries {
+	/**
+	 * @param Registry<KindHelp> $kindHelps
+	 * @param Registry<Display> $displays
+	 * @param Registry<Mapping> $mappings
+	 * @param Registry<ReflectHint> $hints
+	 */
+	public function __construct(
+		public Registry $kindHelps,
+		public Registry $displays,
+		public Registry $mappings,
+		public Registry $hints,
+	) {
+	}
+
+	public static function empty() : self {
+		/** @var Registry<KindHelp> $kindHelps */
+		$kindHelps = new RegistryImpl;
+		/** @var Registry<Display> $displays */
+		$displays = new RegistryImpl;
+		/** @var Registry<Mapping> $mappings */
+		$mappings = new RegistryImpl;
+		/** @var Registry<ReflectHint> $hints */
+		$hints = new RegistryImpl;
+
+		return new self(
+			kindHelps: $kindHelps,
+			displays: $displays,
+			mappings: $mappings,
+			hints: $hints,
+		);
+	}
+
+	public static function singletons() : self {
+		/** @var Registry<KindHelp> $kindHelps */
+		$kindHelps = RegistryImpl::getInstance(KindHelp::$global);
+		/** @var Registry<Display> $displays */
+		$displays = RegistryImpl::getInstance(Display::$global);
+		/** @var Registry<Mapping> $mappings */
+		$mappings = RegistryImpl::getInstance(Mapping::$global);
+		/** @var Registry<ReflectHint> $hints */
+		$hints = RegistryImpl::getInstance(ReflectHint::$global);
+
+		return new self(
+			kindHelps: $kindHelps,
+			displays: $displays,
+			mappings: $mappings,
+			hints: $hints,
+		);
+	}
+}
+
+final class Indices {
+	public function __construct(
+		public Registries $registries,
+		public DisplayIndex $displays,
+		public NamedMappingIndex $namedMappings,
+		public ImplicitMappingIndex $implicitMappings,
+		public ReflectHintIndex $hints,
+	) {
+	}
+
+	public static function withDefaults(Registries $extension) : Indices {
+		/** @var Registry<Display> $defaultDisplays */
+		$defaultDisplays = new RegistryImpl;
+		/** @var Registry<Mapping> $defaultMappings */
+		$defaultMappings = new RegistryImpl;
+		/** @var Registry<ReflectHint> $defaultHints */
+		$defaultHints = new RegistryImpl;
+		Defaults\Index::registerStandardKinds($defaultHints);
+
+		$indices = new Indices(
+			registries: $extension,
+			displays: new DisplayIndex([$defaultDisplays, $extension->displays]),
+			namedMappings: new NamedMappingIndex([$defaultMappings, $extension->mappings]),
+			implicitMappings: new ImplicitMappingIndex([$defaultMappings, $extension->mappings]),
+			hints: new ReflectHintIndex([$defaultHints, $extension->hints]),
+		);
+
+		Defaults\Index::register($indices);
+
+		return $indices;
+	}
 }

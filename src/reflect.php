@@ -7,7 +7,6 @@ namespace SOFe\InfoAPI;
 use Closure;
 use Generator;
 use pocketmine\command\CommandSender;
-use pocketmine\utils\SingletonTrait;
 use ReflectionFunction;
 use ReflectionNamedType;
 use ReflectionUnionType;
@@ -25,11 +24,7 @@ use function gettype;
 use function is_object;
 
 final class ReflectUtil {
-	/**
-	 * @param Registry<Display> $displays
-	 * @param Registry<ReflectHint> $hints
-	 */
-	public static function addClosureDisplay(Registry $displays, Registry $hints, string $kind, Closure $closure) : void {
+	public static function addClosureDisplay(Indices $indices, string $kind, Closure $closure) : void {
 		$reflect = new ReflectionFunction($closure);
 		$params = $reflect->getParameters();
 		if (count($params) < 1) {
@@ -44,7 +39,7 @@ final class ReflectUtil {
 		/** @var class-string $class */ // because $type->isBuiltin() is false
 		$class = $type->getName();
 
-		$hints->register(new ReflectHint(class: $class, kind: $kind));
+		$indices->registries->hints->register(new ReflectHint(class: $class, kind: $kind));
 
 		$display = new Display(
 			kind: $kind,
@@ -55,7 +50,7 @@ final class ReflectUtil {
 				return ($closure)($value, $sender);
 			},
 		);
-		$displays->register($display);
+		$indices->registries->displays->register($display);
 	}
 
 	/**
@@ -67,15 +62,14 @@ final class ReflectUtil {
 	 * Each type hint must map to a known kind through `ReflectUtil::knowKind()`.
 	 * The second parameter onwards may be nullable.
 	 *
-	 * @param Registry<Mapping> $mappings
 	 * @param string[] $names
 	 */
 	public static function addClosureMapping(
-		Registry $mappings,
-		ReflectHintIndex $hints,
+		Indices $indices,
 		string $namespace,
 		array $names,
 		Closure $closure,
+		string $help = "",
 		?Closure $watchChanges = null,
 		bool $isImplicit = false,
 	) : void {
@@ -101,7 +95,7 @@ final class ReflectUtil {
 
 			$param = new Parameter(
 				name: $closureParam->getName(),
-				kind: $hints->lookup($paramType->getName()) ?? throw new RuntimeException("Cannot detect info kind for parameter type {$paramType->getName()}"),
+				kind: $indices->hints->lookup($paramType->getName()) ?? throw new RuntimeException("Cannot detect info kind for parameter type {$paramType->getName()}"),
 				multi: $closureParam->isVariadic(),
 				optional: $paramType->allowsNull(),
 			);
@@ -116,12 +110,12 @@ final class ReflectUtil {
 		}
 
 		/** @var ReflectionNamedType $returnType */
-		$targetKind = $hints->lookup($returnType->getName()) ?? throw new RuntimeException("Cannot detect info kind for return type {$returnType->getName()}");
+		$targetKind = $indices->hints->lookup($returnType->getName()) ?? throw new RuntimeException("Cannot detect info kind for return type {$returnType->getName()}");
 
 		$nsTokens = explode(Mapping::FQN_SEPARATOR, $namespace);
 
 		foreach ($sourceTypes as $sourceType) {
-			$sourceKind = $hints->lookup($sourceType->getName()) ?? throw new RuntimeException("Cannot detect info kind for source type {$sourceType->getName()}");
+			$sourceKind = $indices->hints->lookup($sourceType->getName()) ?? throw new RuntimeException("Cannot detect info kind for source type {$sourceType->getName()}");
 
 			/** @var ?Closure(mixed, mixed[]): Generator<mixed, mixed, mixed, void> */
 			$subscribe = null;
@@ -140,7 +134,7 @@ final class ReflectUtil {
 				$fqnTokens = $nsTokens;
 				$fqnTokens[] = $name;
 
-				$mappings->register(new Mapping(
+				$indices->registries->mappings->register(new Mapping(
 					qualifiedName: $fqnTokens,
 					sourceKind: $sourceKind,
 					targetKind: $targetKind,
@@ -148,6 +142,7 @@ final class ReflectUtil {
 					parameters: $params,
 					map: self::correctClosure($closure, $sourceType, $paramTypes),
 					subscribe: $subscribe,
+					help: $help,
 				));
 			}
 		}
@@ -220,24 +215,8 @@ final class ReflectUtil {
  * @extends Index<ReflectHint>
  */
 final class ReflectHintIndex extends Index {
-	use SingletonTrait;
-
 	/** @var array<class-string, string> */
 	private array $map = [];
-
-	private static function make() : self {
-		/** @var Registry<ReflectHint> $defaults */
-		$defaults = new RegistryImpl;
-		Defaults\Index::registerStandardKinds($defaults);
-
-		/** @var Registry<ReflectHint> $global */
-		$global = RegistryImpl::getInstance(ReflectHint::$global);
-
-		return new self([
-			$defaults,
-			$global,
-		]);
-	}
 
 	public function reset() : void {
 		$this->map = [];

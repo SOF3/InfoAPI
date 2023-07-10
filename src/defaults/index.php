@@ -11,9 +11,8 @@ use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\ReflectHint;
 use Shared\SOFe\InfoAPI\Registry;
 use Shared\SOFe\InfoAPI\Standard;
-use SOFe\InfoAPI\ReflectHintIndex;
+use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\ReflectUtil;
-use SOFe\InfoAPI\RegistryImpl;
 
 final class Index {
 	public const STANDARD_KINDS = [
@@ -25,18 +24,19 @@ final class Index {
 		Player::class => Standard\PlayerInfo::KIND,
 	];
 
-	/**
-	 * @param Registry<Display> $displays
-	 * @param Registry<Mapping> $mappings
-	 */
-	public static function register(Registry $displays, Registry $mappings, ReflectHintIndex $hints) : void {
-		Strings::register($displays, $mappings, $hints);
-		Ints::register($displays, $mappings, $hints);
-		Floats::register($displays, $mappings, $hints);
-		Bools::register($displays, $mappings, $hints);
+	public static function register(Indices$indices) : void {
+		Strings::register($indices);
+		Ints::register($indices);
+		Floats::register($indices);
+		Bools::register($indices);
+		Formats::register($indices);
 	}
 
 	/**
+	 * We register all standard kinds due ot cyclic dependency between standard mappings.
+	 *
+	 * This should not happen in plugins because they should have a clear dependency relationship.
+	 *
 	 * @param Registry<ReflectHint> $defaults
 	 */
 	public static function registerStandardKinds(Registry $defaults) : void {
@@ -48,37 +48,4 @@ final class Index {
 
 	/** @var ?array{Registry<Display>, Registry<Mapping>} */
 	public static ?array $reused = null;
-
-	/**
-	 * @return array{Registry<Display>, Registry<Mapping>}
-	 */
-	private static function lazyInit() : array {
-		if (self::$reused === null) {
-			/** @var Registry<Display> $displays */
-			$displays = new RegistryImpl;
-			/** @var Registry<Mapping> $mappings */
-			$mappings = new RegistryImpl;
-			self::register($displays, $mappings, ReflectHintIndex::getInstance());
-
-			return self::$reused = [$displays, $mappings];
-		}
-
-		return self::$reused;
-	}
-
-	/**
-	 * @return Registry<Display>
-	 */
-	public static function reusedDisplays() : Registry {
-		[$displays, $_mappings] = self::lazyInit();
-		return $displays;
-	}
-
-	/**
-	 * @return Registry<Mapping>
-	 */
-	public static function reusedMappings() : Registry {
-		[$_displays, $mappings] = self::lazyInit();
-		return $mappings;
-	}
 }

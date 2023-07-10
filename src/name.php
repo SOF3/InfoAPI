@@ -23,15 +23,22 @@ final class FullyQualifiedName {
 		return implode(Mapping::FQN_SEPARATOR, $this->tokens);
 	}
 
+	public function shortName() : string {
+		return $this->tokens[count($this->tokens) - 1];
+	}
+
+	public static function parse(string $text) : self {
+		return new self(explode(Mapping::FQN_SEPARATOR, $text));
+	}
+
 	/**
 	 * Tests if the input matches this FQN.
 	 * Returns null if it does not match.
 	 * Returns 0 if it is an exact match.
 	 * Returns a positive number that indicates the number of missing tokens if it is a fuzzy match.
 	 */
-	public function match(string $inputString) : ?int {
-		$input = explode(Mapping::FQN_SEPARATOR, $inputString);
-
+	public function match(QualifiedRef $ref) : ?int {
+		$input = $ref->tokens;
 		if ($input[count($input) - 1] !== $this->tokens[count($this->tokens) - 1]) {
 			return null;
 		}
@@ -61,6 +68,10 @@ final class QualifiedRef {
 	public function __construct(
 		public array $tokens,
 	) {
+	}
+
+	public function shortName() : string {
+		return $this->tokens[count($this->tokens) - 1];
 	}
 
 	public static function parse(string $text) : self {

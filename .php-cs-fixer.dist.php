@@ -6,7 +6,7 @@ use PhpCsFixer\Finder;
 return (function() {
     $finder = Finder::create();
 
-    foreach(["src", "tests"] as $root) {
+    foreach(["src", "shared", "tests"] as $root) {
         foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__ . "/" . $root)) as $file) {
             $file = realpath($file);
 

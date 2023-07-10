@@ -37,6 +37,16 @@ final class BoolInfo {
 	public const KIND = "infoapi/bool";
 }
 
+/** An info of type `\pocketmine\world\Position`, representing an in-game position. */
+final class PositionInfo {
+	public const KIND = "infoapi/position";
+}
+
+/** An info of type `\pocketmine\world\World`, representing a loaded world. */
+final class WorldInfo {
+	public const KIND = "infoapi/world";
+}
+
 /** An info of type `\pocketmine\player\Player`, representing an online player. */
 final class PlayerInfo {
 	public const KIND = "infoapi/player";

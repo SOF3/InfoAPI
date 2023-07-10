@@ -97,6 +97,13 @@ final class Mapping {
 		 * @var ?Closure(mixed $source, mixed[] $args): Generator
 		 */
 		public ?Closure $subscribe,
+
+		/**
+		 * Help message of this mapping.
+		 *
+		 * Used in info discovery and documentation.
+		 */
+		public string $help,
 	) {
 	}
 }
