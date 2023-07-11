@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Defaults;
 
 use Shared\SOFe\InfoAPI\Display;
+use Shared\SOFe\InfoAPI\KindHelp;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\ReflectUtil;
@@ -19,13 +20,15 @@ use function max;
 use function min;
 use function pow;
 use function round;
+use function sprintf;
 
 final class Ints {
 	public static function register(Indices $indices) : void {
+		$indices->registries->kindHelps->register(new KindHelp(Standard\IntInfo::KIND, "Integer", sprintf("A whole number between %e and %e", PHP_INT_MIN, PHP_INT_MAX)));
 		$indices->registries->displays->register(new Display(Standard\IntInfo::KIND, fn($value) => is_int($value) ? (string) $value : Display::INVALID));
 
 		ReflectUtil::addClosureMapping(
-			$indices, "infoapi", ["asFloat"], fn(int $value) : float => (float) $value, isImplicit: true,
+			$indices, "infoapi", ["float"], fn(int $value) : float => (float) $value, isImplicit: true,
 			help: "Convert the integre to a float",
 		);
 
@@ -74,6 +77,7 @@ final class Ints {
 
 final class Floats {
 	public static function register(Indices $indices) : void {
+		$indices->registries->kindHelps->register(new KindHelp(Standard\FloatInfo::KIND, "Float", sprintf("A whole number between %e and %e", PHP_FLOAT_MIN, PHP_FLOAT_MAX)));
 		$indices->registries->displays->register(new Display(Standard\FloatInfo::KIND, fn($value) => is_int($value) || is_float($value) ? (string) $value : Display::INVALID));
 
 		ReflectUtil::addClosureMapping(
@@ -87,6 +91,27 @@ final class Floats {
 		ReflectUtil::addClosureMapping(
 			$indices, "infoapi", ["round"], fn(float $value) : int => (int) round($value),
 			help: "Round the number to the nearest integer.",
+		);
+
+		ReflectUtil::addClosureMapping(
+			$indices, "infoapi", ["gt", "greater"], fn(float $v1, float $v2) : bool => $v1 > $v2,
+			help: "Check if a number is greater than another.",
+		);
+		ReflectUtil::addClosureMapping(
+			$indices, "infoapi", ["ge", "greaterEqual"], fn(float $v1, float $v2) : bool => $v1 >= $v2,
+			help: "Check if a number is greater than or equal to another.",
+		);
+		ReflectUtil::addClosureMapping(
+			$indices, "infoapi", ["lt", "less"], fn(float $v1, float $v2) : bool => $v1 < $v2,
+			help: "Check if a number is less than another.",
+		);
+		ReflectUtil::addClosureMapping(
+			$indices, "infoapi", ["le", "lessEqual"], fn(float $v1, float $v2) : bool => $v1 <= $v2,
+			help: "Check if a number is less than or equal to another.",
+		);
+		ReflectUtil::addClosureMapping(
+			$indices, "infoapi", ["eq", "equal"], fn(float $v1, float $v2) : bool => $v1 === $v2,
+			help: "Check if two numbers are equal. Note that two floats are almost never equal unless they were converted from the same integer.",
 		);
 
 		ReflectUtil::addClosureMapping(

@@ -31,12 +31,13 @@ final class InfoAPI {
 	public static function addKind(
 		string $kind,
 		Closure $display,
+		?string $shortName = null,
 		?string $help = null,
 	) : void {
 		ReflectUtil::addClosureDisplay(self::defaultIndices(), $kind, $display);
 
 		if ($help !== null) {
-			self::defaultIndices()->registries->kindHelps->register(new KindHelp($kind, $help));
+			self::defaultIndices()->registries->kindHelps->register(new KindHelp($kind, $shortName, $help));
 		}
 	}
 

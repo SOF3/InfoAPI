@@ -37,6 +37,11 @@ final class BoolInfo {
 	public const KIND = "infoapi/bool";
 }
 
+/** An info of type `Vector3`, representing a relative vector. */
+final class VectorInfo {
+	public const KIND = "infoapi/vector";
+}
+
 /** An info of type `\pocketmine\world\Position`, representing an in-game position. */
 final class PositionInfo {
 	public const KIND = "infoapi/position";

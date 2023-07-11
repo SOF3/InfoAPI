@@ -15,8 +15,11 @@ final class KindHelp {
 		/** The kind that this object describes */
 		public string $kind,
 
+		/** A short, human-readable name for this type */
+		public ?string $shortName,
+
 		/** Help message for the kind. */
-		public string $help,
+		public ?string $help,
 	) {
 	}
 }

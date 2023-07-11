@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Defaults;
 
+use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
+use pocketmine\world\Position;
+use pocketmine\world\World;
 use Shared\SOFe\InfoAPI\Display;
 use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\ReflectHint;
@@ -22,6 +25,9 @@ final class Index {
 		"bool" => Standard\BoolInfo::KIND,
 		Server::class => Standard\BaseContext::KIND,
 		Player::class => Standard\PlayerInfo::KIND,
+		Position::class => Standard\PositionInfo::KIND,
+		Vector3::class => Standard\VectorInfo::KIND,
+		World::class => Standard\WorldInfo::KIND,
 	];
 
 	public static function register(Indices$indices) : void {
