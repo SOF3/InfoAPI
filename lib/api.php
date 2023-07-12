@@ -36,7 +36,7 @@ final class InfoAPI {
 	) : void {
 		ReflectUtil::addClosureDisplay(self::defaultIndices(), $kind, $display);
 
-		if ($help !== null) {
+		if ($shortName !== null || $help !== null) {
 			self::defaultIndices()->registries->kindHelps->register(new KindHelp($kind, $shortName, $help));
 		}
 	}

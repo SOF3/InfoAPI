@@ -165,33 +165,34 @@ final class Registries {
 }
 
 final class Indices {
+	/**
+	 * @param Registries[] $fallbackRegistries
+	 */
 	public function __construct(
 		public Registries $registries,
 		public DisplayIndex $displays,
 		public NamedMappingIndex $namedMappings,
 		public ImplicitMappingIndex $implicitMappings,
 		public ReflectHintIndex $hints,
+		public array $fallbackRegistries = [],
 	) {
 	}
 
 	public static function withDefaults(Registries $extension) : Indices {
-		/** @var Registry<Display> $defaultDisplays */
-		$defaultDisplays = new RegistryImpl;
-		/** @var Registry<Mapping> $defaultMappings */
-		$defaultMappings = new RegistryImpl;
-		/** @var Registry<ReflectHint> $defaultHints */
-		$defaultHints = new RegistryImpl;
-		Defaults\Index::registerStandardKinds($defaultHints);
+		$defaults = Registries::empty();
+		Defaults\Index::registerStandardKinds($defaults->hints);
 
 		$indices = new Indices(
-			registries: $extension,
-			displays: new DisplayIndex([$defaultDisplays, $extension->displays]),
-			namedMappings: new NamedMappingIndex([$defaultMappings, $extension->mappings]),
-			implicitMappings: new ImplicitMappingIndex([$defaultMappings, $extension->mappings]),
-			hints: new ReflectHintIndex([$defaultHints, $extension->hints]),
+			registries: $defaults,
+			displays: new DisplayIndex([$defaults->displays, $extension->displays]),
+			namedMappings: new NamedMappingIndex([$defaults->mappings, $extension->mappings]),
+			implicitMappings: new ImplicitMappingIndex([$defaults->mappings, $extension->mappings]),
+			hints: new ReflectHintIndex([$defaults->hints, $extension->hints]),
+			fallbackRegistries: [$defaults],
 		);
-
 		Defaults\Index::register($indices);
+
+		$indices->registries = $extension;
 
 		return $indices;
 	}
