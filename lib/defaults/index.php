@@ -15,6 +15,7 @@ use Shared\SOFe\InfoAPI\ReflectHint;
 use Shared\SOFe\InfoAPI\Registry;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
+use SOFe\InfoAPI\InitContext;
 use SOFe\InfoAPI\ReflectUtil;
 
 final class Index {
@@ -30,12 +31,14 @@ final class Index {
 		World::class => Standard\WorldInfo::KIND,
 	];
 
-	public static function register(Indices$indices) : void {
+	public static function register(InitContext $initCtx, Indices $indices) : void {
 		Strings::register($indices);
 		Ints::register($indices);
 		Floats::register($indices);
 		Bools::register($indices);
 		Formats::register($indices);
+
+		Players::register($initCtx, $indices);
 	}
 
 	/**

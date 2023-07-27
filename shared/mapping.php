@@ -83,7 +83,8 @@ final class Mapping {
 		 *
 		 * The closure has the same inputs as $map.
 		 * It returns a generator that implements the await-generator protocol with the Traverser extension.
-		 * It should traverse null values to indicate a change in the mapped value.
+		 * It should traverse arbitrary values to indicate a change in the mapped value.
+		 * The traversed value is not handled by the framework.
 		 *
 		 * If the target kind is also a mutable object,
 		 * a "change" is defined as the representation of a fundamentally different object

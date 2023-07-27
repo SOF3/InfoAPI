@@ -178,7 +178,7 @@ final class Indices {
 	) {
 	}
 
-	public static function withDefaults(Registries $extension) : Indices {
+	public static function withDefaults(InitContext $initCtx, Registries $extension) : Indices {
 		$defaults = Registries::empty();
 		Defaults\Index::registerStandardKinds($defaults->hints);
 
@@ -190,7 +190,7 @@ final class Indices {
 			hints: new ReflectHintIndex([$defaults->hints, $extension->hints]),
 			fallbackRegistries: [$defaults],
 		);
-		Defaults\Index::register($indices);
+		Defaults\Index::register($initCtx, $indices);
 
 		$indices->registries = $extension;
 

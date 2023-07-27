@@ -29,15 +29,16 @@ final class InfoAPI {
 	 * @param Closure(T $display, CommandSender $sender): string $display
 	 */
 	public static function addKind(
+		Plugin $plugin,
 		string $kind,
 		Closure $display,
 		?string $shortName = null,
 		?string $help = null,
 	) : void {
-		ReflectUtil::addClosureDisplay(self::defaultIndices(), $kind, $display);
+		ReflectUtil::addClosureDisplay(self::defaultIndices($plugin), $kind, $display);
 
 		if ($shortName !== null || $help !== null) {
-			self::defaultIndices()->registries->kindHelps->register(new KindHelp($kind, $shortName, $help));
+			self::defaultIndices($plugin)->registries->kindHelps->register(new KindHelp($kind, $shortName, $help));
 		}
 	}
 
@@ -53,7 +54,7 @@ final class InfoAPI {
 		string $help = "",
 	) : void {
 		ReflectUtil::addClosureMapping(
-			indices: self::defaultIndices(),
+			indices: self::defaultIndices($plugin),
 			namespace: strtolower($plugin->getName()),
 			names: is_array($aliases) ? $aliases : [$aliases],
 			closure: $closure,
@@ -65,9 +66,9 @@ final class InfoAPI {
 
 	private static ?Indices $indices = null;
 
-	public static function defaultIndices() : Indices {
+	public static function defaultIndices(Plugin $plugin) : Indices {
 		if (self::$indices === null) {
-			self::$indices = Indices::withDefaults(Registries::singletons());
+			self::$indices = Indices::withDefaults(new PluginInitContext($plugin), Registries::singletons());
 		}
 
 		return self::$indices;
