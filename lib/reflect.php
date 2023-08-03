@@ -21,6 +21,7 @@ use function count;
 use function explode;
 use function get_class;
 use function gettype;
+use function is_float;
 use function is_object;
 
 final class ReflectUtil {
@@ -192,7 +193,7 @@ final class ReflectUtil {
 		}
 
 		if ($type->isBuiltin()) {
-			return gettype($value) === $type->getName();
+			return self::getStandardType($value) === $type->getName();
 		}
 
 		if (is_object($value)) {
@@ -208,6 +209,15 @@ final class ReflectUtil {
 	 */
 	public static function knowKind(Registry $hints, string $class, string $kind) : void {
 		$hints->register(new ReflectHint(class: $class, kind: $kind));
+	}
+
+	public static function getStandardType(mixed $value) : string {
+		if (is_float($value)) {
+			// double -> float
+			return "float";
+		}
+
+		return gettype($value);
 	}
 }
 

@@ -61,6 +61,11 @@ final class NamedMappingIndex extends Index {
 
 		return $results;
 	}
+
+	public function cloned() : self {
+		// this object is clone-safe
+		return clone $this;
+	}
 }
 
 final class ScoredMapping {

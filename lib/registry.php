@@ -164,7 +164,7 @@ final class Registries {
 	}
 }
 
-final class Indices {
+final class Indices implements ReadIndices {
 	/**
 	 * @param Registries[] $fallbackRegistries The non-default registries that this Indices object reads from.
 	 */
@@ -207,5 +207,57 @@ final class Indices {
 		$indices->registries = $extension;
 
 		return $indices;
+	}
+
+	public function getDisplays() : DisplayIndex {
+		return $this->displays;
+	}
+	public function getNamedMappings() : NamedMappingIndex {
+		return $this->namedMappings;
+	}
+	public function getImplicitMappings() : ImplicitMappingIndex {
+		return $this->implicitMappings;
+	}
+	public function getReflectHints() : ReflectHintIndex {
+		return $this->hints;
+	}
+
+	public function readonly() : ReadonlyIndices {
+		return new ReadonlyIndices(
+			displays: $this->displays,
+			namedMappings: $this->namedMappings,
+			implicitMappings: $this->implicitMappings,
+			hints: $this->hints,
+		);
+	}
+}
+
+interface ReadIndices {
+	public function getDisplays() : DisplayIndex ;
+	public function getNamedMappings() : NamedMappingIndex ;
+	public function getImplicitMappings() : ImplicitMappingIndex ;
+	public function getReflectHints() : ReflectHintIndex ;
+}
+
+final class ReadonlyIndices implements ReadIndices {
+	public function __construct(
+		public DisplayIndex $displays,
+		public NamedMappingIndex $namedMappings,
+		public ImplicitMappingIndex $implicitMappings,
+		public ReflectHintIndex $hints,
+	) {
+	}
+
+	public function getDisplays() : DisplayIndex {
+		return $this->displays;
+	}
+	public function getNamedMappings() : NamedMappingIndex {
+		return $this->namedMappings;
+	}
+	public function getImplicitMappings() : ImplicitMappingIndex {
+		return $this->implicitMappings;
+	}
+	public function getReflectHints() : ReflectHintIndex {
+		return $this->hints;
 	}
 }

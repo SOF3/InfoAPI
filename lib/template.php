@@ -10,17 +10,17 @@ use RuntimeException;
 use Shared\SOFe\InfoAPI\Mapping;
 use SOFe\AwaitGenerator\Traverser;
 use SOFe\InfoAPI\Ast;
-use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\Pathfind;
 use SOFe\InfoAPI\Pathfind\Path;
 use SOFe\InfoAPI\QualifiedRef;
+use SOFe\InfoAPI\ReadIndices;
 
 use function array_map;
 use function count;
 use function implode;
 
 final class Template {
-	public static function fromAst(Ast\Template $ast, Indices $indices, string $sourceKind) : Template {
+	public static function fromAst(Ast\Template $ast, ReadIndices $indices, string $sourceKind) : Template {
 		$self = new self;
 
 		/** @var Ast\RawText|Ast\Expr $element */
@@ -30,9 +30,9 @@ final class Template {
 			} else {
 				$choices = [];
 				for ($expr = $element; $expr !== null; $expr = $expr->else) {
-					$path = self::resolveInfoPath($indices, $expr->main, $sourceKind, fn(string $kind) : bool => $indices->displays->canDisplay($kind));
+					$path = self::resolveInfoPath($indices, $expr->main, $sourceKind, fn(string $kind) : bool => $indices->getDisplays()->canDisplay($kind));
 					if ($path !== null) {
-						$display = $indices->displays->getDisplay($path->tailKind) ?? throw new RuntimeException("canDisplay admitted tail kind");
+						$display = $indices->getDisplays()->getDisplay($path->tailKind) ?? throw new RuntimeException("canDisplay admitted tail kind");
 						$choices[] = new PathWithDisplay($path->mappings, $display);
 					}
 				}
@@ -49,7 +49,7 @@ final class Template {
 	/**
 	 * @param Closure(string): bool $admitTailKind
 	 */
-	private static function resolveInfoPath(Indices $indices, Ast\InfoExpr $infoExpr, string $sourceKind, Closure $admitTailKind) : ?Path {
+	private static function resolveInfoPath(ReadIndices $indices, Ast\InfoExpr $infoExpr, string $sourceKind, Closure $admitTailKind) : ?Path {
 		$calls = self::extractMappingCalls($infoExpr);
 		$paths = Pathfind\Finder::find($indices, $calls, $sourceKind, $admitTailKind);
 		// TODO resolve parameter paths

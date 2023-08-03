@@ -6,8 +6,8 @@ namespace SOFe\InfoAPI\Pathfind;
 
 use Closure;
 use Shared\SOFe\InfoAPI\Mapping;
-use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\QualifiedRef;
+use SOFe\InfoAPI\ReadIndices;
 use SplPriorityQueue;
 use function array_merge;
 use function array_shift;
@@ -21,7 +21,7 @@ final class Finder {
 	 * @param Closure(string): bool $admitTailKind
 	 * @return Path[]
 	 */
-	public static function find(Indices $indices, array $calls, string $sourceKind, Closure $admitTailKind) {
+	public static function find(ReadIndices $indices, array $calls, string $sourceKind, Closure $admitTailKind) {
 		$heap = new Heap;
 		$heap->insertPath(new Path(
 			unreadCalls: $calls,
@@ -43,7 +43,7 @@ final class Finder {
 			if (count($path->unreadCalls) > 0) {
 				$shiftedCalls = $path->unreadCalls;
 				$call = array_shift($shiftedCalls);
-				$matches = $indices->namedMappings->find($path->tailKind, $call);
+				$matches = $indices->getNamedMappings()->find($path->tailKind, $call);
 				foreach ($matches as $match) {
 					// TODO also check parameter compatibility here?
 					$newPaths[] = new Path(
@@ -56,7 +56,7 @@ final class Finder {
 				}
 			}
 
-			$implicits = $indices->implicitMappings->getImplicit($path->tailKind);
+			$implicits = $indices->getImplicitMappings()->getImplicit($path->tailKind);
 			foreach ($implicits as $implicit) {
 				if (isset($path->implicitLoopDetector[$implicit->targetKind])) {
 					continue;
