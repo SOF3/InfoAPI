@@ -18,4 +18,4 @@ parameters:
 		-
 			message: "#^While loop condition is always true\\.$#"
 			count: 2
-			path: lib/template.php
+			path: lib/template/watch.php

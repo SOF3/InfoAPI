@@ -15,8 +15,8 @@ final class TemplateTest extends TestCase {
 		$indices = Indices::forTest();
 
 		$displayableKinds = ["bar", "grault"];
-		foreach($displayableKinds as $kind) {
-			$indices->registries->displays->register(new Display("bar", function(mixed $s) use($kind) {
+		foreach ($displayableKinds as $kind) {
+			$indices->registries->displays->register(new Display($kind, function(mixed $s) use ($kind) {
 				self::assertIsString($s);
 				return "$s@$kind";
 			}));
