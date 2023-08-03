@@ -10,8 +10,12 @@ parameters:
 			count: 1
 			path: lib/ast.php
 
-
 		-
 			message: "#^Unable to resolve the template type T in call to method static method SOFe\\\\InfoAPI\\\\ReflectUtil\\:\\:correctClosure\\(\\)$#"
 			count: 2
 			path: lib/reflect.php
+
+		-
+			message: "#^While loop condition is always true\\.$#"
+			count: 2
+			path: lib/template.php

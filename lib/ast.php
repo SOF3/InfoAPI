@@ -61,7 +61,7 @@ final class MappingCall {
 	public function __construct(
 		/** The partially qualified reference to the mapping, e.g. `a:b` in `{{ a:b(c, d=e) }}`. */
 		public QualifiedRef $name,
-		/** @var Arg[] The arguments passed to the mapping, e.g. `c` and `d=e` in `{{ a:b(c, d=e) }}` */
+		/** @var Arg[]|null The arguments passed to the mapping, e.g. `c` and `d=e` in `{{ a:b(c, d=e) }}` */
 		public ?array $args,
 	) {
 	}

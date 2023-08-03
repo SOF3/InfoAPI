@@ -9,7 +9,6 @@ use pocketmine\command\CommandSender;
 use pocketmine\plugin\Plugin;
 use Shared\SOFe\InfoAPI\Display;
 use Shared\SOFe\InfoAPI\KindHelp;
-use Shared\SOFe\InfoAPI\Mapping;
 
 use function is_array;
 use function strtolower;
@@ -26,7 +25,7 @@ final class InfoAPI {
 	 * It must be a type defined by the plugin.
 	 *
 	 * @template T
-	 * @param Closure(T $display, CommandSender $sender): string $display
+	 * @param Closure(T $display, ?CommandSender $sender): string $display
 	 */
 	public static function addKind(
 		Plugin $plugin,
@@ -62,6 +61,17 @@ final class InfoAPI {
 			isImplicit: $isImplicit,
 			help: $help,
 		);
+	}
+
+	/** @var array<string, Ast\Template> */
+	private static array $templates = [];
+
+	public static function parse(string $template, bool $cache = true) : Ast\Template {
+		if ($cache) {
+			return Ast\Parse::parse($template);
+		}
+
+		return self::$templates[$template] ??= Ast\Parse::parse($template);
 	}
 
 	private static ?Indices $indices = null;

@@ -24,7 +24,7 @@ final class Display {
 		/**
 		 * Displays a value for a template.
 		 *
-		 * @var Closure(mixed $display, CommandSender $sender): string
+		 * @var Closure(mixed $value, ?CommandSender $sender): string
 		 */
 		public Closure $display,
 	) {

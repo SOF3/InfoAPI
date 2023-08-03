@@ -43,7 +43,7 @@ final class ReflectUtil {
 
 		$display = new Display(
 			kind: $kind,
-			display: function(mixed $value, CommandSender $sender) use ($closure, $type) : string {
+			display: function(mixed $value, ?CommandSender $sender) use ($closure, $type) : string {
 				if (!self::correctType($value, $type)) {
 					return Display::INVALID;
 				}

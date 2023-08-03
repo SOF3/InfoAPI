@@ -166,7 +166,7 @@ final class Registries {
 
 final class Indices {
 	/**
-	 * @param Registries[] $fallbackRegistries
+	 * @param Registries[] $fallbackRegistries The non-default registries that this Indices object reads from.
 	 */
 	public function __construct(
 		public Registries $registries,
@@ -176,6 +176,18 @@ final class Indices {
 		public ReflectHintIndex $hints,
 		public array $fallbackRegistries = [],
 	) {
+	}
+
+	public static function forTest() : Indices {
+		$registries = Registries::empty();
+		return new self(
+			registries: $registries,
+			displays: new DisplayIndex([$registries->displays]),
+			namedMappings: new NamedMappingIndex([$registries->mappings]),
+			implicitMappings: new ImplicitMappingIndex([$registries->mappings]),
+			hints: new ReflectHintIndex([$registries->hints]),
+			fallbackRegistries: [],
+		);
 	}
 
 	public static function withDefaults(InitContext $initCtx, Registries $extension) : Indices {

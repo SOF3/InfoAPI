@@ -23,15 +23,20 @@ final class DisplayIndex extends Index {
 		$this->kinds[$display->kind] = $display;
 	}
 
-	public function display(string $kind, mixed $value, CommandSender $sender) : string {
+	public function getDisplay(string $kind) : ?Display {
 		$this->sync();
 
 		if (isset($this->kinds[$kind])) {
 			$display = $this->kinds[$kind];
-			return ($display->display)($value, $sender);
+			return $display;
 		} else {
-			return Display::INVALID;
+			return null;
 		}
+	}
+
+	public function display(string $kind, mixed $value, ?CommandSender $sender) : string {
+		$display = $this->getDisplay($kind);
+		return $display !== null ? ($display->display)($value, $sender) : Display::INVALID;
 	}
 
 	public function canDisplay(string $kind) : bool {
