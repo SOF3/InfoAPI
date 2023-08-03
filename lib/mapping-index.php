@@ -31,16 +31,19 @@ final class NamedMappingIndex extends Index {
 		$this->namedMappings[$source][$shortName][] = $mapping;
 	}
 
-	public function find(string $sourceKind, QualifiedRef $ref) : ?Mapping {
+	/**
+	 * @return ScoredMapping[]
+	 */
+	public function find(string $sourceKind, QualifiedRef $ref) : array {
 		$this->sync();
 
 		if (!isset($this->namedMappings[$sourceKind])) {
-			return null;
+			return [];
 		}
 
 		$shortName = $ref->tokens[count($ref->tokens) - 1];
 		if (!isset($this->namedMappings[$sourceKind][$shortName])) {
-			return null;
+			return [];
 		}
 
 		$mappings = array_filter(
@@ -48,20 +51,23 @@ final class NamedMappingIndex extends Index {
 			fn(Mapping $mapping) => (new FullyQualifiedName($mapping->qualifiedName))->match($ref),
 		);
 
-		$bestScore = null;
-		$bestMapping = null;
-
-		foreach ($this->namedMappings[$sourceKind][$shortName] as $mapping) {
+		$results = [];
+		foreach ($mappings as $mapping) {
 			$score = (new FullyQualifiedName($mapping->qualifiedName))->match($ref);
 			if ($score !== null) {
-				if ($bestScore === null || $bestScore > $score) {
-					$bestScore = $score;
-					$bestMapping = $mapping;
-				}
+				$results[] = new ScoredMapping($score, $mapping);
 			}
 		}
 
-		return $bestMapping;
+		return $results;
+	}
+}
+
+final class ScoredMapping {
+	public function __construct(
+		public int $score,
+		public Mapping $mapping,
+	) {
 	}
 }
 
