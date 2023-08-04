@@ -6,7 +6,7 @@ In a nutshell, InfoAPI provides a simple API to register placeholders between pl
 But it is more powerful than just that:
 
 - Object-oriented placeholder expressions
-- Continuously upfate a template when variables change
+- Continuously update a template when variables change
 - Parametric infos &mdash; mathematical operations on info expressions
 
 ## Developer guide: Templating
@@ -14,24 +14,87 @@ But it is more powerful than just that:
 If you let users customize messages in a config,
 you can consider formatting the message with InfoAPI.
 
-2. Pass the config message into InfoAPI:
+Pass the config message into InfoAPI:
 
 ```php
 use SOFe\InfoAPI;
 
 // $this is the plugin main
-$player->sendMessage(InfoAPI::render($this, $this->getConfig()->get("message"), [
-  "arg" => $arg,
+$player->sendMessage(InfoAPI::render($this, $this->getConfig()->get("format"), [
+    "arg" => $arg,
 ], $player));
 ```
 
-  - "message" is the config key for the message template
-  - The args array are the base variables for the template.
-    The variables must use one of the types with infos.
-  - We also pass $player to InfoAPI so that InfoAPI may decide how to localize the message better,
-    e.g. by formatting for the player's language.
+- "message" is the config key for the message template
+- The args array are the base variables for the template.
+  The types of the variables must be one of the default types
+  or provided by another plugin through `InfoAPI::addKind`.
+- `$player` is optional.
+  It tells InfoAPI how to localize the message better,
+  e.g. by formatting for the player's language.
 
-## Developer guide: install InfoAPI
+### Advanced: Continuous templating
+
+You can create a template and watch for changes using the `renderContinuous` API:
+
+```php
+use SOFe\AwaitGenerator\Await;
+use SOFe\InfoAPI;
+
+Await::f2c(function() use($player) {
+    $traverser = InfoAPI::renderContinuous($this, $this->getConfig()->get("format"), [
+        "arg" => $arg,
+    ], $player);
+
+    while(yield from $traverser->next($message)) {
+        $player->sendPopup($message);
+    }
+});
+```
+
+## Developer guide: Register mapping
+
+A mapping converts one info to another,
+e.g. `money` converts a player to the amount of money in `{player money}`.
+You can register your own mappings
+so that your plugin as well as other plugins using InfoAPI
+can use this info in the template.
+
+For example, to provide the money of an online player:
+
+```php
+InfoAPI::addMapping(
+    $this, "myplugin.money",
+    fn(Player $player) : ?int => $this->getMoney($player),
+);
+```
+
+The source and return types must be a default or `InfoAPI::addKind` types.
+
+### Advanced: Register continuous mapping
+
+You can additionally provide a `watchChanges` closure,
+which returns a [traverser](https://sof3.github.io/await-generator/master/async-iterators.html)
+that yields a value when a change is detected.
+The [pmevent](https://github.com/SOF3/pmevent) library may help
+with building traversers from events:
+
+```php
+InfoAPI::addMapping(
+    $this, "myplugin.money",
+    fn(Player $player) : ?int => $this->getMoney($player),
+    watchChanges: fn(Player $player) => Events::watch(
+        $this, MoneyChangeEvent::class, $player->getName(),
+        fn(MoneyChangeEvent $event) => $event->getPlayer()->getName(),
+    )->asGenerator(),
+);
+```
+
+## Developer guide: Install InfoAPI
+
+> If you are not developing a plugin,
+> you do **not** need to install InfoAPI yourself.
+> Plugins should have included InfoAPI in their phar release.
 
 InfoAPI v2 is a virion library using virion 3.1.
 Virion 3.1 uses composer to install libraries:
@@ -46,88 +109,53 @@ Virion 3.1 uses composer to install libraries:
 }
 ```
 
-You can place this file next to your plugin.yml.
-Installing composer is recommended but not required.
+  You can place this file next to your plugin.yml.
+  Installing composer is recommended but not required.
 
 2. Build your plugin with the InfoAPI virion using [pharynx](https://github.com/SOF3/pharynx).
-  You can test it using the custom start.sh provided by pharynx.
+  You can test it on a server using the custom start.cmd/start.sh provided by pharynx.
 
 3. Use the [pharynx GitHub action](https://github.com/SOf3/timer-pmmp/blob/master/.github/workflows/ci.yml)
   to integrate with Poggit.
-  Remember not to commit your vendor directory onto GitHub.
+  Remember to gitignore your vendor directory so that you don't push it to GitHub.
 
-## Developer guide: Registry
+## User guide: Writing a template
 
-You can provide your own infos so that other plugins can use them as variables when templating.
+InfoAPI replaces expressions inside `{}` with variables.
+For example, if a chat plugin provides two variables:
 
-For example, to provide the rank of an online player:
-
-```php
-InfoAPI::addMapping(
-  $this, "myplugin.money",
-  fn(Player $player) : ?int => $this->getMoney($player),
-);
-```
-
-## User guide (for config setup)
-### Formatting infos
-InfoAPI formats your text using placeholders called "info".
-You can put the info in `{}` and it will be replaced into the actual value.
-
-For example, if you are using a chat plugin
-that provides an info called `player`
-which represents the player chatting,
-and an info called `message` which represents the message to be sent.
-Then you can customize the chat message like this:
+- `sender`: the player who sent chat (SOFe)
+- `message`: the chat message
+the following will become something like `<SOFe> Hello world`
+if the plugin provides `sender` and `message` ("Hello world")for the template:
 
 ```
-<{player}> {message}
+<{sender}> {message}
 ```
 
-If the player is called `Steve` and the message is `Hello world`, the formatted chat message would become
+Color codes are default variables.
+Instead of writing &sect;1 &sect;b etc, you could also write:
 
 ```
-<Steve> Hello world
+{aqua}<{sender}> {white}{message}
 ```
 
-### More detailed templates
-Some types of infos provide extra details.
-For example, an info representing a player has a detail called `health`.
-So you can write the detail name after the original info name
-(separated by a space):
+You can get more detailed info for a variable.
+For example, to get the coordinates of a player `player`:
 
 ```
-[{player health}] <{player}> {message}
+{player} is at ({player x}, {player y}, {player z}).
+```
+
+Writing `{` directly will cause error without a matching `}`.
+If you want to write a `{`/`}` that is not part of an expression, write twice instead:
+
+```
+hello {{world}}.
 ```
 
 This will become
 
 ```
-[9.5/10] <Steve> Hello world
+hello {world}.
 ```
-
-You can get details of details!
-The player health is a proportion.
-Proportion infos have a detail called `percent`,
-which converts the fraction into a percentage:
-
-```
-[{player health percent}] <{player}> {message}
-```
-
-This will become
-
-```
-[95%] <Steve> Hello world
-```
-
-### Checking available info types
-
-TODO: setup a common registry to track global kinds and mappings.
-
-### How to write `{}` if I don't want it replaced?
-Simply write `{{` or `}}` when you want `{` or `}`.
-
-> What if I really want `{{` or `}}`?
-
-Write `{{{{` or `}}}}`. Just duplicate every brace. Simple.

@@ -7,11 +7,13 @@ namespace SOFe\InfoAPI;
 use Closure;
 use pocketmine\command\CommandSender;
 use pocketmine\plugin\Plugin;
+use pocketmine\Server;
 use RuntimeException;
 use Shared\SOFe\InfoAPI\Display;
 use Shared\SOFe\InfoAPI\KindHelp;
 use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\Registry;
+use Shared\SOFe\InfoAPI\Standard\BaseContext;
 use SOFe\AwaitGenerator\Traverser;
 use SOFe\InfoAPI\Template\GetOrWatch;
 use SOFe\InfoAPI\Template\RenderedGroup;
@@ -117,6 +119,17 @@ final class InfoAPI {
 		$indices = self::defaultIndices($plugin)->readonly();
 		$indices->namedMappings = $indices->namedMappings->cloned();
 		$indices->namedMappings->addLocalRegistry(0, $localMappings);
+
+		$localMappings->register(new Mapping(
+			qualifiedName: ["infoapi:baseContext"],
+			sourceKind: self::ANONYMOUS_KIND,
+			targetKind: BaseContext::KIND,
+			isImplicit: true,
+			parameters: [],
+			map: fn($_) => Server::getInstance(),
+			subscribe: null,
+			help: "Global functions",
+		));
 
 		foreach ($context as $key => $value) {
 			$standardType = is_object($value) ? get_class($value) : ReflectUtil::getStandardType($value);
