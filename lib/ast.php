@@ -59,9 +59,9 @@ final class InfoExpr {
 /** Calls a mapping with or without arguments. */
 final class MappingCall {
 	public function __construct(
-		/** The partially qualified reference to the mapping, e.g. `a:b` in `{{ a:b(c, d=e) }}`. */
+		/** The partially qualified reference to the mapping, e.g. `a:b` in `{ a:b(c, d=e) }`. */
 		public QualifiedRef $name,
-		/** @var Arg[]|null The arguments passed to the mapping, e.g. `c` and `d=e` in `{{ a:b(c, d=e) }}` */
+		/** @var Arg[]|null The arguments passed to the mapping, e.g. `c` and `d=e` in `{ a:b(c, d=e) }` */
 		public ?array $args,
 	) {
 	}
@@ -70,7 +70,7 @@ final class MappingCall {
 /** An argument passed to a mapping. */
 final class Arg {
 	public function __construct(
-		/** Name of the argument if specified, e.g. `d` in `{{ a:b(c, d=e) }}`. */
+		/** Name of the argument if specified, e.g. `d` in `{ a:b(c, d=e) }`. */
 		public ?string $name,
 
 		/**
@@ -109,7 +109,7 @@ final class Parse {
 			return new RawText("{", "{{");
 		}
 		if ($parser->readExactText("}}")) {
-			return new RawText("{", "{{");
+			return new RawText("}", "}}");
 		}
 		if ($parser->readExactText("}")) {
 			throw $parser->throwSpan("unmatched `}` should be escaped as `}}`");

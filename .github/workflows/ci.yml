@@ -76,5 +76,5 @@ jobs:
       - name: Install Composer
         run: curl -sS https://getcomposer.org/installer | php
       - run: composer install
-      - name: phpstan analyze
+      - name: run tests
         run: composer test
