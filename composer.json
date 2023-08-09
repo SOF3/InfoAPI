@@ -5,6 +5,7 @@
         "pocketmine/pocketmine-mp": "^5.0.0",
         "sof3/await-generator": "^3.6.1",
         "sof3/pmevent": "^0.0.2",
+        "sof3/zleep": "^0.1.0",
         "php": "^8.1"
     },
     "require-dev": {

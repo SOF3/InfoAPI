@@ -56,3 +56,12 @@ final class WorldInfo {
 final class PlayerInfo {
 	public const KIND = "infoapi/player";
 }
+
+/**
+ * An info of type `\pocketmine\block\Block`, representing a block type.
+ *
+ * In the BlockTypeInfo case, the position in the block is meaningless.
+ */
+final class BlockTypeInfo {
+	public const KIND = "infoapi/blockType";
+}

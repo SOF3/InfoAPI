@@ -11,6 +11,16 @@ parameters:
 			path: lib/ast.php
 
 		-
+			message: "#^While loop condition is always true\\.$#"
+			count: 1
+			path: lib/context.php
+
+		-
+			message: "#^While loop condition is always true\\.$#"
+			count: 1
+			path: lib/defaults/world.php
+
+		-
 			message: "#^Unable to resolve the template type T in call to method static method SOFe\\\\InfoAPI\\\\ReflectUtil\\:\\:correctClosure\\(\\)$#"
 			count: 2
 			path: lib/reflect.php

@@ -99,7 +99,7 @@ pub fn Expression(props: &Props) -> Html {
         }
 
         div(class = "box") {
-            h2(class = "heading") { + "Drill down"; }
+            h2(class = "heading") { + "Transform"; }
 
             div(class = "columns") {
                 div(class = "column") {

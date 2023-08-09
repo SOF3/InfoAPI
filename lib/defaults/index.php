@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Defaults;
 
+use pocketmine\block\Block;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\Server;
@@ -31,6 +32,7 @@ final class Index {
 		Position::class => Standard\PositionInfo::KIND,
 		Vector3::class => Standard\VectorInfo::KIND,
 		World::class => Standard\WorldInfo::KIND,
+		Block::class => Standard\BlockTypeInfo::KIND,
 	];
 
 	public static function register(InitContext $initCtx, Indices $indices) : void {
@@ -40,7 +42,11 @@ final class Index {
 		Bools::register($indices);
 		Formats::register($indices);
 
+		Vectors::register($indices);
+		Positions::register($indices);
 		Players::register($initCtx, $indices);
+		Worlds::register($initCtx, $indices);
+		Blocks::register($indices);
 
 		$indices->registries->kindMetas->register(new KindMeta(Standard\BaseContext::KIND, "Global functions", "You can use mappings from here", [
 			KindMetadataKeys::IS_ROOT => true,

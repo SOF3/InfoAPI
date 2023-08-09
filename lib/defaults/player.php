@@ -7,7 +7,9 @@ namespace SOFe\InfoAPI\Defaults;
 use Generator;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerEvent;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\player\PlayerToggleFlightEvent;
 use pocketmine\event\player\PlayerToggleGlideEvent;
@@ -109,7 +111,13 @@ final class Players {
 
 		ReflectUtil::addClosureMapping(
 			$indices, "infoapi:player", ["playerCount"], fn(Server $server) : int => count($server->getOnlinePlayers()),
+			// TODO watchChanges
 			help: "Number of online players",
+		);
+		ReflectUtil::addClosureMapping(
+			$indices, "infoapi:player", ["player"], fn(string $name) : ?Player => Server::getInstance()->getPlayerExact($name),
+			watchChanges: fn(string $name) => self::watchPlayerName($initCtx, $name, PlayerLoginEvent::class, PlayerQuitEvent::class),
+			help: "Search information about an online player by name",
 		);
 	}
 
@@ -117,9 +125,16 @@ final class Players {
 	 * @param class-string<PlayerEvent|PlayerDeathEvent> $events
 	 */
 	private static function watchPlayer(InitContext $initCtx, Player $player, string ...$events) : Generator {
+		return self::watchPlayerName($initCtx, $player->getName(), ...$events);
+	}
+
+	/**
+	 * @param class-string<PlayerEvent|PlayerDeathEvent> $events
+	 */
+	private static function watchPlayerName(InitContext $initCtx, string $playerName, string ...$events) : Generator {
 		return $initCtx->watchEvent(
 			events: $events,
-			key: $player->getName(),
+			key: $playerName,
 			interpreter: fn(PlayerEvent|PlayerDeathEvent $event) => $event->getPlayer()->getName(),
 		)->asGenerator();
 	}
