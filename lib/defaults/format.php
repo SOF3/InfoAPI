@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace SOFe\InfoAPI\Defaults;
 
-use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use Shared\SOFe\InfoAPI\Display;
+use Shared\SOFe\InfoAPI\Mapping;
+use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
-use SOFe\InfoAPI\ReflectUtil;
+use function is_string;
 
 final class Formats {
+	// This is not under the shared Standard namespace because plugins are not expected to register additional mappings related to formats.
+	// Format is an internal kind that only exists to allow users to add formats.
+	public const KIND = "infoapi/private/format";
+
 	public static function register(Indices $indices) : void {
+		$indices->registries->displays->register(new Display(self::KIND, fn($value) : string => is_string($value) ? $value : Display::INVALID));
+
 		foreach ([
 			[TextFormat::BLACK, "black"],
 			[TextFormat::DARK_BLUE, "darkBlue"],
@@ -35,10 +43,17 @@ final class Formats {
 			[TextFormat::UNDERLINE, "underline"],
 			[TextFormat::ITALIC, "italic"],
 		] as [$code, $name]) {
-			ReflectUtil::addClosureMapping(
-				$indices, "infoapi", [$name], fn(Server $_) : string => $code,
+			$indices->registries->mappings->register(new Mapping(
+				qualifiedName: ["infoapi", "formats", $name],
+				sourceKind: Standard\BaseContext::KIND,
+				targetKind: self::KIND,
+				isImplicit: false,
+				parameters: [],
+				map: fn($value) => $code,
+				subscribe: null,
 				help: "Format the subsequent text as $name.",
-			);
+				metadata: [],
+			));
 		}
 	}
 }

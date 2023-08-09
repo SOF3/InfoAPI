@@ -102,6 +102,7 @@ final class ReflectUtil {
 				kind: $indices->hints->lookup($paramType->getName()) ?? throw new RuntimeException("Cannot detect info kind for parameter type {$paramType->getName()}"),
 				multi: $closureParam->isVariadic(),
 				optional: $paramType->allowsNull(),
+				metadata: [],
 			);
 
 			$params[] = $param;

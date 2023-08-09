@@ -29,6 +29,7 @@ final class Doc {
 						"kind" => $param->kind,
 						"multi" => $param->multi,
 						"optional" => $param->optional,
+						"metadata" => $param->metadata,
 					];
 				}
 

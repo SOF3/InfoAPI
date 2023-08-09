@@ -23,11 +23,11 @@ final class Strings {
 		$indices->registries->displays->register(new Display(Standard\StringInfo::KIND, fn($value) => is_string($value) ? $value : Display::INVALID));
 
 		ReflectUtil::addClosureMapping(
-			$indices, "infoapi", ["upper", "uppercase"], fn(string $string) : string => mb_strtoupper($string),
+			$indices, "infoapi:string", ["upper", "uppercase"], fn(string $string) : string => mb_strtoupper($string),
 			help: "Converts the entire string to uppercase.",
 		);
 		ReflectUtil::addClosureMapping(
-			$indices, "infoapi", ["lower", "lowercase"], fn(string $string) : string => mb_strtolower($string),
+			$indices, "infoapi:string", ["lower", "lowercase"], fn(string $string) : string => mb_strtolower($string),
 			help: "Converts the entire string to lowercase.",
 		);
 	}

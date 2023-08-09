@@ -135,6 +135,13 @@ final class Parameter {
 
 		/** Whether this parameter is optional. */
 		public bool $optional,
+
+		/**
+		 * Additional non-standard metadata to describe this mapping.
+		 *
+		 * @var array<string, mixed>
+		 */
+		public array $metadata,
 	) {
 	}
 }
