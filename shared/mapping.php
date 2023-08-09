@@ -105,6 +105,13 @@ final class Mapping {
 		 * Used in info discovery and documentation.
 		 */
 		public string $help,
+
+		/**
+		 * Additional non-standard metadata to describe this mapping.
+		 *
+		 * @var array<string, mixed>
+		 */
+		public array $metadata,
 	) {
 	}
 }

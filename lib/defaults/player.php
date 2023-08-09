@@ -17,7 +17,7 @@ use pocketmine\event\player\PlayerToggleSwimEvent;
 use pocketmine\player\Player;
 use pocketmine\world\Position;
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\InitContext;
@@ -26,7 +26,7 @@ use function ceil;
 
 final class Players {
 	public static function register(InitContext $initCtx, Indices $indices) : void {
-		$indices->registries->kindHelps->register(new KindHelp(Standard\PlayerInfo::KIND, "Player", "An online player"));
+		$indices->registries->kindMetas->register(new KindMeta(Standard\PlayerInfo::KIND, "Player", "An online player", []));
 		$indices->registries->displays->register(new Display(
 			Standard\PlayerInfo::KIND,
 			fn($value) => $value instanceof Player ? $value->getName() : Display::INVALID,

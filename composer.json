@@ -43,6 +43,10 @@
             "composer fmt",
             "composer analyze",
             "composer test"
+        ],
+        "gen-doc": [
+            "mkdir doc/gen || true",
+            "php dump-infos.php >doc/gen/defaults.json"
         ]
     },
     "config": {

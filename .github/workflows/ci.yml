@@ -78,3 +78,49 @@ jobs:
       - run: composer install
       - name: run tests
         run: composer test
+
+  build-site:
+    name: build site
+    needs: [build-php]
+    runs-on: ubuntu-20.04
+    permissions:
+      pages: write
+      id-token: write
+    if: github.event_name == 'push' && github.ref_type == 'branch' && (github.ref_name == 'master' || github.ref_name == 'v2-virion')
+    strategy:
+      matrix:
+        php:
+          - "8.2"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pmmp/setup-php-action@main
+        with:
+          php-version: ${{ matrix.php }}
+          install-path: "../bin"
+          pm-version-major: "5"
+      - name: Install Composer
+        run: curl -sS https://getcomposer.org/installer | php
+      - run: composer install
+      - name: Generate JSON doc
+        run: composer gen-doc
+
+      - name: Install bulma
+        run: npm install
+        working-directory: doc
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin
+          key: trunk
+      - name: Install Trunk
+        run: command -v trunk || cargo install trunk
+      - run: trunk build doc/index.html --release --public-url /InfoAPI/
+
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: doc/dist
+      - uses: actions/deploy-pages@v1

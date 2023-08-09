@@ -10,12 +10,14 @@ use pocketmine\Server;
 use pocketmine\world\Position;
 use pocketmine\world\World;
 use Shared\SOFe\InfoAPI\Display;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\ReflectHint;
 use Shared\SOFe\InfoAPI\Registry;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\InitContext;
+use SOFe\InfoAPI\KindMetadataKeys;
 use SOFe\InfoAPI\ReflectUtil;
 
 final class Index {
@@ -39,6 +41,11 @@ final class Index {
 		Formats::register($indices);
 
 		Players::register($initCtx, $indices);
+
+		$indices->registries->kindMetas->register(new KindMeta(Standard\BaseContext::KIND, "Global functions", "You can use mappings from here", [
+			KindMetadataKeys::IS_ROOT => true,
+			KindMetadataKeys::BROWSER_TEMPLATE_NAME => "(None)",
+		]));
 	}
 
 	/**

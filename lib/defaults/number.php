@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Defaults;
 
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\ReflectUtil;
@@ -24,7 +24,7 @@ use function sprintf;
 
 final class Ints {
 	public static function register(Indices $indices) : void {
-		$indices->registries->kindHelps->register(new KindHelp(Standard\IntInfo::KIND, "Integer", sprintf("A whole number between %e and %e", PHP_INT_MIN, PHP_INT_MAX)));
+		$indices->registries->kindMetas->register(new KindMeta(Standard\IntInfo::KIND, "Integer", sprintf("A whole number between %e and %e", PHP_INT_MIN, PHP_INT_MAX), []));
 		$indices->registries->displays->register(new Display(Standard\IntInfo::KIND, fn($value) => is_int($value) ? (string) $value : Display::INVALID));
 
 		ReflectUtil::addClosureMapping(
@@ -77,7 +77,7 @@ final class Ints {
 
 final class Floats {
 	public static function register(Indices $indices) : void {
-		$indices->registries->kindHelps->register(new KindHelp(Standard\FloatInfo::KIND, "Float", sprintf("A whole number between %e and %e", PHP_FLOAT_MIN, PHP_FLOAT_MAX)));
+		$indices->registries->kindMetas->register(new KindMeta(Standard\FloatInfo::KIND, "Float", sprintf("A whole number between %e and %e", PHP_FLOAT_MIN, PHP_FLOAT_MAX), []));
 		$indices->registries->displays->register(new Display(Standard\FloatInfo::KIND, fn($value) => is_int($value) || is_float($value) ? (string) $value : Display::INVALID));
 
 		ReflectUtil::addClosureMapping(

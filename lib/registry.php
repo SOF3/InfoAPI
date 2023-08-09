@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI;
 
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\ReflectHint;
 use Shared\SOFe\InfoAPI\Registry;
@@ -114,13 +114,13 @@ abstract class Index {
 
 final class Registries {
 	/**
-	 * @param Registry<KindHelp> $kindHelps
+	 * @param Registry<KindMeta> $kindMetas
 	 * @param Registry<Display> $displays
 	 * @param Registry<Mapping> $mappings
 	 * @param Registry<ReflectHint> $hints
 	 */
 	public function __construct(
-		public Registry $kindHelps,
+		public Registry $kindMetas,
 		public Registry $displays,
 		public Registry $mappings,
 		public Registry $hints,
@@ -128,8 +128,8 @@ final class Registries {
 	}
 
 	public static function empty() : self {
-		/** @var Registry<KindHelp> $kindHelps */
-		$kindHelps = new RegistryImpl;
+		/** @var Registry<KindMeta> $kindMetas */
+		$kindMetas = new RegistryImpl;
 		/** @var Registry<Display> $displays */
 		$displays = new RegistryImpl;
 		/** @var Registry<Mapping> $mappings */
@@ -138,7 +138,7 @@ final class Registries {
 		$hints = new RegistryImpl;
 
 		return new self(
-			kindHelps: $kindHelps,
+			kindMetas: $kindMetas,
 			displays: $displays,
 			mappings: $mappings,
 			hints: $hints,
@@ -146,8 +146,8 @@ final class Registries {
 	}
 
 	public static function singletons() : self {
-		/** @var Registry<KindHelp> $kindHelps */
-		$kindHelps = RegistryImpl::getInstance(KindHelp::$global);
+		/** @var Registry<KindMeta> $kindMetas */
+		$kindMetas = RegistryImpl::getInstance(KindMeta::$global);
 		/** @var Registry<Display> $displays */
 		$displays = RegistryImpl::getInstance(Display::$global);
 		/** @var Registry<Mapping> $mappings */
@@ -156,7 +156,7 @@ final class Registries {
 		$hints = RegistryImpl::getInstance(ReflectHint::$global);
 
 		return new self(
-			kindHelps: $kindHelps,
+			kindMetas: $kindMetas,
 			displays: $displays,
 			mappings: $mappings,
 			hints: $hints,

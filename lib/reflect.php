@@ -21,6 +21,7 @@ use function count;
 use function explode;
 use function get_class;
 use function gettype;
+use function implode;
 use function is_float;
 use function is_object;
 
@@ -64,6 +65,7 @@ final class ReflectUtil {
 	 * The second parameter onwards may be nullable.
 	 *
 	 * @param string[] $names
+	 * @param array<string, mixed> $metadata
 	 */
 	public static function addClosureMapping(
 		Indices $indices,
@@ -73,6 +75,7 @@ final class ReflectUtil {
 		string $help = "",
 		?Closure $watchChanges = null,
 		bool $isImplicit = false,
+		array $metadata = [],
 	) : void {
 		$reflect = new ReflectionFunction($closure);
 		$closureParams = $reflect->getParameters();
@@ -131,9 +134,17 @@ final class ReflectUtil {
 				};
 			}
 
+			$first = null;
 			foreach ($names as $name) {
 				$fqnTokens = $nsTokens;
 				$fqnTokens[] = $name;
+
+				$metadataCopy = $metadata;
+				if ($first === null) {
+					$first = implode(Mapping::FQN_SEPARATOR, $fqnTokens);
+				} else {
+					$metadataCopy[MappingMetadataKeys::ALIAS_OF] = $first;
+				}
 
 				$indices->registries->mappings->register(new Mapping(
 					qualifiedName: $fqnTokens,
@@ -144,6 +155,7 @@ final class ReflectUtil {
 					map: self::correctClosure($closure, $sourceType, $paramTypes),
 					subscribe: $subscribe,
 					help: $help,
+					metadata: $metadataCopy,
 				));
 			}
 		}

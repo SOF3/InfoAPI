@@ -33,6 +33,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod2", "dupTest"],
@@ -45,6 +46,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "toNull"],
@@ -57,6 +59,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "toQux"],
@@ -69,6 +72,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "toCorge"],
@@ -81,6 +85,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "toGrault"],
@@ -93,6 +98,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "maybeImplicit"],
@@ -105,6 +111,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "maybeImplicit"],
@@ -117,6 +124,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 		$indices->registries->mappings->register(new Mapping(
 			qualifiedName: ["root", "mod1", "graultGrault"],
@@ -129,6 +137,7 @@ final class TemplateTest extends TestCase {
 			},
 			subscribe: null,
 			help: "",
+			metadata: [],
 		));
 
 		return $indices;

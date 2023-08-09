@@ -10,7 +10,7 @@ use pocketmine\plugin\Plugin;
 use pocketmine\Server;
 use RuntimeException;
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Mapping;
 use Shared\SOFe\InfoAPI\Registry;
 use Shared\SOFe\InfoAPI\Standard\BaseContext;
@@ -36,6 +36,7 @@ final class InfoAPI {
 	 *
 	 * @template T
 	 * @param Closure(T $display, ?CommandSender $sender): string $display
+	 * @param array<string, mixed> $metadata
 	 */
 	public static function addKind(
 		Plugin $plugin,
@@ -43,16 +44,20 @@ final class InfoAPI {
 		Closure $display,
 		?string $shortName = null,
 		?string $help = null,
+		array $metadata = [],
 	) : void {
+		$metadata[MappingMetadataKeys::SOURCE_PLUGIN] = $plugin->getName();
+
 		ReflectUtil::addClosureDisplay(self::defaultIndices($plugin), $kind, $display);
 
 		if ($shortName !== null || $help !== null) {
-			self::defaultIndices($plugin)->registries->kindHelps->register(new KindHelp($kind, $shortName, $help));
+			self::defaultIndices($plugin)->registries->kindMetas->register(new KindMeta($kind, $shortName, $help, $metadata));
 		}
 	}
 
 	/**
 	 * @param string|string[] $aliases
+	 * @param array<string, mixed> $metadata
 	 */
 	public static function addMapping(
 		Plugin $plugin,
@@ -61,7 +66,10 @@ final class InfoAPI {
 		?Closure $watchChanges = null,
 		bool $isImplicit = false,
 		string $help = "",
+		array $metadata = [],
 	) : void {
+		$metadata[MappingMetadataKeys::SOURCE_PLUGIN] = $plugin->getName();
+
 		ReflectUtil::addClosureMapping(
 			indices: self::defaultIndices($plugin),
 			namespace: strtolower($plugin->getName()),
@@ -70,6 +78,7 @@ final class InfoAPI {
 			watchChanges: $watchChanges,
 			isImplicit: $isImplicit,
 			help: $help,
+			metadata: $metadata,
 		);
 	}
 
@@ -129,6 +138,7 @@ final class InfoAPI {
 			map: fn($_) => Server::getInstance(),
 			subscribe: null,
 			help: "Global functions",
+			metadata: [],
 		));
 
 		foreach ($context as $key => $value) {
@@ -147,6 +157,7 @@ final class InfoAPI {
 				map: fn($array) => is_array($array) ? $array[$key] : null,
 				subscribe: null,
 				help: "",
+				metadata: [],
 			));
 		}
 

@@ -1,0 +1,5 @@
+=== InfoAPI schema list ===
+
+# Default InfoAPI
+# Run `composer gen-doc` to create this file in dev env.
+gen/defaults.json

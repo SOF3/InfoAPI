@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SOFe\InfoAPI\Defaults;
 
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\ReflectUtil;
@@ -13,7 +13,7 @@ use function is_bool;
 
 final class Bools {
 	public static function register(Indices $indices) : void {
-		$indices->registries->kindHelps->register(new KindHelp(Standard\BoolInfo::KIND, "Boolean", "A condition that is either true or false"));
+		$indices->registries->kindMetas->register(new KindMeta(Standard\BoolInfo::KIND, "Boolean", "A condition that is either true or false", []));
 		$indices->registries->displays->register(new Display(Standard\BoolInfo::KIND, fn($value) => is_bool($value) ? ($value ? "true" : "false") : Display::INVALID));
 
 		ReflectUtil::addClosureMapping(

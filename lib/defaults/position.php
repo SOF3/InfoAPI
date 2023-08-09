@@ -8,7 +8,7 @@ use pocketmine\math\Vector3;
 use pocketmine\world\Position;
 use pocketmine\world\World;
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 use Shared\SOFe\InfoAPI\Standard;
 use SOFe\InfoAPI\Indices;
 use SOFe\InfoAPI\ReflectUtil;
@@ -16,7 +16,7 @@ use function sprintf;
 
 final class Positions {
 	public static function register(Indices $indices) : void {
-		$indices->registries->kindHelps->register(new KindHelp(Standard\PositionInfo::KIND, "Position", "A physical position in the game world"));
+		$indices->registries->kindMetas->register(new KindMeta(Standard\PositionInfo::KIND, "Position", "A physical position in the game world", []));
 		$indices->registries->displays->register(new Display(
 			Standard\PositionInfo::KIND,
 			fn($value) => $value instanceof Position ? sprintf("(%s, %s, %s) @ %s", $value->x, $value->y, $value->z, $value->world?->getDisplayName() ?? "null") : Display::INVALID,
@@ -56,7 +56,7 @@ final class Positions {
 
 final class Vectors {
 	public static function register(Indices $indices) : void {
-		$indices->registries->kindHelps->register(new KindHelp(Standard\VectorInfo::KIND, "Vector", "A relative vector representing a direction and magnitude in 3D"));
+		$indices->registries->kindMetas->register(new KindMeta(Standard\VectorInfo::KIND, "Vector", "A relative vector representing a direction and magnitude in 3D", []));
 		$indices->registries->displays->register(new Display(
 			Standard\VectorInfo::KIND,
 			fn($value) => $value instanceof Vector3 ? sprintf("(%s, %s, %s)", $value->x, $value->y, $value->z) : Display::INVALID,

@@ -7,8 +7,8 @@ namespace Shared\SOFe\InfoAPI;
 /**
  * Help message for a kind.
  */
-final class KindHelp {
-	/** @var ?Registry<KindHelp> */
+final class KindMeta {
+	/** @var ?Registry<KindMeta> */
 	public static ?Registry $global = null;
 
 	public function __construct(
@@ -20,6 +20,13 @@ final class KindHelp {
 
 		/** Help message for the kind. */
 		public ?string $help,
+
+		/**
+		 * Additional non-standard metadata to describe this kind.
+		 *
+		 * @var array<string, mixed>
+		 */
+		public array $metadata,
 	) {
 	}
 }

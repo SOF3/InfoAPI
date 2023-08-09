@@ -6,7 +6,7 @@ namespace SOFe\InfoAPI;
 
 use pocketmine\command\CommandSender;
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\KindHelp;
+use Shared\SOFe\InfoAPI\KindMeta;
 
 /**
  * @extends Index<Display>
@@ -47,10 +47,10 @@ final class DisplayIndex extends Index {
 }
 
 /**
- * @extends Index<KindHelp>
+ * @extends Index<KindMeta>
  */
-final class KindHelpIndex extends Index {
-	/** @var array<string, KindHelp> */
+final class KindMetaIndex extends Index {
+	/** @var array<string, KindMeta> */
 	private array $kinds;
 
 	public function reset() : void {
@@ -61,13 +61,13 @@ final class KindHelpIndex extends Index {
 		$this->kinds[$help->kind] = $help;
 	}
 
-	public function get(string $kind) : ?string {
+	public function get(string $kind) : ?KindMeta {
 		$this->sync();
 
 		if (!isset($this->kinds[$kind])) {
 			return null;
 		}
 
-		return $this->kinds[$kind]->help;
+		return $this->kinds[$kind];
 	}
 }
