@@ -39,7 +39,7 @@ final class WatchEvalChain implements EvalChain, RenderedWatchElement {
 
 	/** @var list<Closure(mixed): mixed> */
 	private array $maps = [];
-	/** @var array<int, Closure(mixed): Traverser<null>> */
+	/** @var array<int, Closure(mixed): ?Traverser<null>> */
 	private array $subFuncs = [];
 
 	/** @var array<int, true> */

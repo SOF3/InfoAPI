@@ -57,32 +57,67 @@ final class CoalescePath implements TemplateElement {
 	) {
 	}
 
-	public function render(mixed $context, ?CommandSender $sender, GetOrWatch $getOrWatch) : RenderedElement {
-		$chain = $getOrWatch->startEvalChain(); // double dispatch
-
+	private function populateChain(mixed $context, NestedEvalChain $chain, bool $display, ?CommandSender $sender) : bool {
 		foreach ($this->choices as $choice) {
+			// initialize starting state
 			$chain->then(
-				fn($_) => $context,
+				fn($_) => [$context, []],
 				null,
 			);
 
-			foreach ($choice->path as $mapping) {
-				$args = []; // TODO
+			foreach ($choice->path->segments as $segment) {
+				// TODO optimization: make these argument triggers parallel instead of serial
+				foreach($segment->args as $arg) {
+					if($arg->path !== null) {
+						$child = new StackedEvalChain($chain);
+						$arg->path->populateChain($context, $child, false, null);
+						$child->finish(function($state, $argResult) {
+							/** @var array{mixed, mixed[]} $state */
+							[$receiver, $args] = $state;
+							$args[] = $argResult;
+							return [$receiver, $args];
+						});
+					} else {
+						$chain->then(function($state) use($arg) {
+							/** @var array{mixed, mixed[]} $state */
+							[$receiver, $args] = $state;
+							$args[] = $arg->constantValue;
+							return [$receiver, $args];
+						}, null);
+					}
+				}
 
 				$chain->then(
-					fn($receiver) => ($mapping->map)($receiver, $args),
-					$mapping->subscribe === null ? null : fn($receiver) => new Traverser(($mapping->subscribe)($receiver, $args)),
+					function($state) use($segment) {
+						/** @var array{mixed, mixed[]} $state */
+						return [($segment->mapping->map)($state[0], $state[1]), []];
+					},
+					$segment->mapping->subscribe === null ? null : fn($state) => new Traverser(($segment->mapping->subscribe)($state[0], $state[1])),
 				);
 			}
 
-			$chain->then(
-				fn($receiver) => $receiver !== null ? ($choice->display->display)($receiver, $sender) : null,
-				null,
-			);
+			if($display) {
+				$chain->then(
+					function($state) use($choice, $sender) {
+						/** @var array{mixed, mixed[]} $state */
+						return $state[0] !== null ? ($choice->display->display)($state[0], $sender) : null;
+					},
+					null,
+				);
 
-			if ($chain->breakOnNonNull()) {
-				return $chain->getResultAsElement();
+				if($chain->breakOnNonNull()) {
+					return true;
+				}
 			}
+		}
+
+		return false;
+	}
+
+	public function render(mixed $context, ?CommandSender $sender, GetOrWatch $getOrWatch) : RenderedElement {
+		$chain = $getOrWatch->startEvalChain(); // double dispatch
+		if($this->populateChain($context, $chain, true, $sender)) {
+			return $chain->getResultAsElement();
 		}
 
 		$chain->then(
@@ -98,11 +133,8 @@ final class CoalescePath implements TemplateElement {
 }
 
 final class PathWithDisplay {
-	/**
-	 * @param Mapping[] $path
-	 */
 	public function __construct(
-		public array $path,
+		public ResolvedPath $path,
 		public Display $display,
 	) {
 	}

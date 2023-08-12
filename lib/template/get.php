@@ -6,7 +6,6 @@ namespace SOFe\InfoAPI\Template;
 
 use Closure;
 use RuntimeException;
-
 use function is_string;
 
 /**
