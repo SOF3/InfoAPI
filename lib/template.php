@@ -32,7 +32,7 @@ final class Template {
 			if ($element instanceof Ast\RawText) {
 				$self->elements[] = new RawText($element->original);
 			} else {
-				$self->elements[] = self::toCoalescePath($indices, $sourceKind, $element, requireDisplayable: true, expectTargetKind: null, pathToChoice: function(ResolvedPath $path) use($indices) : PathWithDisplay {
+				$self->elements[] = self::toCoalescePath($indices, $sourceKind, $element, requireDisplayable: true, expectTargetKind: null, pathToChoice: function(ResolvedPath $path) use ($indices) : PathWithDisplay {
 					$display = $indices->getDisplays()->getDisplay($path->getTargetKind()) ?? throw new RuntimeException("canDisplay admitted tail kind");
 					return new PathWithDisplay($path, $display);
 				});
@@ -50,12 +50,12 @@ final class Template {
 	public static function toCoalescePath(ReadIndices $indices, string $sourceKind, Ast\Expr $element, bool $requireDisplayable, ?string $expectTargetKind, Closure $pathToChoice) : CoalescePath {
 		$choices = [];
 		for ($expr = $element; $expr !== null; $expr = $expr->else) {
-			$path = self::resolveInfoPath($indices, $expr->main, $sourceKind, function(string $kind) use($indices, $requireDisplayable, $expectTargetKind) : bool {
-				if($requireDisplayable && !$indices->getDisplays()->canDisplay($kind)) {
-						return false;
+			$path = self::resolveInfoPath($indices, $expr->main, $sourceKind, function(string $kind) use ($indices, $requireDisplayable, $expectTargetKind) : bool {
+				if ($requireDisplayable && !$indices->getDisplays()->canDisplay($kind)) {
+					return false;
 				}
 
-				if($expectTargetKind !== null && $kind !== $expectTargetKind) {
+				if ($expectTargetKind !== null && $kind !== $expectTargetKind) {
 					return false;
 				}
 
@@ -141,14 +141,14 @@ final class Template {
 
 			$argName = $astArg->name;
 			if ($argName !== null) {
-				if(!isset($namedParams[$argName])) {
+				if (!isset($namedParams[$argName])) {
 					// invalid argument, let's drop it for now
 					// TODO: elegantly pass parsing errors upwards
 					continue;
 				}
 				$index = $namedParams[$argName];
 			} else {
-				if(count($nextPositional) === 0) {
+				if (count($nextPositional) === 0) {
 					// TODO: elegantly pass parsing errors upwards
 					continue;
 				}

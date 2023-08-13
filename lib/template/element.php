@@ -147,9 +147,13 @@ final class PathOnly implements CoalesceChoice {
 	) {
 	}
 
-	public function getPath() : ResolvedPath { return $this->path; }
+	public function getPath() : ResolvedPath {
+		return $this->path;
+	}
 
-	public function getDisplay() : ?Display {return null;}
+	public function getDisplay() : ?Display {
+		return null;
+	}
 }
 
 final class PathWithDisplay implements CoalesceChoice {
@@ -159,7 +163,11 @@ final class PathWithDisplay implements CoalesceChoice {
 	) {
 	}
 
-	public function getPath() : ResolvedPath { return $this->path; }
+	public function getPath() : ResolvedPath {
+		return $this->path;
+	}
 
-	public function getDisplay() : ?Display { return $this->display; }
+	public function getDisplay() : ?Display {
+		return $this->display;
+	}
 }
