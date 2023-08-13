@@ -35,9 +35,9 @@
         "analyze": "vendor/bin/phpstan",
         "baseline": "vendor/bin/phpstan --generate-baseline --allow-empty-baseline",
         "test": [
-            "vendor/bin/pharynx -s shared -s lib -o pharynx-tmp-src",
+            "vendor/bin/pharynx -s shared -s lib -o pharynx-tmp-src # drop trailing args",
             "vendor/bin/phpunit tests --bootstrap tests/autoload-bootstrap.php",
-            "rm -r pharynx-tmp-src"
+            "rm -r pharynx-tmp-src # drop trailing args"
         ],
         "all": [
             "composer install --ignore-platform-reqs",

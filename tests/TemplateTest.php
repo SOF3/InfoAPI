@@ -7,8 +7,10 @@ namespace SOFe\InfoAPI\Template;
 use PHPUnit\Framework\TestCase;
 use Shared\SOFe\InfoAPI\Display;
 use Shared\SOFe\InfoAPI\Mapping;
+use Shared\SOFe\InfoAPI\Parameter;
 use SOFe\InfoAPI\Ast;
 use SOFe\InfoAPI\Indices;
+use function json_encode;
 
 final class TemplateTest extends TestCase {
 	private static function setupIndices() : Indices {
@@ -139,6 +141,22 @@ final class TemplateTest extends TestCase {
 			help: "",
 			metadata: [],
 		));
+		$indices->registries->mappings->register(new Mapping(
+			qualifiedName: ["root", "mod1", "withParams"],
+			sourceKind: "foo",
+			targetKind: "grault",
+			isImplicit: false,
+			parameters: [
+				new Parameter("theRequired", "qux", multi: false, optional: false, metadata: []),
+				new Parameter("theOptional", "corge", multi: false, optional: true, metadata: []),
+			],
+			map: function($v, $args) {
+				return $v . ";" . json_encode($args[0]) . ";" . json_encode($args[1]);
+			},
+			subscribe: null,
+			help: "",
+			metadata: [],
+		));
 
 		return $indices;
 	}
@@ -168,5 +186,21 @@ final class TemplateTest extends TestCase {
 
 	public function testLongerPath() : void {
 		self::assertTemplate("lorem {maybeImplicit graultGrault} ipsum", "foo", "init", "lorem init+toQux+throughQux+graultGrault@grault ipsum");
+	}
+
+	public function testOmittedNamedArgs() : void {
+		self::assertTemplate("lorem {withParams(theRequired = toQux)} ipsum", "foo", "init", 'lorem init;"init+toQux";null@grault ipsum');
+	}
+
+	public function testOmittedUnnamedArgs() : void {
+		self::assertTemplate("lorem {withParams(toQux)} ipsum", "foo", "init", 'lorem init;"init+toQux";null@grault ipsum');
+	}
+
+	public function testFullNamedArgs() : void {
+		self::assertTemplate("lorem {withParams(theRequired = toQux, theOptional = toCorge)} ipsum", "foo", "init", 'lorem init;"init+toQux";"init+toQux+toCorge"@grault ipsum');
+	}
+
+	public function testFullUnnamedArgs() : void {
+		self::assertTemplate("lorem {withParams(toQux, toCorge)} ipsum", "foo", "init", 'lorem init;"init+toQux";"init+toQux+toCorge"@grault ipsum');
 	}
 }

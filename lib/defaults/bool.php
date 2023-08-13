@@ -18,7 +18,7 @@ final class Bools {
 
 		ReflectUtil::addClosureMapping(
 			$indices, "infoapi:bool", ["if"], fn(bool $value, string $then, string $else) : string => $value ? $then : $else,
-			help: "Resolve to the first argument (\"then\") if the condition is true, otherwise to the second arugment (\"else\").",
+			help: "Resolve to the first argument (\"then\") if the condition is true, otherwise to the second argument (\"else\").",
 		);
 		ReflectUtil::addClosureMapping(
 			$indices, "infoapi:bool", ["and"], fn(bool $v1, bool $v2) : bool => $v1 && $v2,

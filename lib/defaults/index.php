@@ -55,7 +55,7 @@ final class Index {
 	}
 
 	/**
-	 * We register all standard kinds due ot cyclic dependency between standard mappings.
+	 * We register all standard kinds due to cyclic dependency between standard mappings.
 	 *
 	 * This should not happen in plugins because they should have a clear dependency relationship.
 	 *

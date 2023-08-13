@@ -6,7 +6,6 @@ namespace SOFe\InfoAPI\Template;
 
 use pocketmine\command\CommandSender;
 use Shared\SOFe\InfoAPI\Display;
-use Shared\SOFe\InfoAPI\Mapping;
 use SOFe\AwaitGenerator\Traverser;
 
 use function count;
@@ -46,10 +45,13 @@ final class StaticRenderedElement implements RenderedGetElement, RenderedWatchEl
 	}
 }
 
+/**
+ * @template ChoiceT of CoalesceChoice
+ */
 final class CoalescePath implements TemplateElement {
 	/**
 	 * @param string $raw Fallback display if the string cannot be resolved
-	 * @param PathWithDisplay[] $choices
+	 * @param ChoiceT[] $choices
 	 */
 	public function __construct(
 		public string $raw,
@@ -65,20 +67,21 @@ final class CoalescePath implements TemplateElement {
 				null,
 			);
 
-			foreach ($choice->path->segments as $segment) {
+			foreach ($choice->getPath()->segments as $segment) {
 				// TODO optimization: make these argument triggers parallel instead of serial
-				foreach($segment->args as $arg) {
-					if($arg->path !== null) {
+				foreach ($segment->args as $arg) {
+					if ($arg->path !== null) {
 						$child = new StackedEvalChain($chain);
 						$arg->path->populateChain($context, $child, false, null);
-						$child->finish(function($state, $argResult) {
+						$child->finish(function($state, $argChainResult) {
 							/** @var array{mixed, mixed[]} $state */
 							[$receiver, $args] = $state;
+							[$argResult, $_argArgs] = $argChainResult;
 							$args[] = $argResult;
 							return [$receiver, $args];
 						});
 					} else {
-						$chain->then(function($state) use($arg) {
+						$chain->then(function($state) use ($arg) {
 							/** @var array{mixed, mixed[]} $state */
 							[$receiver, $args] = $state;
 							$args[] = $arg->constantValue;
@@ -88,24 +91,25 @@ final class CoalescePath implements TemplateElement {
 				}
 
 				$chain->then(
-					function($state) use($segment) {
+					function($state) use ($segment) {
 						/** @var array{mixed, mixed[]} $state */
-						return [($segment->mapping->map)($state[0], $state[1]), []];
+						[$receiver, $args] = $state;
+						return [($segment->mapping->map)($receiver, $args), []];
 					},
 					$segment->mapping->subscribe === null ? null : fn($state) => new Traverser(($segment->mapping->subscribe)($state[0], $state[1])),
 				);
 			}
 
-			if($display) {
+			if (($display = $choice->getDisplay()) !== null) {
 				$chain->then(
-					function($state) use($choice, $sender) {
+					function($state) use ($display, $sender) {
 						/** @var array{mixed, mixed[]} $state */
-						return $state[0] !== null ? ($choice->display->display)($state[0], $sender) : null;
+						return $state[0] !== null ? ($display->display)($state[0], $sender) : null;
 					},
 					null,
 				);
 
-				if($chain->breakOnNonNull()) {
+				if ($chain->breakOnNonNull()) {
 					return true;
 				}
 			}
@@ -116,7 +120,7 @@ final class CoalescePath implements TemplateElement {
 
 	public function render(mixed $context, ?CommandSender $sender, GetOrWatch $getOrWatch) : RenderedElement {
 		$chain = $getOrWatch->startEvalChain(); // double dispatch
-		if($this->populateChain($context, $chain, true, $sender)) {
+		if ($this->populateChain($context, $chain, true, $sender)) {
 			return $chain->getResultAsElement();
 		}
 
@@ -132,10 +136,30 @@ final class CoalescePath implements TemplateElement {
 	}
 }
 
-final class PathWithDisplay {
+interface CoalesceChoice {
+	public function getPath() : ResolvedPath;
+	public function getDisplay() : ?Display;
+}
+
+final class PathOnly implements CoalesceChoice {
+	public function __construct(
+		public ResolvedPath $path,
+	) {
+	}
+
+	public function getPath() : ResolvedPath { return $this->path; }
+
+	public function getDisplay() : ?Display {return null;}
+}
+
+final class PathWithDisplay implements CoalesceChoice {
 	public function __construct(
 		public ResolvedPath $path,
 		public Display $display,
 	) {
 	}
+
+	public function getPath() : ResolvedPath { return $this->path; }
+
+	public function getDisplay() : ?Display { return $this->display; }
 }

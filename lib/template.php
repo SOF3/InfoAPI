@@ -15,9 +15,13 @@ use SOFe\InfoAPI\Ast\MappingCall;
 use SOFe\InfoAPI\Pathfind;
 use SOFe\InfoAPI\ReadIndices;
 
+use function array_keys;
 use function array_map;
 use function count;
 use function implode;
+use function json_decode;
+use function range;
+use function sprintf;
 
 final class Template {
 	public static function fromAst(Ast\Template $ast, ReadIndices $indices, string $sourceKind) : Template {
@@ -28,25 +32,41 @@ final class Template {
 			if ($element instanceof Ast\RawText) {
 				$self->elements[] = new RawText($element->original);
 			} else {
-				$self->elements[] = self::toCoalescePath($indices, $sourceKind, $element);
+				$self->elements[] = self::toCoalescePath($indices, $sourceKind, $element, requireDisplayable: true, expectTargetKind: null, pathToChoice: function(ResolvedPath $path) use($indices) : PathWithDisplay {
+					$display = $indices->getDisplays()->getDisplay($path->getTargetKind()) ?? throw new RuntimeException("canDisplay admitted tail kind");
+					return new PathWithDisplay($path, $display);
+				});
 			}
 		}
 
 		return $self;
 	}
 
-	public static function toCoalescePath(ReadIndices $indices, string $sourceKind, Ast\Expr $element) : CoalescePath {
+	/**
+	 * @template ChoiceT of CoalesceChoice
+	 * @param Closure(ResolvedPath): ChoiceT $pathToChoice
+	 * @return CoalescePath<ChoiceT>
+	 */
+	public static function toCoalescePath(ReadIndices $indices, string $sourceKind, Ast\Expr $element, bool $requireDisplayable, ?string $expectTargetKind, Closure $pathToChoice) : CoalescePath {
 		$choices = [];
 		for ($expr = $element; $expr !== null; $expr = $expr->else) {
-			$path = self::resolveInfoPath($indices, $expr->main, $sourceKind, fn(string $kind) : bool => $indices->getDisplays()->canDisplay($kind));
+			$path = self::resolveInfoPath($indices, $expr->main, $sourceKind, function(string $kind) use($indices, $requireDisplayable, $expectTargetKind) : bool {
+				if($requireDisplayable && !$indices->getDisplays()->canDisplay($kind)) {
+						return false;
+				}
+
+				if($expectTargetKind !== null && $kind !== $expectTargetKind) {
+					return false;
+				}
+
+				return true;
+			});
 			if ($path !== null) {
-				$display = $indices->getDisplays()->getDisplay($path->getTargetKind()) ?? throw new RuntimeException("canDisplay admitted tail kind");
-				$choices[] = new PathWithDisplay($path, $display);
+				$choices[] = $pathToChoice($path);
 			}
 		}
 
 		$raw = self::toRawString($element->main);
-
 		return new CoalescePath($raw, $choices);
 	}
 
@@ -57,24 +77,25 @@ final class Template {
 		$calls = self::extractMappingCalls($infoExpr);
 		$paths = Pathfind\Finder::find($indices, array_map(fn(MappingCall $call) => $call->name, $calls), $sourceKind, $admitTailKind);
 
-		if(count($paths) === 0) {
+		if (count($paths) === 0) {
 			return null;
 		}
 
-		foreach($paths as $path) {
+		foreach ($paths as $path) {
 			$segments = [];
 			$callIndex = 0;
-			if(count($path->mappings) === 0) {
+			if (count($path->mappings) === 0) {
 				throw new RuntimeException("path cannot have no mappings");
 			}
-			foreach($path->mappings as $mapping) {
+			foreach ($path->mappings as $mapping) {
 				$args = [];
-				if(!$mapping->isImplicit) {
+				if (!$mapping->isImplicit) {
 					$call = $calls[$callIndex];
 					$callIndex += 1;
 
-
-					$args = self::matchArgsToParams($indices, $sourceKind, $calls[$callIndex]->args ?? [], $mapping->parameters);
+					$args = self::matchArgsToParams($indices, $sourceKind, $call->args ?? [], $mapping->parameters);
+				} elseif (count($mapping->parameters) > 0) {
+					throw new RuntimeException(sprintf("Mapping %s requires parameters and cannot be implicit", implode(Mapping::FQN_SEPARATOR, $mapping->qualifiedName)));
 				}
 
 				$segments[] = new ResolvedPathSegment($mapping, $args);
@@ -109,23 +130,35 @@ final class Template {
 	private static function matchArgsToParams(ReadIndices $indices, string $sourceKind, array $astArgs, array $params) : array {
 		$namedParams = [];
 		$resolved = [];
-		foreach($params as $i => $param) {
+		foreach ($params as $i => $param) {
 			$namedParams[$param->name] = $i;
 			$resolved[$i] = ResolvedPathArg::unset($param);
 		}
 		$nextPositional = range(0, count($params));
 
-		foreach($astArgs as $astArg) {
+		foreach ($astArgs as $astArg) {
+			// TODO support multi-args
+
 			$argName = $astArg->name;
-			if($argName !== null) {
+			if ($argName !== null) {
+				if(!isset($namedParams[$argName])) {
+					// invalid argument, let's drop it for now
+					// TODO: elegantly pass parsing errors upwards
+					continue;
+				}
 				$index = $namedParams[$argName];
 			} else {
+				if(count($nextPositional) === 0) {
+					// TODO: elegantly pass parsing errors upwards
+					continue;
+				}
 				$index = array_keys($nextPositional)[0];
 			}
 			$param = $params[$index];
 			unset($nextPositional[$index]);
 
-			$resolved[$index] = ResolvedPathArg::fromAst($indices, $sourceKind, $astArg, $param);
+			$resolvedArg = ResolvedPathArg::fromAst($indices, $sourceKind, $astArg, $param);
+			$resolved[$index] = $resolvedArg;
 		}
 
 		return $resolved;
@@ -162,10 +195,11 @@ final class ResolvedPath {
 	 */
 	public function __construct(
 		public array $segments,
-	) {}
+	) {
+	}
 
 	public function getTargetKind() : string {
-		return $this->segments[count($this->segments)-1]->mapping->targetKind;
+		return $this->segments[count($this->segments) - 1]->mapping->targetKind;
 	}
 }
 
@@ -176,29 +210,33 @@ final class ResolvedPathSegment {
 	public function __construct(
 		public Mapping $mapping,
 		public array $args,
-	) {}
+	) {
+	}
 }
 
 final class ResolvedPathArg {
 	/**
 	 * $path and $constantValue are exclusive.
+	 *
+	 * @param ?CoalescePath<PathOnly> $path
 	 */
 	private function __construct(
 		public Parameter $param,
 		public ?CoalescePath $path,
 		public mixed $constantValue,
-	) {}
+	) {
+	}
 
 	public static function unset(Parameter $param) : self {
 		return new self($param, path: null, constantValue: null);
 	}
 	public static function fromAst(ReadIndices $indices, string $sourceKind, Ast\Arg $astArg, Parameter $param) : self {
-		if($astArg->value instanceof Ast\JsonValue) {
+		if ($astArg->value instanceof Ast\JsonValue) {
 			$value = json_decode($astArg->value->json);
 			return new self($param, path: null, constantValue: $value);
 		} else {
 			$expr = $astArg->value;
-			$path = Template::toCoalescePath($indices, $sourceKind, $expr);
+			$path = Template::toCoalescePath($indices, $sourceKind, $expr, requireDisplayable: false, expectTargetKind: $param->kind, pathToChoice: fn(ResolvedPath $path) => new PathOnly($path));
 			return new self($param, path: $path, constantValue: null);
 		}
 	}
@@ -257,22 +295,28 @@ interface EvalChain extends NestedEvalChain {
 final class StackedEvalChain implements NestedEvalChain {
 	public function __construct(private NestedEvalChain $chain) {
 		// state: [parentState, isChildBroken, childState]
-		$this->chain->then(fn($parentState) => [$parentState, false, null], null);
+		$this->chain->then(function($parentState) {
+			return [$parentState, false, null];
+		}, null);
 	}
 
 	public function then(Closure $map, ?Closure $subscribe) : void {
-		$this->chain->then(function($state) use($map) {
+		$this->chain->then(function($state) use ($map) {
 			/** @var array{mixed, bool, mixed} $state */
 			[$parentState, $isBroken, $myState] = $state;
-			if($isBroken) return;
+			if ($isBroken) {
+				return;
+			}
 			$myState = $map($myState);
-			return [$parentState, $myState];
-		}, function($state) use($subscribe) {
+			return [$parentState, $isBroken, $myState];
+		}, function($state) use ($subscribe) {
 			/** @var array{mixed, bool, mixed} $state */
-			return ($state[1] || $subscribe === null) ? null : $subscribe($state[2]);} );
+			[$_parentState, $isBroken, $myState] = $state;
+			return ($isBroken || $subscribe === null) ? null : $subscribe($myState);
+		} );
 	}
 
-	public function breakOnNonNull(): bool {
+	public function breakOnNonNull() : bool {
 		$this->chain->then(function($state) {
 			/** @var array{mixed, bool, mixed} $state */
 			[$parentState, $isBroken, $myState] = $state;
@@ -286,9 +330,10 @@ final class StackedEvalChain implements NestedEvalChain {
 	 * Complete this stack. Merge the stacked result into the original value.
 	 */
 	public function finish(Closure $merge) : void {
-		$this->chain->then(function($state) use($merge) {
+		$this->chain->then(function($state) use ($merge) {
 			/** @var array{mixed, bool, mixed} $state */
-			return $merge($state[0], $state[2]);
+			[$parentState, $_isBroken, $myState] = $state;
+			return $merge($parentState, $myState);
 		}, null);
 	}
 }
