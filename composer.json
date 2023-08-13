@@ -2,24 +2,57 @@
     "name": "sof3/infoapi",
     "type": "library",
     "require": {
-        "pocketmine/pocketmine-mp": "^4.0.0"
+        "pocketmine/pocketmine-mp": "^5.0.0",
+        "sof3/await-generator": "^3.6.1",
+        "sof3/pmevent": "^0.0.2",
+        "sof3/zleep": "^0.1.0",
+        "php": "^8.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.0",
-        "phpstan/phpstan": "^1.2.0",
-        "phpstan/phpstan-phpunit": "^1.0.0",
+        "friendsofphp/php-cs-fixer": "^3.20",
         "phpstan/extension-installer": "^1.1.0",
-        "infection/infection": "dev-master"
+        "phpstan/phpstan": "^1.10.0",
+        "phpstan/phpstan-phpunit": "^1.0.0",
+        "phpunit/phpunit": "^9.5.0",
+        "sof3/pharynx": "^0.3.4"
     },
     "license": "Apache-2.0",
     "autoload": {
-        "psr-0": {
-            "SOFe\\InfoAPI\\": "src/"
-        }
+        "classmap": ["shared", "lib"]
     },
     "autoload-dev": {
-        "psr-4": {
-            "SOFe\\InfoAPI\\": ["tests/", "tools/"]
+        "classmap": ["tests"]
+    },
+    "extra": {
+        "virion": {
+            "spec": "3.1",
+            "namespace-root": "SOFe\\InfoAPI",
+            "shared-namespace-root": "Shared\\SOFe\\InfoAPI"
+        }
+    },
+    "scripts": {
+        "fmt": "vendor/bin/php-cs-fixer fix",
+        "analyze": "vendor/bin/phpstan",
+        "baseline": "vendor/bin/phpstan --generate-baseline --allow-empty-baseline",
+        "test": [
+            "vendor/bin/pharynx -s shared -s lib -o pharynx-tmp-src # drop trailing args",
+            "vendor/bin/phpunit tests --bootstrap tests/autoload-bootstrap.php",
+            "rm -r pharynx-tmp-src # drop trailing args"
+        ],
+        "all": [
+            "composer install --ignore-platform-reqs",
+            "composer fmt",
+            "composer analyze",
+            "composer test"
+        ],
+        "gen-doc": [
+            "mkdir doc/gen || true",
+            "php dump-infos.php >doc/gen/defaults.json"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
         }
     }
 }

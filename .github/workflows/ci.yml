@@ -3,74 +3,124 @@ on:
   - push
   - pull_request
 jobs:
-  phpunit:
-    name: Unit test
-    runs-on: ubuntu-latest
+  build-php:
+    name: Prepare PHP
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version:
-          - "8.0"
+        php:
+          - "8.2"
     steps:
-      - uses: actions/checkout@v2
+      - name: Build and prepare PHP cache
+        uses: pmmp/setup-php-action@main
         with:
-          fetch-depth: 0
-      - uses: shivammathur/setup-php@v2
+          php-version: ${{ matrix.php }}
+          install-path: "../bin"
+          pm-version-major: "5"
+
+  fmt:
+    name: code style check
+    needs: [build-php]
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php:
+          - "8.2"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pmmp/setup-php-action@main
         with:
-          php-version: ${{matrix.php-version}}
-          tools: composer
-          coverage: xdebug2
-      - run: composer install --optimize-autoloader --ignore-platform-reqs
-      - name: phpunit test
-        env:
-          XDEBUG_MODE: coverage
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
-      - uses: codecov/codecov-action@v2
-        with:
-          files: coverage.xml
+          php-version: ${{ matrix.php }}
+          install-path: "../bin"
+          pm-version-major: "5"
+      - name: Install Composer
+        run: curl -sS https://getcomposer.org/installer | php
+      - run: composer install
+      - run: composer fmt
+      - run: git diff --exit-code
   phpstan:
     name: phpstan analyze
-    runs-on: ubuntu-latest
+    needs: [build-php]
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version:
-          - "8.0"
+        php:
+          - "8.2"
     steps:
-      - uses: actions/checkout@v2
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v3
+      - uses: pmmp/setup-php-action@main
         with:
-          php-version: ${{matrix.php-version}}
-          tools: composer
-      - run: composer install --optimize-autoloader --ignore-platform-reqs
+          php-version: ${{ matrix.php }}
+          install-path: "../bin"
+          pm-version-major: "5"
+      - name: Install Composer
+        run: curl -sS https://getcomposer.org/installer | php
+      - run: composer install
       - name: phpstan analyze
-        run: vendor/bin/phpstan
-  infection:
-    name: Mutation test
-    runs-on: ubuntu-latest
+        run: composer analyze
+  test:
+    name: phpunit test
+    needs: [build-php]
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php-version:
-          - "8.0"
+        php:
+          - "8.2"
     steps:
-      - uses: actions/checkout@v2
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v3
+      - uses: pmmp/setup-php-action@main
         with:
-          php-version: ${{matrix.php-version}}
-          tools: composer
-          coverage: xdebug2
-      - run: composer install --optimize-autoloader --ignore-platform-reqs
-      - name: infection
-        env:
-          XDEBUG_MODE: coverage
-        run: vendor/bin/infection -s
-      - uses: actions/upload-artifact@v1
+          php-version: ${{ matrix.php }}
+          install-path: "../bin"
+          pm-version-major: "5"
+      - name: Install Composer
+        run: curl -sS https://getcomposer.org/installer | php
+      - run: composer install
+      - name: run tests
+        run: composer test
+
+  build-site:
+    name: build site
+    needs: [build-php]
+    runs-on: ubuntu-20.04
+    permissions:
+      pages: write
+      id-token: write
+    if: github.event_name == 'push' && github.ref_type == 'branch' && (github.ref_name == 'master' || github.ref_name == 'v2-virion')
+    strategy:
+      matrix:
+        php:
+          - "8.2"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pmmp/setup-php-action@main
         with:
-          name: infection.log
-          path: infection.log
-      - uses: actions/upload-artifact@v1
+          php-version: ${{ matrix.php }}
+          install-path: "../bin"
+          pm-version-major: "5"
+      - name: Install Composer
+        run: curl -sS https://getcomposer.org/installer | php
+      - run: composer install
+      - name: Generate JSON doc
+        run: composer gen-doc
+
+      - name: Install bulma
+        run: npm install
+        working-directory: doc
+
+      - uses: actions-rs/toolchain@v1
         with:
-          name: infection-summary.log
-          path: infection-summary.log
-      - uses: actions/upload-artifact@v1
+          toolchain: stable
+          target: wasm32-unknown-unknown
+      - uses: actions/cache@v3
         with:
-          name: infection-per-mutator.md
-          path: infection-per-mutator.md
+          path: ~/.cargo/bin
+          key: trunk
+      - name: Install Trunk
+        run: command -v trunk || cargo install trunk
+      - run: trunk build doc/index.html --release --public-url /InfoAPI/
+
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: doc/dist
+      - uses: actions/deploy-pages@v1

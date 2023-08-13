@@ -1,7 +1,31 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Dead catch \\- ReflectionException is never thrown in the try block\\.$#"
+			message: "#^Negated boolean expression is always true\\.$#"
 			count: 1
-			path: src/SOFe/InfoAPI/ContextInfo.php
+			path: lib/ast.php
 
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: lib/ast.php
+
+		-
+			message: "#^While loop condition is always true\\.$#"
+			count: 1
+			path: lib/context.php
+
+		-
+			message: "#^While loop condition is always true\\.$#"
+			count: 1
+			path: lib/defaults/world.php
+
+		-
+			message: "#^Unable to resolve the template type T in call to method static method SOFe\\\\InfoAPI\\\\ReflectUtil\\:\\:correctClosure\\(\\)$#"
+			count: 2
+			path: lib/reflect.php
+
+		-
+			message: "#^While loop condition is always true\\.$#"
+			count: 2
+			path: lib/template/watch.php

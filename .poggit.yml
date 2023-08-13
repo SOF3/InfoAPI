@@ -1,8 +1,0 @@
-projects:
-  InfoAPI:
-    lint: false
-    libs:
-      - src: SOF3/pmforms/pmforms
-        version: ^1.0.0
-      - src: SOF3/await-generator/await-generator
-        version: ^2.2.0

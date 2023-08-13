@@ -1,5 +1,5 @@
 .idea
 *.cache
 /vendor/
-
-/docs/
+/composer.lock
+/pharynx-tmp-src
