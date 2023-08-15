@@ -128,6 +128,8 @@ final class InfoAPI {
 		$indices = self::defaultIndices($plugin)->readonly();
 		$indices->namedMappings = $indices->namedMappings->cloned();
 		$indices->namedMappings->addLocalRegistry(0, $localMappings);
+		$indices->implicitMappings = $indices->implicitMappings->cloned();
+		$indices->implicitMappings->addLocalRegistry(0, $localMappings);
 
 		$localMappings->register(new Mapping(
 			qualifiedName: ["infoapi", "baseContext"],

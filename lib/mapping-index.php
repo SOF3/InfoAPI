@@ -105,4 +105,9 @@ final class ImplicitMappingIndex extends Index {
 		$this->sync();
 		return $this->implicitMappings[$sourceKind] ?? [];
 	}
+
+	public function cloned() : self {
+		// this object is clone-safe
+		return clone $this;
+	}
 }
