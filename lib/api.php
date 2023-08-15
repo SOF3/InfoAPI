@@ -130,7 +130,7 @@ final class InfoAPI {
 		$indices->namedMappings->addLocalRegistry(0, $localMappings);
 
 		$localMappings->register(new Mapping(
-			qualifiedName: ["infoapi:baseContext"],
+			qualifiedName: ["infoapi", "baseContext"],
 			sourceKind: self::ANONYMOUS_KIND,
 			targetKind: BaseContext::KIND,
 			isImplicit: true,

@@ -48,7 +48,7 @@ final class NamedMappingIndex extends Index {
 
 		$mappings = array_filter(
 			$this->namedMappings[$sourceKind][$shortName],
-			fn(Mapping $mapping) => (new FullyQualifiedName($mapping->qualifiedName))->match($ref),
+			fn(Mapping $mapping) => (new FullyQualifiedName($mapping->qualifiedName))->match($ref) !== null,
 		);
 
 		$results = [];
