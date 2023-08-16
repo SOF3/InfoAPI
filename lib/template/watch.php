@@ -80,6 +80,10 @@ final class WatchEvalChain implements EvalChain, RenderedWatchElement {
 							$racers[$k] = $traverser->next($_);
 						}
 					}
+					if(count($racers) === 0) {
+						// the entire expression is static
+						break;
+					}
 
 					[$k, $running] = yield from Await::safeRace($racers);
 					if ($running) {
@@ -166,6 +170,10 @@ final class RenderedWatchGroup implements RenderedGroup {
 						if ($traverser !== null) {
 							$racers[$k] = $traverser->next($strings[$k]);
 						}
+					}
+					if(count($racers) === 0) {
+						// the entire template is static
+						break;
 					}
 
 					[$k, $running] = yield from Await::safeRace($racers);
