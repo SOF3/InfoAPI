@@ -229,6 +229,14 @@ final class ReflectUtil {
 			// double -> float
 			return "float";
 		}
+		if (is_int($value)) {
+			// integer -> int
+			return "int";
+		}
+		if (is_bool($value)) {
+			// boolean -> bool
+			return "bool";
+		}
 
 		return gettype($value);
 	}
